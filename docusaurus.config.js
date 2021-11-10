@@ -1,20 +1,18 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const lightCodeTheme = require('prism-react-renderer/themes/nightOwlLight');
+const darkCodeTheme = require('prism-react-renderer/themes/nightOwl');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Rocat',
   tagline: 'Roblox infra-as-code and deployment tool',
-  url: 'https://blake-mealey.github.io/rocat-docs',
+  url: 'https://rocat.vercel.app',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
-  organizationName: 'blake-mealey',
-  projectName: 'rocat',
+  // favicon: 'img/favicon.ico',
 
   presets: [
     [
@@ -39,10 +37,10 @@ const config = {
     ({
       navbar: {
         title: 'Rocat',
-        logo: {
-          alt: 'Rocat Logo',
-          src: 'img/logo.svg',
-        },
+        // logo: {
+        //   alt: 'Rocat Logo',
+        //   src: 'img/logo.svg',
+        // },
         items: [
           {
             type: 'doc',
