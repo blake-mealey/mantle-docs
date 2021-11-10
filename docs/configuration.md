@@ -17,7 +17,7 @@ The configuration file contains the fields:
   - **Required**
 - `state`: A [`State`](#state) object or `"local"`. Defaults to `"local"`.
 
-#### Deployment
+### Deployment
 
 A deployment contains the fields:
 
