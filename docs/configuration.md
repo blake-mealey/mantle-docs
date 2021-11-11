@@ -42,7 +42,7 @@ A deployment contains the fields:
 A templates contains the fields:
 
 - `experience`: An [`ExperienceTemplate`](#experiencetemplate) object.
-- `places`: A dictionary of place names to [`PlaceTemplate`](#placetemplate) object.
+- `places`: A dictionary of place names to [`PlaceTemplate`](#placetemplate) objects.
   - **Required**
 
 ### ExperienceTemplate
@@ -73,9 +73,29 @@ An experience template contains the fields:
   `playerChoice`.
 - `avatarCollisionType`: The experience's avatar collision type. Valid options: `outerBox`,
   `innerBox`.
+- `developerProducts`: A dictionary of product names to [`DeveloperProduct`](#developerproduct) objects.
 
 In order to configure the name and description of an experience, use the `name` and `description`
 fields of the [`PlaceTemplate`](#placetemplate) for the experience's start place.
+
+### DeveloperProduct
+
+A developer product contains the fields:
+
+- `name`: The display name of the developer product on the Roblox website and in-game.
+  - **Required**
+- `price`: The price of the developer product in Robux.
+  - **Required**
+- `description`: The description of the developer product on the Roblox website and in-game.
+
+Because Roblox does not offer any way to delete developer products, when a product is "deleted" by
+Rocat, it is updated in the following ways:
+
+1. Its description is updated to: `Name: <name>\nDescription:\n<description>`
+2. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time
+   in `YYYY-MM-DD hh::mm::ss.ns` format.
+
+Currently developer product icons are not supported.
 
 ### PlaceTemplate
 
