@@ -23,16 +23,13 @@ A deployment contains the fields:
 
 - `name`: The name of the deployment. Must be unique across all deployments.
   - **Required**
-- `branches`: An array of file globs to match against Git branches. This is how Rocat determines
-  which deployment to use.
-  - **Required**
-- `experienceId`: The ID of a Roblox experience to deploy to.
-  - **Required**
+- `branches`: An array of file globs to match against Git branches. If the `--deployment` option is
+  not specified, this is how Rocat determines which deployment to use.
+- `experienceId`: The ID of a Roblox experience to deploy to. If not provided, Rocat will create a
+  new experience.
 - `placeIds`: A dictionary of place names to IDs of Roblox places to deploy to. Note that the name
-  should match an entry in the `places` field of the [`Templates`](#templates) object.
-  - **Required**
-- `deployMode`: The deploy mode to use when deploying place files. Valid options: `publish`, `save`.
-  Defaults to `publish`.
+  should match an entry in the `places` field of the [`Templates`](#templates) object. If an ID is
+  not provided, Rocat will create a new place.
 - `tagCommit`: A boolean indicating whether or not to tag the commit with place file versions after
   successful deployments. It is recommended to only enable this on production deployment
   configurations.
@@ -42,7 +39,9 @@ A deployment contains the fields:
 A templates contains the fields:
 
 - `experience`: An [`ExperienceTemplate`](#experiencetemplate) object.
-- `places`: A dictionary of place names to [`PlaceTemplate`](#placetemplate) objects.
+- `places`: A dictionary of place names to [`PlaceTemplate`](#placetemplate) objects. There must be
+  at least one place supplied with the name `"start"`, which will be used as the start place for the
+  experience.
   - **Required**
 
 ### ExperienceTemplate
