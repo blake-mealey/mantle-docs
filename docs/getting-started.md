@@ -30,14 +30,21 @@ To get started with Rocat, create a `rocat.yml` file like the following:
 deployments:
   - name: staging
     branches: [dev, dev/*]
+    overrides:
+      places:
+        start:
+          name: Staging - Pirate Wars!
   - name: production
     branches: [main]
+    overrides:
+      experience:
+        playability: public
 
 templates:
   experience:
     genre: naval
     playableDevices: [computer]
-    playability: public
+    playability: private
     privateServerPrice: 0
     enableStudioAccessToApis: true
     icon: marketing/game-icon.png
@@ -135,7 +142,7 @@ Deploying resources:
   |    ╷
   |    |  + assetId: 7969246232
   |    |  + configuration:
-  |    |  +   name: Pirate Wars!
+  |    |  +   name: Staging - Pirate Wars!
   |    |  +   description: "Duke it out on the high seas in your pirate ship!\n\n🍂 Fall update: new cannons, new ship types!"
   |    |  +   maxPlayerCount: 10
   |    |  +   allowCopying: ~
@@ -156,7 +163,7 @@ Deploying resources:
   |  + Creating: experienceActivation singleton
   |    ╷
   |    |  + experienceId: 3078825648
-  |    |  + isActive: true
+  |    |  + isActive: false
   |    |
   |    ╰─ Succeeded
   |
@@ -166,7 +173,7 @@ Deploying resources:
   |    |  +   genre: Pirate
   |    |  +   playableDevices:
   |    |  +     - computer
-  |    |  +   isFriendsOnly: false
+  |    |  +   isFriendsOnly: ~
   |    |  +   allowPrivateServers: true
   |    |  +   privateServerPrice: 0
   |    |  +   isForSale: ~
