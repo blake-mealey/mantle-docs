@@ -33,6 +33,8 @@ A deployment contains the fields:
 - `tagCommit`: A boolean indicating whether or not to tag the commit with place file versions after
   successful deployments. It is recommended to only enable this on production deployment
   configurations.
+- `overrides`: A [`Templates`](#templates) object. Any supplied fields will override the value
+  specified in the [top-level](#reference) `templates` field.
 
 ### Templates
 
