@@ -43,6 +43,8 @@ A templates contains the fields:
   at least one place supplied with the name `"start"`, which will be used as the start place for the
   experience.
   - **Required**
+- `products`: A dictionary of product names to [`Product`](#product) objects.
+- `passes`: A dictionary of pass names to [`Pass`](#pass) objects.
 
 ### ExperienceTemplate
 
@@ -72,20 +74,20 @@ An experience template contains the fields:
   `playerChoice`.
 - `avatarCollisionType`: The experience's avatar collision type. Valid options: `outerBox`,
   `innerBox`.
-- `developerProducts`: A dictionary of product names to [`DeveloperProduct`](#developerproduct) objects.
 
 In order to configure the name and description of an experience, use the `name` and `description`
 fields of the [`PlaceTemplate`](#placetemplate) for the experience's start place.
 
-### DeveloperProduct
+### Product
 
-A developer product contains the fields:
+A product contains the fields:
 
 - `name`: The display name of the developer product on the Roblox website and in-game.
   - **Required**
 - `price`: The price of the developer product in Robux.
   - **Required**
 - `description`: The description of the developer product on the Roblox website and in-game.
+- `icon`: A file path to a product icon.
 
 Because Roblox does not offer any way to delete developer products, when a product is "deleted" by
 Rocat, it is updated in the following ways:
@@ -94,7 +96,23 @@ Rocat, it is updated in the following ways:
 2. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time
    in `YYYY-MM-DD hh::mm::ss.ns` format.
 
-Currently developer product icons are not supported.
+### Pass
+
+A pass contains the fields:
+
+- `name`: The display name of the game pass on the Roblox website and in-game.
+  - **Required**
+- `icon`: A file path to a pass icon.
+  - **Required**
+- `price`: The price of the game pass in Robux. If not specified, the game pass will be off-sale.
+- `description`: The description of the game pass on the Roblox website and in-game.
+
+Because Roblox does not offer any way to delete game passes, when a pass is "deleted" by
+Rocat, it is updated in the following ways:
+
+1. Its description is updated to: `Name: <name>\nPrice: <price>\nDescription:\n<description>`
+2. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time
+   in `YYYY-MM-DD hh::mm::ss.ns` format.
 
 ### PlaceTemplate
 
@@ -128,5 +146,6 @@ A remote state contains the fields:
   - **Required**
 - `bucket`: The name of an AWS S3 bucket.
   - **Required**
-- `key`: The key to use to store your state file. Note that it will be automatically postfixed with `".rocat-state.yml"`.
+- `key`: The key to use to store your state file. Note that it will be automatically postfixed with
+  `".rocat-state.yml"`.
   - **Required**
