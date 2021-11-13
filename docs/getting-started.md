@@ -241,3 +241,8 @@ Load outputs:
   }
 }
 ```
+
+## Destroying
+
+If you want to destroy a deployment you can run `rocat destroy` from your project directory. Run
+`rocat help destroy` for more information.
