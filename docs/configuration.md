@@ -36,7 +36,7 @@ A deployment contains the fields:
 - `overrides`: A [`Templates`](#templates) object. Any supplied fields will override the value
   specified in the [top-level](#reference) `templates` field.
 
-```yml title="Example"
+```yml title="Fully Managed Example"
 deployments:
   - name: staging
     branches: [dev, dev/*]
@@ -49,6 +49,15 @@ deployments:
     overrides:
       experience:
         playability: public
+```
+
+```yml title="Existing Experience Example"
+deployments:
+  - name: production
+    branches: [main]
+    experienceId: 3078825648
+    placeIds:
+      start: 7969246232
 ```
 
 ### Templates
