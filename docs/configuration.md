@@ -198,6 +198,11 @@ templates:
       icon: badges/capture-first-ship.png
 ```
 
+:::caution
+By default, Rocat does not have permission to make purchases with Robux. Since creating badges costs
+Robux, you will need to pass the `--allow-purchases` flag when you want to create them.
+:::
+
 Because Roblox does not offer any way to delete badges, when a badge is "deleted" by
 Rocat, it is updated in the following ways:
 
@@ -205,11 +210,6 @@ Rocat, it is updated in the following ways:
 2. Its description is updated to: `Name: <name>\nEnabled: <enabled>\nDescription:\n<description>`
 3. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time
    in `YYYY-MM-DD hh::mm::ss.ns` format.
-
-:::caution
-By default, Rocat does not have permission to make purchases with Robux. Since creating badges costs
-Robux, you will need to pass the `--allow-purchases` flag when you want to create them.
-:::
 
 ### Asset
 
@@ -229,6 +229,12 @@ templates:
       name: game-thumbnail
 ```
 
+:::caution
+By default, Rocat does not have permission to make purchases with Robux. Since creating and updating
+audio assets costs Robux, you will need to pass the `--allow-purchases` flag when you want to create
+or update them.
+:::
+
 If the asset is a string, it will be interpreted as a glob (e.g. `assets/*`) and the `rbxgameasset`
 name of each matched file will be its file name without the extension. For example,
 `assets/pirate-flag.png` will be given the `rbxgameasset` name `pirate-flag`.
@@ -240,12 +246,6 @@ and their asset types:
 | :--------- | :---------------------------------------------- |
 | Image      | `.bmp`, `.gif`, `.jpeg`, `.jpg`, `.png`, `.tga` |
 | Audio      | `.ogg`, `.mp3`                                  |
-
-:::caution
-By default, Rocat does not have permission to make purchases with Robux. Since creating and updating
-audio assets costs Robux, you will need to pass the `--allow-purchases` flag when you want to create
-or update them.
-:::
 
 ### Place
 
