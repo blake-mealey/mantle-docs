@@ -4,8 +4,8 @@ sidebar_position: 1
 
 # Introduction
 
-Rocat is an experimental declarative infrastructure-as-code (IaC) and deployment tool for Roblox.
-Rocat is not currently ready for production use-cases.
+Mantle is an experimental declarative infrastructure-as-code (IaC) and deployment tool for Roblox.
+Mantle is not currently ready for production use-cases.
 
 ## What is IaC?
 
@@ -38,4 +38,4 @@ uploaded to Roblox and then use to deliver your game.
 
 What if you could keep all of that configuration inside your VCS and automatically manage that
 infrastructure in Roblox without even navigating to the [Create
-page](https://www.roblox.com/develop)? With Rocat, now you can!
+page](https://www.roblox.com/develop)? With Mantle, now you can!

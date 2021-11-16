@@ -28,7 +28,7 @@ function HomepageHeader() {
 
 export default function Home(): JSX.Element {
   return (
-    <Layout title="Features" description="Rocat features">
+    <Layout title="Features" description="Mantle features">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

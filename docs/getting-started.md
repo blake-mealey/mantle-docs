@@ -6,15 +6,15 @@ sidebar_position: 3
 
 ## Authentication
 
-Before you can get started with Rocat, you need to get the necessary authentication pieces. Please
+Before you can get started with Mantle, you need to get the necessary authentication pieces. Please
 remember never to store secrets in your version control systems as malicious actors could use them
 to harm you if they got access.
 
-Rocat uses different authentication pieces for different functionality:
+Mantle uses different authentication pieces for different functionality:
 
 - Deployment operations: `.ROBLOSECURITY` cookie, which can be copied from the dev tools on
-  roblox.com and can be given to Rocat via the `ROBLOSECURITY` environment variable.
-- Remote state file management: AWS credentials, which can be given to Rocat via any of the methods
+  roblox.com and can be given to Mantle via the `ROBLOSECURITY` environment variable.
+- Remote state file management: AWS credentials, which can be given to Mantle via any of the methods
   supported by
   [rusoto](https://github.com/rusoto/rusoto/blob/master/AWS-CREDENTIALS.md#credentials). The
   simplest option is to provide the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment
@@ -24,7 +24,7 @@ For more information, refer to the [Authentication guide](/docs/authentication).
 
 ## Configuration
 
-To get started with Rocat, create a `rocat.yml` file like the following:
+To get started with Mantle, create a `mantle.yml` file like the following:
 
 ```yml
 deployments:
@@ -67,7 +67,7 @@ For the full configuration reference, see the [Configuration guide](/docs/config
 
 ## Deploying
 
-To deploy with Rocat, just run `rocat deploy` from your project directory! Run `rocat help deploy`
+To deploy with Mantle, just run `mantle deploy` from your project directory! Run `mantle help deploy`
 for more information.
 
 When deploying the above configuration file for the first time, you'll see something like this:
@@ -75,9 +75,9 @@ When deploying the above configuration file for the first time, you'll see somet
 ```txt
 Loading project:
   ╷
-  |  Loaded config file rocat.yml
+  |  Loaded config file mantle.yml
   |  Selected deployment configuration staging because the current branch dev matched one of [dev, dev/*]
-  |  Loading previous state from local file .rocat-state.yml
+  |  Loading previous state from local file .mantle-state.yml
   |  No previous state for deployment staging
   |
   ╰─ Succeeded
@@ -193,15 +193,15 @@ Deploying resources:
 
 Saving state:
   ╷
-  |  Saving to local file .rocat-state.yml. It is recommended you commit this file to your source control
+  |  Saving to local file .mantle-state.yml. It is recommended you commit this file to your source control
   |
   ╰─ Succeeded
 ```
 
 ## Outputs
 
-If you want to know the ID of a resource which Rocat created so you can reference it in your game,
-you can run `rocat outputs` from your project directory. Run `rocat help outputs` for more
+If you want to know the ID of a resource which Mantle created so you can reference it in your game,
+you can run `mantle outputs` from your project directory. Run `mantle help outputs` for more
 information.
 
 After deploying the above configuration file for the first time, running the outputs command will
@@ -210,9 +210,9 @@ print something like this:
 ```txt
 Load outputs:
 ╷
-| Loaded config file rocat.yml
+| Loaded config file mantle.yml
 | Selected provided deployment configuration staging
-| Loading previous state from local file .rocat-state.yml
+| Loading previous state from local file .mantle-state.yml
 |
 ╰─ Succeeded
 
@@ -251,5 +251,5 @@ Load outputs:
 
 ## Destroying
 
-If you want to destroy a deployment you can run `rocat destroy` from your project directory. Run
-`rocat help destroy` for more information.
+If you want to destroy a deployment you can run `mantle destroy` from your project directory. Run
+`mantle help destroy` for more information.

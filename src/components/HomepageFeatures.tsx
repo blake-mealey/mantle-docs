@@ -18,7 +18,7 @@ const FeatureList: FeatureItem[] = [
     title: 'Declarative',
     description: (
       <>
-        Declaratively define the Roblox infrastructure you want and Rocat will
+        Declaratively define the Roblox infrastructure you want and Mantle will
         handle the rest.
       </>
     ),

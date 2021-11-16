@@ -6,9 +6,9 @@ const darkCodeTheme = require('prism-react-renderer/themes/nightOwl');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Rocat',
+  title: 'Mantle',
   tagline: 'Roblox infra-as-code and deployment tool',
-  url: 'https://rocat.vercel.app',
+  url: 'https://mantle.vercel.app',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -23,7 +23,7 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/blake-mealey/rocat-docs/edit/main/website/',
+            'https://github.com/blake-mealey/mantle-docs/edit/main/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -36,9 +36,9 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'Rocat',
+        title: 'Mantle',
         // logo: {
-        //   alt: 'Rocat Logo',
+        //   alt: 'Mantle Logo',
         //   src: 'img/logo.svg',
         // },
         items: [
@@ -49,7 +49,7 @@ const config = {
             label: 'Docs',
           },
           {
-            href: 'https://github.com/blake-mealey/rocat',
+            href: 'https://github.com/blake-mealey/mantle',
             label: 'GitHub',
             position: 'right',
           },
@@ -72,7 +72,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/blake-mealey/rocat',
+                href: 'https://github.com/blake-mealey/mantle',
               },
             ],
           },

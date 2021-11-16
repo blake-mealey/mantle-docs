@@ -4,8 +4,8 @@ sidebar_position: 5
 
 # Configuration
 
-By default, Rocat looks for a project's configuration in a `rocat.yml` file but you can optionally
-point Rocat to any YAML file.
+By default, Mantle looks for a project's configuration in a `mantle.yml` file but you can optionally
+point Mantle to any YAML file.
 
 ## Reference
 
@@ -24,12 +24,12 @@ A deployment contains the fields:
 - `name`: The name of the deployment. Must be unique across all deployments.
   - **Required**
 - `branches`: An array of file globs to match against Git branches. If the `--deployment` option is
-  not specified, this is how Rocat determines which deployment to use.
-- `experienceId`: The ID of a Roblox experience to deploy to. If not provided, Rocat will create a
+  not specified, this is how Mantle determines which deployment to use.
+- `experienceId`: The ID of a Roblox experience to deploy to. If not provided, Mantle will create a
   new experience.
 - `placeIds`: A dictionary of place names to IDs of Roblox places to deploy to. Note that the name
   should match an entry in the `places` field of the [`Templates`](#templates) object. If an ID is
-  not provided, Rocat will create a new place.
+  not provided, Mantle will create a new place.
 - `tagCommit`: A boolean indicating whether or not to tag the commit with place file versions after
   successful deployments. It is recommended to only enable this on production deployment
   configurations.
@@ -145,7 +145,7 @@ templates:
 ```
 
 Because Roblox does not offer any way to delete developer products, when a product is "deleted" by
-Rocat, it is updated in the following ways:
+Mantle, it is updated in the following ways:
 
 1. Its description is updated to: `Name: <name>\nDescription:\n<description>`
 2. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time
@@ -172,7 +172,7 @@ templates:
 ```
 
 Because Roblox does not offer any way to delete game passes, when a pass is "deleted" by
-Rocat, it is updated in the following ways:
+Mantle, it is updated in the following ways:
 
 1. Its description is updated to: `Name: <name>\nPrice: <price>\nDescription:\n<description>`
 2. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time
@@ -199,12 +199,12 @@ templates:
 ```
 
 :::caution
-By default, Rocat does not have permission to make purchases with Robux. Since creating badges costs
+By default, Mantle does not have permission to make purchases with Robux. Since creating badges costs
 Robux, you will need to pass the `--allow-purchases` flag when you want to create them.
 :::
 
 Because Roblox does not offer any way to delete badges, when a badge is "deleted" by
-Rocat, it is updated in the following ways:
+Mantle, it is updated in the following ways:
 
 1. It is disabled
 2. Its description is updated to: `Name: <name>\nEnabled: <enabled>\nDescription:\n<description>`
@@ -230,7 +230,7 @@ templates:
 ```
 
 :::caution
-By default, Rocat does not have permission to make purchases with Robux. Since creating and updating
+By default, Mantle does not have permission to make purchases with Robux. Since creating and updating
 audio assets costs Robux, you will need to pass the `--allow-purchases` flag when you want to create
 or update them.
 :::
@@ -294,7 +294,7 @@ A state is either `"local"` or an object with the fields:
 state:
   remote:
     region: [us-west-2]
-    bucket: rocat-states
+    bucket: mantle-states
     key: pirate-wars
 ```
 
@@ -315,5 +315,5 @@ A remote state contains the fields:
 - `bucket`: The name of an AWS S3 bucket.
   - **Required**
 - `key`: The key to use to store your state file. Note that it will be automatically postfixed with
-  `".rocat-state.yml"`.
+  `".mantle-state.yml"`.
   - **Required**
