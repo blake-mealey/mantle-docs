@@ -208,7 +208,7 @@ Rocat, it is updated in the following ways:
 
 :::caution
 By default, Rocat does not have permission to make purchases with Robux. Since creating badges costs
-Robux, you will need to pass `--allow-purchases` flag when you want to create them.
+Robux, you will need to pass the `--allow-purchases` flag when you want to create them.
 :::
 
 ### Asset
@@ -243,8 +243,8 @@ and their asset types:
 
 :::caution
 By default, Rocat does not have permission to make purchases with Robux. Since creating and updating
-audio assets costs Robux, you will need to pass `--allow-purchases` flag when you want to create or
-update them.
+audio assets costs Robux, you will need to pass the `--allow-purchases` flag when you want to create
+or update them.
 :::
 
 ### Place
