@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/nightOwl');
 const config = {
   title: 'Mantle',
   tagline: 'Roblox infra-as-code and deployment tool',
-  url: 'https://mantle.vercel.app',
+  url: 'https://mantle-docs.vercel.app',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
