@@ -11,60 +11,61 @@ point Mantle to any YAML file.
 
 The configuration file contains the fields:
 
-- `deployments`: An array of [`Deployment`](#deployment) objects.
+- `environments`: An array of [`Environment`](#environment) objects.
   - **Required**
-- `templates`: A [`Templates`](#templates) object.
+- `target`: A [`Target`](#target) object.
   - **Required**
 - `state`: A [`State`](#state). Defaults to `"local"`.
 
-### Deployment
+### Environment
 
-A deployment contains the fields:
+A environment contains the fields:
 
-- `name`: The name of the deployment. Must be unique across all deployments.
+- `name`: The name of the environment. Must be unique across all environments.
   - **Required**
-- `branches`: An array of file globs to match against Git branches. If the `--deployment` option is
-  not specified, this is how Mantle determines which deployment to use.
-- `experienceId`: The ID of a Roblox experience to deploy to. If not provided, Mantle will create a
-  new experience.
-- `placeIds`: A dictionary of place names to IDs of Roblox places to deploy to. Note that the name
-  should match an entry in the `places` field of the [`Templates`](#templates) object. If an ID is
-  not provided, Mantle will create a new place.
+- `branches`: An array of file globs to match against Git branches. If the `--environment` option is
+  not specified, this is how Mantle determines which environment to use.
 - `tagCommit`: A boolean indicating whether or not to tag the commit with place file versions after
-  successful deployments. It is recommended to only enable this on production deployment
+  successful deployments. It is recommended to only enable this on production environment
   configurations.
-- `overrides`: A [`Templates`](#templates) object. Any supplied fields will override the value
-  specified in the [top-level](#reference) `templates` field.
+- `overrides`: An object containing overrides to the [top-level](#reference) `target` configuration.
+  The type of this object depends on the type of target. For experience targets, this is an
+  [`Experience`](#experience) object.
 
-```yml title="Fully Managed Example"
-deployments:
+```yml title="Example"
+environments:
   - name: staging
     branches: [dev, dev/*]
     overrides:
       places:
         start:
-          name: Staging
+          configuration:
+            name: Staging
   - name: production
     branches: [main]
     overrides:
-      experience:
+      configuration:
         playability: public
 ```
 
-```yml title="Existing Experience Example"
-deployments:
-  - name: production
-    branches: [main]
-    experienceId: 3078825648
-    placeIds:
-      start: 7969246232
+### Target
+
+A target contains _one_ of the fields:
+
+- `experience`: An [`Experience`](#experience) object
+
+```yml title="Example"
+target:
+  experience: {}
 ```
 
-### Templates
+In the future, Mantle will support other target types like Plugins and Models.
 
-A templates contains the fields:
+### Experience
 
-- `experience`: An [`Experience`](#experience) object.
+An experience contains the fields:
+
+- `configuration`: An [`ExperienceConfiguration`](#experienceconfiguration) object.
 - `places`: A dictionary of place names to [`Place`](#place) objects. There must be
   at least one place supplied with the name `"start"`, which will be used as the start place for the
   experience.
@@ -74,7 +75,7 @@ A templates contains the fields:
 - `badges`: A dictionary of badge names to [`Badge`](#badge) objects.
 - `assets`: An array of [`Asset`](#asset).
 
-### Experience
+### ExperienceConfiguration
 
 An experience contains the fields:
 
@@ -104,21 +105,68 @@ An experience contains the fields:
   `innerBox`.
 
 ```yml title="Example"
-templates:
+target:
   experience:
-    genre: naval
-    playableDevices: [computer]
-    playability: private
-    privateServerPrice: 0
-    enableStudioAccessToApis: true
-    icon: marketing/game-icon.png
-    thumbnails:
-      - marketing/game-thumbnail-fall-update.png
-      - marketing/game-thumbnail-default.png
+    configuration:
+      genre: naval
+      playableDevices: [computer]
+      playability: private
+      privateServerPrice: 0
+      enableStudioAccessToApis: true
+      icon: marketing/game-icon.png
+      thumbnails:
+        - marketing/game-thumbnail-fall-update.png
+        - marketing/game-thumbnail-default.png
 ```
 
 In order to configure the name and description of an experience, use the `name` and `description`
-fields of the [`PlaceTemplate`](#placetemplate) for the experience's start place.
+fields of the [`PlaceConfiguration`](#placeconfiguration) for the experience's start place.
+
+### Place
+
+A place contains the fields:
+
+- `file`: A file path to a Roblox place. Only `.rbxlx` is supported at this time (see
+  [#47](https://github.com/blake-mealey/mantle/issues/47) for more information).
+- `configuration`: A [`PlaceConfiguration`](#placeconfiguration) object.
+
+```yml title="Example"
+target:
+  experience:
+    places:
+      start:
+        file: game.rbxlx
+        configuration:
+          name: Pirate Wars!
+          description: |-
+            Duke it out on the high seas in your pirate ship!
+
+            🍂 Fall update: new cannons, new ship types!
+          maxPlayerCount: 10
+          serverFill: robloxOptimized
+```
+
+```yml title="Reserved Slots Example"
+target:
+  experience:
+    places:
+      start:
+        file: game.rbxlx
+        configuration:
+          serverFill:
+            reservedSlots: 10
+```
+
+### PlaceConfiguration
+
+A place configuration contains the fields:
+
+- `name`: The display name of the place on the Roblox website and in-game.
+- `description`: The description of the place on the Roblox website.
+- `maxPlayerCount`: The maximum number of players that can be in a server for the place.
+- `allowCopying`: A boolean indicating whether or not other Roblox users can clone your place.
+- `serverFill`: How Roblox will fill your servers. Valid options: `robloxOptimized`, `maximum`, or
+  an object with the field `reservedSlots` set to a number indicating the number of reserved slots.
 
 ### Product
 
@@ -126,22 +174,25 @@ A product contains the fields:
 
 - `name`: The display name of the developer product on the Roblox website and in-game.
   - **Required**
-- `price`: The price of the developer product in Robux.
-  - **Required**
 - `description`: The description of the developer product on the Roblox website and in-game.
 - `icon`: A file path to a product icon.
+- `price`: The price of the developer product in Robux.
+  - **Required**
 
 ```yml title="Example"
-templates:
-  products:
-    fiftyGold:
-      name: 50 Gold
-      desription: Add 50 gold to your wallet!
-      icon: products/50-gold.png
-    hundredGold:
-      name: 100 Gold
-      desription: Add 100 gold to your wallet!
-      icon: products/100-gold.png
+target:
+  experience:
+    products:
+      fiftyGold:
+        name: 50 Gold
+        description: Add 50 gold to your wallet!
+        icon: products/50-gold.png
+        price: 25
+      hundredGold:
+        name: 100 Gold
+        description: Add 100 gold to your wallet!
+        icon: products/100-gold.png
+        price: 45
 ```
 
 Because Roblox does not offer any way to delete developer products, when a product is "deleted" by
@@ -157,18 +208,20 @@ A pass contains the fields:
 
 - `name`: The display name of the game pass on the Roblox website and in-game.
   - **Required**
+- `description`: The description of the game pass on the Roblox website and in-game.
 - `icon`: A file path to a pass icon.
   - **Required**
 - `price`: The price of the game pass in Robux. If not specified, the game pass will be off-sale.
-- `description`: The description of the game pass on the Roblox website and in-game.
 
 ```yml title="Example"
-templates:
-  passes:
-    tipJar:
-      name: Tip Jar
-      desription: Drop some change to support the developers!
-      icon: passes/tip-jar.png
+target:
+  experience:
+    passes:
+      shipOfTheLine:
+        name: Ship of the Line
+        description: Get the best ship in the game!
+        icon: passes/ship-of-the-line.png
+        price: 499
 ```
 
 Because Roblox does not offer any way to delete game passes, when a pass is "deleted" by
@@ -184,23 +237,24 @@ A badge contains the fields:
 
 - `name`: The display name of the badge on the Roblox website and in-game.
   - **Required**
+- `description`: The description of the badge on the Roblox website and in-game.
 - `icon`: A file path to a badge icon.
   - **Required**
-- `description`: The description of the badge on the Roblox website and in-game.
 - `enabled`: A boolean indicating whether or not the badge is enabled. Defaults to true.
 
 ```yml title="Example"
-templates:
-  badges:
-    captureFirstShip:
-      name: Capture First Ship!
-      desription: You captured your first enemy ship!
-      icon: badges/capture-first-ship.png
+target:
+  experience:
+    badges:
+      captureFirstShip:
+        name: Capture First Ship!
+        description: You captured your first enemy ship!
+        icon: badges/capture-first-ship.png
 ```
 
 :::caution
-By default, Mantle does not have permission to make purchases with Robux. Since creating badges costs
-Robux, you will need to pass the `--allow-purchases` flag when you want to create them.
+By default, Mantle does not have permission to make purchases with Robux. Since creating badges
+costs Robux, you will need to use the `--allow-purchases` flag when you want to create them.
 :::
 
 Because Roblox does not offer any way to delete badges, when a badge is "deleted" by
@@ -222,66 +276,31 @@ An asset is either a string or an object containing the fields:
   - **Required**
 
 ```yml title="Example"
-templates:
-  assets:
-    - assets/*
-    - file: marketing/icon.png
-      name: game-thumbnail
+target:
+  experience:
+    assets:
+      - assets/*
+      - file: marketing/icon.png
+        name: game-icon
 ```
 
 :::caution
-By default, Mantle does not have permission to make purchases with Robux. Since creating and updating
-audio assets costs Robux, you will need to pass the `--allow-purchases` flag when you want to create
-or update them.
+By default, Mantle does not have permission to make purchases with Robux. Since creating and
+updating audio assets costs Robux, you will need to use the `--allow-purchases` flag when you want
+to create or update them.
 :::
 
 If the asset is a string, it will be interpreted as a glob (e.g. `assets/*`) and the `rbxgameasset`
 name of each matched file will be its file name without the extension. For example,
 `assets/pirate-flag.png` will be given the `rbxgameasset` name `pirate-flag`.
 
-Each file will be uploaded as the asset type matching its file extension. Supported file extensions
-and their asset types:
+Each file will be uploaded as the asset type matching its file extension. Supported asset types and
+their file extensions:
 
 | Asset type | File extensions                                 |
 | :--------- | :---------------------------------------------- |
 | Image      | `.bmp`, `.gif`, `.jpeg`, `.jpg`, `.png`, `.tga` |
 | Audio      | `.ogg`, `.mp3`                                  |
-
-### Place
-
-A place contains the fields:
-
-- `file`: A file path to a Roblox place (either a `.rbxl` or `.rbxlx`).
-  - **Required**
-- `name`: The display name of the place on the Roblox website and in-game.
-- `description`: The description of the place on the Roblox website.
-- `maxPlayerCount`: The maximum number of players that can be in a server for the place.
-- `allowCopying`: A boolean indicating whether or not other Roblox users can clone your place.
-- `serverFill`: How Roblox will fill your servers. Valid options: `robloxOptimized`, `maximum`, or
-  an object with the field `reservedSlots` set to a number indicating the number of reserved slots.
-
-```yml title="Example"
-templates:
-  places:
-    start:
-      file: game.rbxlx
-      name: Pirate Wars!
-      description: |-
-        Duke it out on the high seas in your pirate ship!
-
-        🍂 Fall update: new cannons, new ship types!
-      maxPlayerCount: 10
-      serverFill: robloxOptimized
-```
-
-```yml title="Reserved Slots Example"
-templates:
-  places:
-    start:
-      file: game.rbxlx
-      serverFill:
-        reservedSlots: 10
-```
 
 ### State
 
