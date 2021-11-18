@@ -115,6 +115,7 @@ An experience contains the fields:
   at least one place supplied with the name `"start"`, which will be used as the start place for the
   experience.
   - **Required**
+- `socialLinks`: An array of [`SocialLink`](#sociallink) objects.
 - `products`: A dictionary of product names to [`Product`](#product) objects.
 - `passes`: A dictionary of pass names to [`Pass`](#pass) objects.
 - `badges`: A dictionary of badge names to [`Badge`](#badge) objects.
@@ -212,6 +213,23 @@ A place configuration contains the fields:
 - `allowCopying`: A boolean indicating whether or not other Roblox users can clone your place.
 - `serverFill`: How Roblox will fill your servers. Valid options: `robloxOptimized`, `maximum`, or
   an object with the field `reservedSlots` set to a number indicating the number of reserved slots.
+
+### SocialLink
+
+A social link contains the fields:
+
+- `title`: The display name of the social link on the Roblox website.
+  - **Required**
+- `url`: The URL of the social link. Must be one of the Roblox supported social link types.
+  - **Required**
+
+```yml title="Example"
+target:
+  experience:
+    socialLinks:
+      - title: Follow on Twitter
+        url: https://twitter.com/blakemdev
+```
 
 ### Product
 
