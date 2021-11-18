@@ -27,40 +27,44 @@ For more information, refer to the [Authentication guide](/docs/authentication).
 To get started with Mantle, create a `mantle.yml` file like the following:
 
 ```yml
-deployments:
+environments:
   - name: staging
     branches: [dev, dev/*]
     overrides:
       places:
         start:
-          name: Staging - Pirate Wars!
+          configuration:
+            name: Staging - Pirate Wars!
   - name: production
     branches: [main]
     overrides:
       experience:
-        playability: public
+        configuration:
+          playability: public
 
-templates:
+target:
   experience:
-    genre: naval
-    playableDevices: [computer]
-    playability: private
-    privateServerPrice: 0
-    enableStudioAccessToApis: true
-    icon: marketing/game-icon.png
-    thumbnails:
-      - marketing/game-thumbnail-fall-update.png
-      - marketing/game-thumbnail-default.png
-  places:
-    start:
-      file: game.rbxlx
-      name: Pirate Wars!
-      description: |-
-        Duke it out on the high seas in your pirate ship!
+    configuration:
+      genre: naval
+      playableDevices: [computer]
+      playability: private
+      privateServerPrice: 0
+      enableStudioAccessToApis: true
+      icon: marketing/game-icon.png
+      thumbnails:
+        - marketing/game-thumbnail-fall-update.png
+        - marketing/game-thumbnail-default.png
+    places:
+      start:
+        file: game.rbxlx
+        configuration:
+          name: Pirate Wars!
+          description: |-
+            Duke it out on the high seas in your pirate ship!
 
-        🍂 Fall update: new cannons, new ship types!
-      maxPlayerCount: 10
-      serverFill: robloxOptimized
+            🍂 Fall update: new cannons, new ship types!
+          maxPlayerCount: 10
+          serverFill: robloxOptimized
 ```
 
 For the full configuration reference, see the [Configuration guide](/docs/configuration).
