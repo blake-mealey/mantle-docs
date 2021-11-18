@@ -257,3 +257,20 @@ Load outputs:
 
 If you want to destroy a deployment you can run `mantle destroy` from your project directory. Run
 `mantle help destroy` for more information.
+
+## Importing
+
+Mantle provides an import feature so that you can deploy to an existing experience with Mantle.
+
+:::caution
+The import feature _**DOES NOT**_ convert your existing Roblox project into a Mantle project. Do not
+import, then deploy a place with Mantle without first testing on a staging environment as you may
+destroy your assets.
+:::
+
+After creating a staging environment with Mantle that is on-par with your production environment,
+you can import your production environment into Mantle so that you can deploy to it. This feature is
+still experimental and does not do a good job of matching existing resources to configured ones so
+most resources will be recreated.
+
+Run `mantle import --environment <your-environment>`. Run `mantle help import` for more information.
