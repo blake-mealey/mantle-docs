@@ -11,11 +11,56 @@ point Mantle to any YAML file.
 
 The configuration file contains the fields:
 
+- `owner`: The owner of the resources that will be created. An [`Owner`](#owner). Defaults to
+  `"personal"`.
+- `payments`: Where Robux should come from to purchase resources (if `--allow-purchases` is
+  enabled). A [`Payments`](#payments). Defaults to `"owner"`.
 - `environments`: An array of [`Environment`](#environment) objects.
   - **Required**
 - `target`: A [`Target`](#target) object.
   - **Required**
 - `state`: A [`State`](#state). Defaults to `"local"`.
+
+### Owner
+
+An owner is either `"personal"` or an object with the fields:
+
+- `group`: A group ID.
+  - **Required**
+
+```yml title="Group Example"
+owner:
+  group: 5723117
+```
+
+```yml title="Personal Example (Default)"
+owner: personal
+```
+
+When set to `"personal"`, all resources will be created under the authenticated user. When set to a
+group, all resources will be created under that group.
+
+### Payments
+
+A payments is either `"owner"`, `"personal"`, or `"group"`.
+
+```yml title="Personal Example"
+payments: personal
+```
+
+```yml title="Group Example"
+payments: group
+```
+
+```yml title="Owner Example (Default)"
+payments: owner
+```
+
+When set to `"owner"`, it payments will cone from the balance of the owner specified by the
+[top-level](#reference) `owner` field. When set to `"personal"`, all purchases will be made from the
+authenticated user's balance. When set to `"group"`, all purchases will be made from group funds.
+Payments can only be set to `"group"` when `"owner"` is also set to a group, since Roblox does not
+allow groups to pay for purchases of resources outside of themselves.
 
 ### Environment
 
