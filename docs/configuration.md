@@ -127,32 +127,36 @@ An experience contains the fields:
 
 - `genre`: The experience's genre. Valid options: `all`, `adventure`, `building`, `comedy`,
   `fighting`, `fps`, `horror`, `medieval`, `military`, `naval`, `rpg`, `sciFi`, `sports`,
-  `townAndCity`, `western`.
+  `townAndCity`, `western`. Defaults to `all`.
 - `playableDevices`: An array of playable devices. Valid options: `computer`, `phone`, `tablet`,
-  `console`.
+  `console`. Defaults to `[computer, phone, tablet]`.
 - `icon`: A file path to a game icon.
 - `thumbnails`: An array of file paths to game thumbnails.
 - `playability`: The experience's playability. Valid options: `private`, `friends`, `public`.
   `private` will set the experience to inactive, while the others will set it to active and
-  additionally configure whether only friends can play it or not.
+  additionally configure whether only friends can play it or not. Defaults to `private`.
 - `paidAccessPrice`: A price for paid access in Robux. If specified, paid access will be enabled and
-  configured to the specified price.
+  configured to the specified price. Defaults to paid access disabled with no price.
 - `privateServerPrice`: A price for private servers in Robux. If specified, private servers will be
   enabled and configured to the specified price. To enable private servers for free, pass `0`.
+  Defaults to private servers disabled with no price.
 - `enableStudioAccessToApis`: A boolean indicating whether or not studio should be able to use APIs
-  like data stores.
+  like data stores. Defaults to `false`.
 - `allowThirdPartySales`: A boolean indicating whether or not third party sales are allowed in-game.
+  Defaults to `false`.
 - `allowThirdPartyTeleports`: A boolean indicating whether or not third party teleports are allowed
-  in-game.
-- `avatarType`: The experience's avatar type. Valid options: `r6`, `r15`, `playerChoice`.
+  in-game. Defaults to `false`.
+- `avatarType`: The experience's avatar type. Valid options: `r6`, `r15`, `playerChoice`. Defaults
+  to `r15`.
 - `avatarAnimationType`: The experience's avatar animation type. Valid options: `standard`,
-  `playerChoice`.
+  `playerChoice`. Defaults to `playerChoice`.
 - `avatarCollisionType`: The experience's avatar collision type. Valid options: `outerBox`,
-  `innerBox`.
+  `innerBox`. Defaults to `outerBox`.
 - `avatarScaleConstraints`: The experience's avatar scale constraints. An
-  [`AvatarScaleConstraints`](#avatarscaleconstraints) object.
+  [`AvatarScaleConstraints`](#avatarscaleconstraints) object. Defaults to Roblox's defaults.
 - `avatarAssetOverrides`: The experience's avatar asset overrides. An
-  [`AvatarAssetOverrides`](#avatarassetoverrides) object.
+  [`AvatarAssetOverrides`](#avatarassetoverrides) object. Defaults to no overrides (player's
+  choice).
 
 ```yml title="Example"
 target:
@@ -182,6 +186,20 @@ An avatar scale constraints contains the fields:
 - `bodyType`: The body type constraints. A [`Constraint`](#constraint) object.
 - `proportions`: The proportions constraints. A [`Constraint`](#constraint) object.
 
+```yml title="Example"
+target:
+  experience:
+    configuration:
+      avatarScaleConstraints:
+        height:
+          min: 0.95
+        width:
+          max: 0.9
+        proportions:
+          min: 30
+          max: 50
+```
+
 ### Constraint
 
 A constraint contains the fields:
@@ -203,6 +221,16 @@ An avatar asset overrides contains the fields:
 - `tshirt`: The t-shirt override. An asset ID.
 - `shirt`: The shirt override. An asset ID.
 - `pants`: The pants override. An asset ID.
+
+```yml title="Example"
+target:
+  experience:
+    configuration:
+      avatarAssetOverrides:
+        face: 7699174
+        shirt: 5382048848
+        pants: 5611120855
+```
 
 ### Place
 
@@ -243,12 +271,15 @@ target:
 
 A place configuration contains the fields:
 
-- `name`: The display name of the place on the Roblox website and in-game.
-- `description`: The description of the place on the Roblox website.
-- `maxPlayerCount`: The maximum number of players that can be in a server for the place.
+- `name`: The display name of the place on the Roblox website and in-game. Defaults to `"Untitled Game"`.
+- `description`: The description of the place on the Roblox website. Defaults to `"Created with Mantle"`.
+- `maxPlayerCount`: The maximum number of players that can be in a server for the place. Defaults to
+  `50`.
 - `allowCopying`: A boolean indicating whether or not other Roblox users can clone your place.
+  Defaults to `false`.
 - `serverFill`: How Roblox will fill your servers. Valid options: `robloxOptimized`, `maximum`, or
   an object with the field `reservedSlots` set to a number indicating the number of reserved slots.
+  Defaults to `robloxOptimized`.
 
 ### SocialLink
 
