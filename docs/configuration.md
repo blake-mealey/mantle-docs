@@ -149,6 +149,10 @@ An experience contains the fields:
   `playerChoice`.
 - `avatarCollisionType`: The experience's avatar collision type. Valid options: `outerBox`,
   `innerBox`.
+- `avatarScaleConstraints`: The experience's avatar scale constraints. An
+  [`AvatarScaleConstraints`](#avatarscaleconstraints) object.
+- `avatarAssetOverrides`: The experience's avatar asset overrides. An
+  [`AvatarAssetOverrides`](#avatarassetoverrides) object.
 
 ```yml title="Example"
 target:
@@ -167,6 +171,38 @@ target:
 
 In order to configure the name and description of an experience, use the `name` and `description`
 fields of the [`PlaceConfiguration`](#placeconfiguration) for the experience's start place.
+
+### AvatarScaleConstraints
+
+An avatar scale constraints contains the fields:
+
+- `height`: The height constraints. A [`Constraint`](#constraint) object.
+- `width`: The width constraints. A [`Constraint`](#constraint) object.
+- `head`: The head constraints. A [`Constraint`](#constraint) object.
+- `bodyType`: The body type constraints. A [`Constraint`](#constraint) object.
+- `proportions`: The proportions constraints. A [`Constraint`](#constraint) object.
+
+### Constraint
+
+A constraint contains the fields:
+
+- `min`: The minimum value (float).
+- `max`: The maximum value (float).
+
+### AvatarAssetOverrides
+
+An avatar asset overrides contains the fields:
+
+- `face`: The face override. An asset ID.
+- `head`: The head override. An asset ID.
+- `torso`: The torso override. An asset ID.
+- `leftArm`: The left arm override. An asset ID.
+- `rightArm`: The right arm override. An asset ID.
+- `leftLeg`: The left leg override. An asset ID.
+- `rightLeg`: The right leg override. An asset ID.
+- `tshirt`: The t-shirt override. An asset ID.
+- `shirt`: The shirt override. An asset ID.
+- `pants`: The pants override. An asset ID.
 
 ### Place
 
