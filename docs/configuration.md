@@ -56,7 +56,7 @@ payments: group
 payments: owner
 ```
 
-When set to `"owner"`, it payments will cone from the balance of the owner specified by the
+When set to `"owner"`, payments will come from the balance of the owner specified by the
 [top-level](#reference) `owner` field. When set to `"personal"`, all purchases will be made from the
 authenticated user's balance. When set to `"group"`, all purchases will be made from group funds.
 Payments can only be set to `"group"` when `"owner"` is also set to a group, since Roblox does not
