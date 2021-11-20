@@ -305,7 +305,8 @@ A product contains the fields:
 - `name`: The display name of the developer product on the Roblox website and in-game.
   - **Required**
 - `description`: The description of the developer product on the Roblox website and in-game.
-- `icon`: A file path to a product icon.
+  Defaults to `""`.
+- `icon`: A file path to a product icon. Defaults to no icon.
 - `price`: The price of the developer product in Robux.
   - **Required**
 
@@ -338,7 +339,8 @@ A pass contains the fields:
 
 - `name`: The display name of the game pass on the Roblox website and in-game.
   - **Required**
-- `description`: The description of the game pass on the Roblox website and in-game.
+- `description`: The description of the game pass on the Roblox website and in-game. Defaults to
+  `""`.
 - `icon`: A file path to a pass icon.
   - **Required**
 - `price`: The price of the game pass in Robux. If not specified, the game pass will be off-sale.
@@ -367,10 +369,10 @@ A badge contains the fields:
 
 - `name`: The display name of the badge on the Roblox website and in-game.
   - **Required**
-- `description`: The description of the badge on the Roblox website and in-game.
+- `description`: The description of the badge on the Roblox website and in-game. Defaults to `""`.
 - `icon`: A file path to a badge icon.
   - **Required**
-- `enabled`: A boolean indicating whether or not the badge is enabled. Defaults to true.
+- `enabled`: A boolean indicating whether or not the badge is enabled. Defaults to `true`.
 
 ```yml title="Example"
 target:
