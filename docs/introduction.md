@@ -1,8 +1,7 @@
 ---
 sidebar_position: 1
+title: Introduction
 ---
-
-# Introduction
 
 Mantle is an experimental declarative infrastructure-as-code (IaC) and deployment tool for Roblox.
 Mantle is not currently ready for production use-cases.

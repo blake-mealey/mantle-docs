@@ -1,8 +1,7 @@
 ---
 sidebar_position: 3
+title: Getting Started
 ---
-
-# Getting Started
 
 ## Authentication
 
@@ -19,6 +18,12 @@ Mantle uses different authentication pieces for different functionality:
   [rusoto](https://github.com/rusoto/rusoto/blob/master/AWS-CREDENTIALS.md#credentials). The
   simplest option is to provide the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment
   variables.
+
+:::tip
+For Windows users who have logged in to a Roblox Studio installation, the `.ROBLOSECURITY` cookie
+will be automatically sourced from Roblox Studio, so there is no need to supply the environment
+variable unless you wish to deploy from a different account.
+:::
 
 For more information, refer to the [Authentication guide](/docs/authentication).
 

@@ -1,8 +1,7 @@
 ---
 sidebar_position: 2
+title: Installation
 ---
-
-# Installation
 
 There are two ways to install Mantle.
 
