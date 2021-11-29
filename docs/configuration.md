@@ -1,8 +1,7 @@
 ---
 sidebar_position: 5
+title: Configuration
 ---
-
-# Configuration
 
 By default, Mantle looks for a project's configuration in a `mantle.yml` file but you can optionally
 point Mantle to any YAML file.
