@@ -278,4 +278,5 @@ you can import your production environment into Mantle so that you can deploy to
 still experimental and does not do a good job of matching existing resources to configured ones so
 most resources will be recreated.
 
-Run `mantle import --environment <your-environment>`. Run `mantle help import` for more information.
+Run `mantle import --environment <your-environment> --target-id <experience-id>`. Run
+`mantle help import` for more information.
