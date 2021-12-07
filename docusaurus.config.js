@@ -31,9 +31,15 @@ const config = {
     ],
   ],
 
+  plugins: ['@docusaurus/plugin-google-gtag'],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      gtag: {
+        trackingID: 'G-Q4VEG3S3WF',
+        anonymizeIP: true,
+      },
       navbar: {
         title: 'Mantle',
         // logo: {
