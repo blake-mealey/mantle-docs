@@ -31,8 +31,6 @@ const config = {
     ],
   ],
 
-  plugins: ['@docusaurus/plugin-google-gtag'],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
