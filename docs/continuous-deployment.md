@@ -8,6 +8,7 @@ to setup a GitHub Action to automatically deploy your Mantle project on every co
 
 This guide assumes:
 
+- Your project is saved in a GitHub repo
 - Your project is being built with [Rojo](https://rojo.space)
 - Your project tooling (rojo and mantle) is
   [installed](/docs/installation#install-with-foreman-recommended) with
