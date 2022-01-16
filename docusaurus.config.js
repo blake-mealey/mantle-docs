@@ -34,6 +34,9 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      colorMode: {
+        respectPrefersColorScheme: true,
+      },
       gtag: {
         trackingID: 'G-Q4VEG3S3WF',
         anonymizeIP: true,

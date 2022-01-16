@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 7
 title: Configuration
 ---
 
@@ -72,24 +72,52 @@ A environment contains the fields:
 - `tagCommit`: A boolean indicating whether or not to tag the commit with place file versions after
   successful deployments. It is recommended to only enable this on production environment
   configurations.
+- `targetNamePrefix`: A [`TargetNamePrefix`](#targetnameprefix) which configures a prefix to be added to the target's
+  name. Implementation is dependent on the target type. For experience targets, all place names will
+  be updated with the prefix.
+- `targetAccess`: Overrides the target's access. Implementation is dependent on the target type. For
+  experience targets, the `configuration.playability` field will be overridden. Valid options:
+  `public`, `private`, `friends`.
 - `overrides`: An object containing overrides to the [top-level](#reference) `target` configuration.
   The type of this object depends on the type of target. For experience targets, this is an
-  [`Experience`](#experience) object.
+  [`Experience`](#experience) object. Overrides will override all configuration, including changes
+  made by the `targetNamePrefix` and `targetAccess` fields.
 
 ```yml title="Example"
 environments:
   - name: staging
     branches: [dev, dev/*]
     overrides:
-      places:
-        start:
-          configuration:
-            name: Staging
+      configuration:
+        genre: building
   - name: production
     branches: [main]
-    overrides:
-      configuration:
-        playability: public
+    targetAccess: public
+```
+
+### TargetNamePrefix
+
+A target name prefix is either `"environmentName"` or an object with the fields:
+
+- `custom`: A string which will be used as the target name prefix.
+  - **Required**
+
+If set to `environmentName`, the target name prefix will use the format `[<ENVIRONMENT>] ` where
+`<ENVIRONMENT>` is the value of the environment's `name` field.
+
+```yml title="Environment Name Example"
+environments:
+  - name: staging
+    targetNamePrefix: environmentName
+  - name: production
+```
+
+```yml title="Custom Example"
+environments:
+  - name: staging
+    targetNamePrefix:
+      custom: 'Prefix: '
+  - name: production
 ```
 
 ### Target

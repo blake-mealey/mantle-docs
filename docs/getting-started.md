@@ -35,17 +35,10 @@ To get started with Mantle, create a `mantle.yml` file like the following:
 environments:
   - name: staging
     branches: [dev, dev/*]
-    overrides:
-      places:
-        start:
-          configuration:
-            name: Staging - Pirate Wars!
+    targetNamePrefix: environmentName
   - name: production
     branches: [main]
-    overrides:
-      experience:
-        configuration:
-          playability: public
+    targetAccess: public
 
 target:
   experience:
