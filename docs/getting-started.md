@@ -3,273 +3,284 @@ sidebar_position: 3
 title: Getting Started
 ---
 
-## Authentication
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-Before you can get started with Mantle, you need to get the necessary authentication pieces. Please
-remember never to store secrets in your version control systems as malicious actors could use them
-to harm you if they got access.
+The quickest way to get started is with the
+[Examples](https://github.com/blake-mealey/mantle-examples) repo. This guide will walk you through
+deploying your first project with Mantle using the [Getting
+Started](https://github.com/blake-mealey/mantle-examples/tree/main/examples/getting-started)
+example.
 
-Mantle uses different authentication pieces for different functionality:
+## Get the tools
 
-- Deployment operations: `.ROBLOSECURITY` cookie, which can be copied from the dev tools on
-  roblox.com and can be given to Mantle via the `ROBLOSECURITY` environment variable.
-- Remote state file management: AWS credentials, which can be given to Mantle via any of the methods
-  supported by
-  [rusoto](https://github.com/rusoto/rusoto/blob/master/AWS-CREDENTIALS.md#credentials). The
-  simplest option is to provide the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment
-  variables.
+Before we get started, you'll need to have a couple of tools installed.
 
-:::tip
-For Windows users who have logged in to a Roblox Studio installation, the `.ROBLOSECURITY` cookie
-will be automatically sourced from Roblox Studio, so there is no need to supply the environment
-variable unless you wish to deploy from a different account.
+### Git
+
+First of all, make sure you have Git installed. If not, you can install it from its official
+[downloads](https://git-scm.com/downloads) page.
+
+### Foreman
+
+Next, you'll need to install Foreman which is a Roblox toolchain manager (in other words, it's what
+you will use to install Mantle). You can find more information on this in the
+[Installation](/docs/installation) guide, but we'll go through it step-by-step here.
+
+<Tabs>
+<TabItem value="windows" label="Windows" default>
+
+1. Head over to the Foreman [Releases](https://github.com/roblox/foreman/releases) page, and download
+   the latest Windows version (look for the `foreman-x.x.x-win64.zip` link).
+2. Once downloaded, unzip the folder
+3. Copy the `foreman.exe` file to a reusable location. I like to put mine in `C:\Programs` (you'll
+   have to create this folder as it's not a default one)
+4. Add `foreman` to your path so that you can execute it from anywhere on your system. Open the
+   start menu and search "Edit the system environment variables." In the dialog that opens, click
+   "Environment Variables..." Look for the "Path" variable under "System variables" and edit it.
+   Click "New" to add an entry and enter the path of the _folder_ you put your `foreman.exe` file
+   into (for me it's `C:\Programs`).
+5. Open a terminal and run `foreman --version` to verify it's working
+
+</TabItem>
+<TabItem value="macos" label="MacOS">
+
+1. Head over to the Foreman [Releases](https://github.com/roblox/foreman/releases) page, and download
+   the latest MacOS version (look for the `foreman-x.x.x-macos.zip` link).
+
+> TODO: finish writing these docs for MacOS
+
+</TabItem>
+</Tabs>
+
+## Clone the examples repo
+
+Now it's time to clone the [Examples](https://github.com/blake-mealey/mantle-examples) repo. In a
+terminal, run `git clone https://github.com/blake-mealey/mantle-examples` to clone the repo to your
+computer. Now run `cd mantle-examples` to enter the project.
+
+## Install Mantle
+
+Now you can install Mantle using Foreman for the Examples project. Note that this will only be
+installing Mantle for this project based on it's `foreman.toml` file. Run `foreman install` to
+install Mantle. To verify it was installed correctly, run `mantle --version`.
+
+## Deploy your first project
+
+Now it's time to deploy your first project! Run `mantle deploy examples/getting-started --environment dev`
+to deploy the getting started project.
+
+:::caution
+If you are a MacOS user, or you are a Windows user but you are not currently logged in to Roblox
+Studio, you will need to provide a `ROBLOSECURITY` environment variable. You can read more about
+this in the [Authentication](/docs/authentication) guide.
 :::
 
-For more information, refer to the [Authentication guide](/docs/authentication).
+If everything goes well, you should see that the deployment completed successfully. Let's break down
+the output.
 
-## Configuration
+First, Mantle tells us about the project we are trying to deploy:
 
-To get started with Mantle, create a `mantle.yml` file like the following:
+```
+Loading project:
+  ╷
+  │  Loaded config file .\examples\getting-started\mantle.yml
+  │  Selected provided environment configuration dev
+  │  Loading previous state from local file .\examples\getting-started\.mantle-state.yml
+  │  No previous state for environment dev
+  │
+  ╰─ Succeeded
+```
 
-```yml
+Here we can see the configuration file that Mantle used was `examples/getting-started/mantle.yml`
+because by default Mantle will look for a file called `mantle.yml` in the provided folder. It also
+tells us that it is targeting the `dev` environment configuration because we passed `--environment dev`
+to the deployment command. Finally, it tells us that it is looking for previous state from the
+local file `examples/getting-started/.mantle-state.yml` and that no previous state was found. We'll
+come back to this state file in more detail later, but for now you can just know that Mantle
+realized we didn't have a state file yet so it created a new one.
+
+Next, Mantle tells us about the resources it is deploying:
+
+```
+Deploying resources:
+  ╷
+  │  + Creating: experience_singleton
+  │    ╷
+  │    │  Dependencies:
+  │    │      []
+  │    │  Inputs:
+  │    │    + experience:
+  │    │    +   groupId: ~
+  │    │
+  │    ╰─ Succeeded with outputs:
+  │         + experience:
+  │         +   assetId: 3272076227
+  │         +   startPlaceId: 8588802093
+
+... cut for brevity ...
+
+  │
+  ╰─ Succeeded with 6 create(s), 0 update(s), 0 delete(s), 0 noop(s), 0 skip(s)
+```
+
+Here we can see all of the Roblox resources which Mantle has decided it needs to create for us to
+match the configuration file. In the snippet above, Mantle is creating a new Roblox experience, and
+we can see its asset ID and its start place's asset ID in its outputs section. At the end of this
+section, Mantle provides a summary of the operations it performed. In this case, all it did was
+create 6 resources.
+
+Next, Mantle tells us where it is saving the state of the current deployment:
+
+```
+Saving state:
+  ╷
+  │  Saving to local file .\examples\getting-started\.mantle-state.yml. It is recommended you commit this file to your source control
+  │
+  ╰─ Succeeded
+```
+
+Here's the mysterious state file again! Let's crack it open and take a look. Run
+`cat examples/getting-started/.mantle-state.yml` to print the file's contents into your terminal. As
+you can see, it's a YAML file containing a list of all of the resources in each environment. If you
+look closely, you'll see that its contents actually look very similar to the output which Mantle
+already printed out for us. Mantle uses this file to know which resources need to be changed between
+deployments, but more on that later. Mantle also told us that "It is recommended you commit this
+file to your source control" which is true! You might notice that the examples project doesn't do
+this, but this is just so that everyone can try their own deployments.
+
+Finally, Mantle tells us the final results of the deployment as it relates to the "target" resource
+which in this case was an experience:
+
+```
+Target results:
+  ╷
+  │  Experience:
+  │    https://www.roblox.com/games/8588802093
+  │
+  │  Places:
+  │    start: https://www.roblox.com/games/8588802093
+  │
+  ╰──○
+```
+
+Open one of the links to view and play your new experience! It should look like the following image:
+
+![Roblox place created with Mantle](/img/tutorial/getting-started-place.png)
+
+Let's modify the configuration and see how Mantle responds. Open the
+`examples/getting-started/mantle.yml` file in your favourite text editor (I use
+[VSCode](https://code.visualstudio.com/)) and change the start place configuration's `name` field to
+something new:
+
+```yml title="examples/getting-started/mantle.yml" {15}
 environments:
-  - name: staging
-    branches: [dev, dev/*]
+  - name: dev
     targetNamePrefix: environmentName
-  - name: production
-    branches: [main]
+  - name: prod
     targetAccess: public
 
 target:
   experience:
     configuration:
-      genre: naval
-      playableDevices: [computer]
-      playability: private
-      privateServerPrice: 0
-      enableStudioAccessToApis: true
-      icon: marketing/game-icon.png
-      thumbnails:
-        - marketing/game-thumbnail-fall-update.png
-        - marketing/game-thumbnail-default.png
+      genre: building
     places:
       start:
         file: game.rbxlx
         configuration:
-          name: Pirate Wars!
+          name: I changed the Mantle config!
           description: |-
-            Duke it out on the high seas in your pirate ship!
-
-            🍂 Fall update: new cannons, new ship types!
-          maxPlayerCount: 10
-          serverFill: robloxOptimized
+            Made with Mantle
 ```
 
-For the full configuration reference, see the [Configuration guide](/docs/configuration).
+Now, re-run the deploy command (`mantle deploy examples/getting-started -e dev`) and see what
+happens.
 
-## Deploying
+You should see a very similar output to the first deployment, except instead of recreating all of
+the resources, Mantle is able to just apply the single change you made to the place configuration:
 
-To deploy with Mantle, just run `mantle deploy` from your project directory! Run `mantle help deploy`
-for more information.
-
-When deploying the above configuration file for the first time, you'll see something like this:
-
-```txt
-Loading project:
-  ╷
-  │  Loaded config file mantle.yml
-  │  Selected deployment configuration staging because the current branch dev matched one of [dev, dev/*]
-  │  Loading previous state from local file .mantle-state.yml
-  │  No previous state for deployment staging
-  │
-  ╰─ Succeeded
-
+```
 Deploying resources:
   ╷
-  │  + Creating: experience singleton
+  │  ~ Updating: placeConfiguration_start
   │    ╷
-  │    │  + assetId: ~
+  │    │  Dependencies:
+  │    │      - place:
+  │    │          assetId: 8588802093
+  │    │  Inputs:
+  │    │      placeConfiguration:
+  │    │    -   name: "[DEV] Getting Started with Mantle"
+  │    │    +   name: "[DEV] I changed the Mantle config!"
+  │    │        description: Made with Mantle
+  │    │        maxPlayerCount: 50
+  │    │        allowCopying: false
+  │    │        socialSlotType: Automatic
+  │    │        customSocialSlotsCount: ~
   │    │
   │    ╰─ Succeeded with outputs:
-  │         assetId: 3078825648
-  │         startPlaceId: 7969246232
-  │
-  │  + Creating: experienceThumbnail marketing/game-thumbnail-fall-update.png
-  │    ╷
-  │    │  + experienceId: 3078825648
-  │    │  + fileHash: c1811300860fcd79a178142a4f4f7aa73198afa3b64a1b3ae19fc50235e7fa75
-  │    │  + filePath: marketing/game-thumbnail-fall-update.png
-  │    │
-  │    ╰─ Succeeded with outputs:
-  │         assetId: 50578876
-  │
-  │  + Creating: experienceIcon marketing/game-icon.png
-  │    ╷
-  │    │  + experienceId: 3078825648
-  │    │  + fileHash: 787f02689d554fd858b6db2e912179524d348a74ba23cffcc9415815e2a27b33
-  │    │  + filePath: marketing/game-icon.png
-  │    │
-  │    ╰─ Succeeded with outputs:
-  │         assetId: 34660038
-  │
-  │  + Creating: experienceThumbnail marketing/game-thumbnail-default.png
-  │    ╷
-  │    │  + experienceId: 3078825648
-  │    │  + fileHash: d36757cf3312ca2683eb597bed3359367861cd3e4f1c71668fef24f86edb3a12
-  │    │  + filePath: marketing/game-thumbnail-default.png
-  │    │
-  │    ╰─ Succeeded with outputs:
-  │         assetId: 50578878
-  │
-  │  + Creating: experienceThumbnailOrder singleton
-  │    ╷
-  │    │  + assetIds:
-  │    │  +   - 50578876
-  │    │  +   - 50578878
-  │    │  + experienceId: 3078825648
-  │    │
-  │    ╰─ Succeeded
-  │
-  │  + Creating: place start
-  │    ╷
-  │    │  + assetId: ~
-  │    │  + experienceId: 3078825648
-  │    │  + isStart: true
-  │    │  + startPlaceId: 7969246232
-  │    │
-  │    ╰─ Succeeded with outputs:
-  │         assetId: 7969246232
-  │
-  │  + Creating: placeConfiguration start
-  │    ╷
-  │    │  + assetId: 7969246232
-  │    │  + configuration:
-  │    │  +   name: Staging - Pirate Wars!
-  │    │  +   description: "Duke it out on the high seas in your pirate ship!\n\n🍂 Fall update: new cannons, new ship types!"
-  │    │  +   maxPlayerCount: 10
-  │    │  +   allowCopying: ~
-  │    │  +   socialSlotType: Automatic
-  │    │  +   customSocialSlotCount: ~
-  │    │
-  │    ╰─ Succeeded
-  │
-  │  + Creating: placeFile start
-  │    ╷
-  │    │  + assetId: 7969246232
-  │    │  + fileHash: 991d8b1cadc89be408a9f3cf9c47c4f844f52f439b8e5b20c61c77f194a81c7c
-  │    │  + filePath: game.rbxlx
-  │    │
-  │    ╰─ Succeeded with outputs:
-  │         version: 2
-  │
-  │  + Creating: experienceActivation singleton
-  │    ╷
-  │    │  + experienceId: 3078825648
-  │    │  + isActive: false
-  │    │
-  │    ╰─ Succeeded
-  │
-  │  + Creating: experienceConfiguration singleton
-  │    ╷
-  │    │  + configuration:
-  │    │  +   genre: Pirate
-  │    │  +   playableDevices:
-  │    │  +     - computer
-  │    │  +   isFriendsOnly: ~
-  │    │  +   allowPrivateServers: true
-  │    │  +   privateServerPrice: 0
-  │    │  +   isForSale: ~
-  │    │  +   price: ~
-  │    │  +   studioAccessToApisAllowed: true
-  │    │  +   permissions: ~
-  │    │  +   universeAvatarType: ~
-  │    │  +   universeAnimationType: ~
-  │    │  +   universeCollisionType: ~
-  │    │  +   isArchived: ~
-  │    │  + experienceId: 3078825648
-  │    │
-  │    ╰─ Succeeded
+  │           placeConfiguration
   │
   │
-  ╰─ Succeeded with 10 create(s), 0 update(s), 0 delete(s), 0 noop(s)
-
-Saving state:
-  ╷
-  │  Saving to local file .mantle-state.yml. It is recommended you commit this file to your source control
-  │
-  ╰─ Succeeded
+  ╰─ Succeeded with 0 create(s), 1 update(s), 0 delete(s), 5 noop(s), 0 skip(s)
 ```
 
-## Outputs
+As you can see, Mantle highlights for us in the output exactly what changed and which resources
+needed to be updated as a result of it. Mantle is able to do this because of the state file! All it
+has to do is compare what the results of the previous deployment were by reading the state file with
+the "desired state" as defined by the configuration file. Now we finally understand why Mantle uses
+a state file!
 
-If you want to know the ID of a resource which Mantle created so you can reference it in your game,
-you can run `mantle outputs` from your project directory. Run `mantle help outputs` for more
-information.
+Let's make a couple more changes to our configuration file. Add a `maxPlayerCount` to the start
+place's configuration and add some social links to your experience:
 
-After deploying the above configuration file for the first time, running the outputs command will
-print something like this:
+```yml title="examples/getting-started/mantle.yml" {16,19-23}
+environments:
+  - name: dev
+    targetNamePrefix: environmentName
+  - name: prod
+    targetAccess: public
 
-```txt
-Load outputs:
-╷
-│ Loaded config file mantle.yml
-│ Selected provided deployment configuration staging
-│ Loading previous state from local file .mantle-state.yml
-│
-╰─ Succeeded
-
-{
-  "experience": {
-    "singleton": {
-      "assetId": 3078825648,
-      "startPlaceId": 7969246232
-    }
-  },
-  "experienceIcon": {
-    "marketing/game-icon.png": {
-      "assetId": 34660038
-    }
-  },
-  "experienceThumbnail": {
-    "marketing/game-thumbnail-default.png": {
-      "assetId": 50578878
-    },
-    "marketing/game-thumbnail-fall-update.png": {
-      "assetId": 50578876
-    }
-  },
-  "place": {
-    "start": {
-      "assetId": 7969246232
-    }
-  },
-  "placeFile": {
-    "start": {
-      "version": 2
-    }
-  }
-}
+target:
+  experience:
+    configuration:
+      genre: building
+    places:
+      start:
+        file: game.rbxlx
+        configuration:
+          name: I changed the Mantle config!
+          maxPlayerCount: 25
+          description: |-
+            Made with Mantle
+    socialLinks:
+      - title: Follow on Twitter
+        url: https://twitter.com/blakemdev
+      - title: Official Roblox YouTube
+        url: https://youtube.com/channel/UCjiPEaapiHbJMoAdi_L8fNA
 ```
 
-## Destroying
+Re-run the deploy command, then take a look at your experience on the Roblox website again. It
+should now be updated to look something like this:
 
-If you want to destroy a deployment you can run `mantle destroy` from your project directory. Run
-`mantle help destroy` for more information.
+![Roblox place created with Mantle](/img/tutorial/getting-started-place-updated.png)
 
-## Importing
+Note that the title, server size, and social links have all been changed!
 
-Mantle provides an import feature so that you can deploy to an existing experience with Mantle.
+At this point I would encourage you to continue playing around with the configuration file and
+redeploying to see how Mantle handles the changes and to get familiar with the format. Here are some
+things you can try on your own:
 
-:::caution
-The import feature _**DOES NOT**_ convert your existing Roblox project into a Mantle project. Do not
-import, then deploy a place with Mantle without first testing on a staging environment as you may
-destroy your assets.
-:::
+- Try deploying to the `prod` environment
+- Remove one of the social links
+- Add a game icon and thumbnails to the experience
+- Try adding a second place to the experience
 
-After creating a staging environment with Mantle that is on-par with your production environment,
-you can import your production environment into Mantle so that you can deploy to it. This feature is
-still experimental and does not do a good job of matching existing resources to configured ones so
-most resources will be recreated.
+To see what all of the options are for the configuration file, check out the
+[Configuration](/docs/configuration) guide!
 
-Run `mantle import --environment <your-environment> --target-id <experience-id>`. Run
-`mantle help import` for more information.
+## Destroy the project when you are finished
+
+If you are done with the example project and you would like to get rid of the places it created in
+your Roblox account, you can run `mantle destroy examples/getting-started --environment dev` to
+destroy the project. Note that the resources will still be in Roblox but they will be archived and
+hidden wherever possible.
