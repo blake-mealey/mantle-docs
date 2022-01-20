@@ -270,7 +270,8 @@ At this point I would encourage you to continue playing around with the configur
 redeploying to see how Mantle handles the changes and to get familiar with the format. Here are some
 things you can try on your own:
 
-- Remove one of the social links and see what happens
+- Try deploying to the `prod` environment
+- Remove one of the social links
 - Add a game icon and thumbnails to the experience
 - Try adding a second place to the experience
 
