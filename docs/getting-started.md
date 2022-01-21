@@ -274,6 +274,7 @@ things you can try on your own:
 - Remove one of the social links
 - Add a game icon and thumbnails to the experience
 - Try adding a second place to the experience
+- Try deploying some of the other example projects
 
 To see what all of the options are for the configuration file, check out the
 [Configuration](/docs/configuration) guide!
