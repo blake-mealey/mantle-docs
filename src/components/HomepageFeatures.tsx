@@ -5,12 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react';
-import clsx from 'clsx';
 import styles from './HomepageFeatures.module.css';
 
 type FeatureItem = {
   title: string;
   description: JSX.Element;
+  image: string;
 };
 
 const FeatureList: FeatureItem[] = [
@@ -22,23 +22,33 @@ const FeatureList: FeatureItem[] = [
         handle the rest.
       </>
     ),
+    image: '/img/feature_declarative.svg',
   },
   {
-    title: 'Deploy',
-    description: <>Quickly deploy your Roblox places.</>,
+    title: 'Integrated with the Community',
+    description: (
+      <>
+        Install with <a href="https://github.com/roblox/foreman">Foreman</a> and
+        build with <a href="https://rojo.space">Rojo</a>
+        <br />
+      </>
+    ),
+    image: '/img/feature_integrated.svg',
   },
   {
-    title: 'Continuous Integration',
-    description: <>Designed for CI environments like GitHub Actions.</>,
+    title: 'Continuous Deployment',
+    description: <>Designed for CD environments like GitHub Actions.</>,
+    image: '/img/feature_cd.svg',
   },
 ];
 
-function Feature({ title, description }: FeatureItem) {
+function Feature({ title, description, image }: FeatureItem) {
   return (
-    <div className={clsx('col col--4')}>
+    <div className="col col--4">
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
         <p>{description}</p>
+        <img src={image} />
       </div>
     </div>
   );
