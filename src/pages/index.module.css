@@ -21,3 +21,51 @@
   align-items: center;
   justify-content: center;
 }
+
+.divider {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 3em 0;
+  background-color: var(--ifm-background-surface-color);
+}
+
+.divider h3 {
+  margin: 0;
+}
+
+.divider a {
+  color: white;
+  text-decoration: none;
+}
+
+.divider a:hover {
+  color: var(--ifm-link-hover-color);
+}
+
+.feature {
+  display: flex;
+  max-width: 70%;
+  margin: 1em auto;
+  gap: 2em;
+}
+
+.feature > * {
+  flex: 1;
+}
+
+.feature .content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.featureNum {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+  border-radius: 50%;
+  border: solid 3px var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
