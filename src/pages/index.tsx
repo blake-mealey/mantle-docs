@@ -88,6 +88,14 @@ target:
               Describe the Roblox infrastructure you want and Mantle will take
               care of the rest.
             </p>
+            <div>
+              <Link
+                className="button button--secondary button--lg"
+                to="/docs/configuration"
+              >
+                Learn More
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -112,6 +120,14 @@ mantle = { source = "blake-mealey/mantle", version = "0.10" }`}
               <a href="https://github.com/roblox/foreman">Foreman</a> and build
               with <a href="https://rojo.space">Rojo</a>.
             </p>
+            <div>
+              <Link
+                className="button button--secondary button--lg"
+                to="/docs/installation"
+              >
+                Learn More
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -152,6 +168,14 @@ jobs:
               Mantle is designed for continuous deployment environments like
               GitHub Actions.
             </p>
+            <div>
+              <Link
+                className="button button--secondary button--lg"
+                to="/docs/continuous-deployment"
+              >
+                Learn More
+              </Link>
+            </div>
           </div>
         </section>
       </main>

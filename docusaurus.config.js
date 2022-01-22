@@ -12,7 +12,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  // favicon: 'img/favicon.ico',
+  favicon: 'favicon.ico',
 
   presets: [
     [
@@ -45,7 +45,7 @@ const config = {
         title: 'Mantle',
         // logo: {
         //   alt: 'Mantle Logo',
-        //   src: 'img/logo.svg',
+        //   src: 'img/mantle-logo.png',
         // },
         items: [
           {
@@ -53,6 +53,11 @@ const config = {
             docId: 'introduction',
             position: 'left',
             label: 'Docs',
+          },
+          {
+            href: 'https://github.com/blake-mealey/mantle-examples/tree/main/examples',
+            label: 'Examples',
+            position: 'left',
           },
           {
             href: 'https://github.com/blake-mealey/mantle',
