@@ -110,6 +110,10 @@ const config = {
             title: 'Community',
             items: [
               {
+                label: 'Roblox OSS Community',
+                href: 'https://discord.gg/wH5ncNS',
+              },
+              {
                 label: 'Feature requests',
                 href: 'https://github.com/blake-mealey/mantle/issues/new',
               },

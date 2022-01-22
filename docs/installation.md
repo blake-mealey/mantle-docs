@@ -19,12 +19,16 @@ You can check for the latest Mantle version on the
 [releases](https://github.com/blake-mealey/mantle/releases) page.
 
 This is the recommended method as it enables consistent version management across your team,
-provides better interop with other tools, and makes using Mantle in CI environments (especially GitHub
-Action) simpler.
+provides better interop with other tools, and makes using Mantle in CI environments (especially
+GitHub Action) simpler.
+
+If you need help installing Foreman, check out the [Getting Started](/docs/getting-started#foreman)
+guide.
 
 ## Install with Cargo
 
-You can download and compile the [crate](https://crates.io/crates/rbx_mantle) from source with Cargo:
+You can download and compile the [crate](https://crates.io/crates/rbx_mantle) from source with
+Cargo:
 
 ```sh
 cargo install rbx_mantle

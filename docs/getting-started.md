@@ -12,6 +12,12 @@ deploying your first project with Mantle using the [Getting
 Started](https://github.com/blake-mealey/mantle-examples/tree/main/examples/getting-started)
 example.
 
+:::tip
+This guide will require you to run commands from a terminal. If you're new to terminals, we
+recommend you use **PowerShell on Windows** and **Terminal on MacOS**. Some commands we use in this guide
+will _not_ work in Window's CMD terminal.
+:::
+
 ## Get the tools
 
 Before we get started, you'll need to have a couple of tools installed.
@@ -35,11 +41,16 @@ you will use to install Mantle). You can find more information on this in the
 2. Once downloaded, unzip the folder
 3. Copy the `foreman.exe` file to a reusable location. I like to put mine in `C:\Programs` (you'll
    have to create this folder as it's not a default one)
-4. Add `foreman` to your path so that you can execute it from anywhere on your system. Open the
-   start menu and search "Edit the system environment variables." In the dialog that opens, click
-   "Environment Variables..." Look for the "Path" variable under "System variables" and edit it.
-   Click "New" to add an entry and enter the path of the _folder_ you put your `foreman.exe` file
-   into (for me it's `C:\Programs`).
+4. Now we will need to configure your path variable to include both the `foreman.exe` **and** the
+   tools that Foreman will install later.
+   1. To configure your path variable, open the start menu and search "Edit the system environment
+      variables." In the dialog that opens, click "Environment Variables..." Select the "Path"
+      variable under "User variables for <username\>" and click "Edit..."
+   2. Add `foreman.exe` to your path by clicking "New" to add an entry and enter the path of the
+      _folder_ you put `foreman.exe` into (for me it was `C:\Programs`).
+   3. Add the Foreman `bin` directory to your path by clicking "New" to add an entry and enter
+      `C:\Users\<username>\.foreman\bin` where `<username>` is your Windows username.
+   4. Click "Ok" to save your changes.
 5. Open a terminal and run `foreman --version` to verify it's working
 
 </TabItem>
@@ -61,9 +72,13 @@ computer. Now run `cd mantle-examples` to enter the project.
 
 ## Install Mantle
 
-Now you can install Mantle using Foreman for the Examples project. Note that this will only be
-installing Mantle for this project based on it's `foreman.toml` file. Run `foreman install` to
-install Mantle. To verify it was installed correctly, run `mantle --version`.
+Now you can install Mantle using Foreman for the Examples project! Run `foreman install` to install
+Mantle. Foreman will download the version of Mantle which the Examples project is configured to use
+in its [foreman.toml](https://github.com/blake-mealey/mantle-examples/tree/main/foreman.toml) file
+and make it available to your terminal as `mantle` within the Examples project directory.
+
+To verify that it was installed correctly, run `mantle --version`. If you are having trouble, you
+can ask for help in the "tooling" channel of the [Roblox OSS Discord](https://discord.gg/wH5ncNS).
 
 ## Deploy your first project
 

@@ -103,7 +103,7 @@ target:
           <aside>
             <div className={styles.codeBlock}>
               <div className={styles.codeBlockTitle}>foreman.toml</div>
-              <SyntaxHighlighter language="yaml" style={codeTheme}>
+              <SyntaxHighlighter language="toml" style={codeTheme}>
                 {`[tools]
 mantle = { source = "blake-mealey/mantle", version = "0.10" }`}
               </SyntaxHighlighter>
