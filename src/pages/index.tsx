@@ -4,6 +4,8 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.css';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { anOldHope as codeTheme } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -35,28 +37,49 @@ export default function Home(): JSX.Element {
         <section className={styles.divider}>
           <a href="#feature-declarative">
             <h3>
-              <span className={styles.featureNum}>1</span> Declarative
+              <span className={styles.featureNum}>1</span>Declarative
             </h3>
           </a>
           <a href="#feature-integrated">
             <h3>
-              <span className={styles.featureNum}>2</span> Integrated
+              <span className={styles.featureNum}>2</span>Integrated
             </h3>
           </a>
           <a href="#feature-automated">
             <h3>
-              <span className={styles.featureNum}>3</span> Automated
+              <span className={styles.featureNum}>3</span>Automated
             </h3>
           </a>
         </section>
 
         <section id="feature-declarative" className={styles.feature}>
           <aside>
-            <img src="/img/feature_declarative.svg" />
+            <div className={styles.codeBlock}>
+              <div className={styles.codeBlockTitle}>mantle.yml</div>
+              <SyntaxHighlighter language="yaml" style={codeTheme}>
+                {`environments:
+  - name: dev
+    targetNamePrefix: environmentName
+  - name: prod
+    targetAccess: public
+
+target:
+  experience:
+    configuration:
+      genre: building
+    places:
+      start:
+        file: game.rbxlx
+        configuration:
+          name: Getting Started with Mantle
+          description: |-
+            Made with Mantle`}
+              </SyntaxHighlighter>
+            </div>
           </aside>
           <div className={styles.content}>
             <h3>
-              <span className={styles.featureNum}>1</span> Declarative
+              <span className={styles.featureNum}>1</span>Declarative
               configuration
             </h3>
             <p>
@@ -68,11 +91,17 @@ export default function Home(): JSX.Element {
 
         <section id="feature-integrated" className={styles.feature}>
           <aside>
-            <img src="/img/feature_integrated.svg" />
+            <div className={styles.codeBlock}>
+              <div className={styles.codeBlockTitle}>foreman.toml</div>
+              <SyntaxHighlighter language="yaml" style={codeTheme}>
+                {`[tools]
+mantle = { source = "blake-mealey/mantle", version = "0.10" }`}
+              </SyntaxHighlighter>
+            </div>
           </aside>
           <div className={styles.content}>
             <h3>
-              <span className={styles.featureNum}>2</span> Integrated with the
+              <span className={styles.featureNum}>2</span>Integrated with the
               Roblox OSS community
             </h3>
             <p>
@@ -86,11 +115,35 @@ export default function Home(): JSX.Element {
 
         <section id="feature-automated" className={styles.feature}>
           <aside>
-            <img src="/img/feature_cd.svg" />
+            <div className={styles.codeBlock}>
+              <div className={styles.codeBlockTitle}>
+                .github/workflows/deploy.yml
+              </div>
+              <SyntaxHighlighter language="yaml" style={codeTheme}>
+                {`name: Deploy
+on: push
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Roblox/setup-foreman@v1
+        with:
+          token: $\{\{ secrets.GITHUB_TOKEN }}
+      - name: Build project
+        run: rojo build --output game.rbxlx
+      - name: Deploy project
+        run: mantle deploy
+        env:
+          ROBLOSECURITY: $\{\{ secrets.ROBLOSECURITY }}
+          AWS_ACCESS_KEY_ID: $\{\{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: $\{\{ secrets.AWS_SECRET_ACCESS_KEY }}`}
+              </SyntaxHighlighter>
+            </div>
           </aside>
           <div className={styles.content}>
             <h3>
-              <span className={styles.featureNum}>3</span> Automate with
+              <span className={styles.featureNum}>3</span>Automate with
               continuous deployments
             </h3>
             <p>

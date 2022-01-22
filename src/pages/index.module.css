@@ -47,7 +47,20 @@
   display: flex;
   max-width: 70%;
   margin: 1em auto;
+  padding: 0 1em;
   gap: 2em;
+}
+
+@media screen and (max-width: 966px) {
+  .feature {
+    max-width: 100%;
+    flex-direction: column-reverse;
+    gap: 0;
+  }
+
+  .divider {
+    display: none;
+  }
 }
 
 .feature > * {
@@ -55,6 +68,7 @@
 }
 
 .feature .content {
+  font-size: 1.1em;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -68,4 +82,22 @@
   border-radius: 50%;
   border: solid 3px var(--ifm-color-primary);
   color: var(--ifm-color-primary);
+  margin-right: 0.5em;
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.codeBlock {
+  background-color: rgb(28, 29, 33);
+  border-radius: 1em;
+}
+
+.codeBlock pre {
+  padding: 0.5em 1em !important;
+}
+
+.codeBlockTitle {
+  padding: 0.5em 1em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  font-size: 1.1em;
+  font-weight: bold;
 }

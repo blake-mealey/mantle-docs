@@ -1,8 +1,8 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/nightOwlLight');
-const darkCodeTheme = require('prism-react-renderer/themes/nightOwl');
+const lightCodeTheme = require('prism-react-renderer/themes/vsLight');
+const darkCodeTheme = require('prism-react-renderer/themes/vsDark');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -63,27 +63,58 @@ const config = {
       },
       footer: {
         style: 'dark',
+        logo: {
+          alt: 'Mantle Logo',
+          src: 'img/mantle-logo.png',
+          href: 'https://mantle-docs.vercel.app',
+          width: 60,
+          height: 60,
+        },
         links: [
           {
             title: 'Docs',
             items: [
               {
-                label: 'Docs',
-                to: '/docs/introduction',
+                label: 'Getting Started',
+                to: '/docs/getting-started',
+              },
+              {
+                label: 'Configuration',
+                to: '/docs/configuration',
               },
             ],
           },
           {
-            title: 'More',
+            title: 'Repos',
             items: [
               {
-                label: 'GitHub',
+                label: 'Mantle',
                 href: 'https://github.com/blake-mealey/mantle',
+              },
+              {
+                label: 'Examples',
+                href: 'https://github.com/blake-mealey/mantle-examples',
+              },
+              {
+                label: 'Docs',
+                href: 'https://github.com/blake-mealey/mantle-docs',
+              },
+            ],
+          },
+          {
+            title: 'Community',
+            items: [
+              {
+                label: 'Feature requests',
+                href: 'https://github.com/blake-mealey/mantle/issues/new',
+              },
+              {
+                label: 'Bug reports',
+                href: 'https://github.com/blake-mealey/mantle/issues/new',
               },
             ],
           },
         ],
-        copyright: `Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
