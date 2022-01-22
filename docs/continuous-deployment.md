@@ -10,7 +10,7 @@ This guide assumes:
 
 - Your project is saved in a GitHub repo
 - Your project is being built with [Rojo](https://rojo.space)
-- Your project tooling (rojo and mantle) is
+- Your project tools (Rojo and Mantle) are
   [installed](/docs/installation#install-with-foreman-recommended) with
   [Foreman](https://github.com/Roblox/foreman#readme)
 - Your Mantle project is configured to use [remote state](/docs/remote-state)
