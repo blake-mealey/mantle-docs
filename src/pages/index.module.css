@@ -23,11 +23,17 @@
 }
 
 .divider {
+  background-color: var(--ifm-background-surface-color);
+  padding: 0 1em;
+}
+
+.divider > div {
+  max-width: max(966px, 70%);
+  margin: 0 auto;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   padding: 3em 0;
-  background-color: var(--ifm-background-surface-color);
 }
 
 .divider h3 {
@@ -43,9 +49,15 @@
   color: var(--ifm-link-hover-color);
 }
 
+@media screen and (max-width: 500px) {
+  .divider {
+    display: none;
+  }
+}
+
 .feature {
   display: flex;
-  max-width: 70%;
+  max-width: max(966px, 70%);
   margin: 1em auto;
   padding: 0 1em;
   gap: 2em;
@@ -53,13 +65,8 @@
 
 @media screen and (max-width: 966px) {
   .feature {
-    max-width: 100%;
     flex-direction: column-reverse;
     gap: 0;
-  }
-
-  .divider {
-    display: none;
   }
 }
 

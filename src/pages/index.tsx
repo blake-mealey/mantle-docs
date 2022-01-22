@@ -35,21 +35,23 @@ export default function Home(): JSX.Element {
         {/* TODO: extract this into data-driven components */}
 
         <section className={styles.divider}>
-          <a href="#feature-declarative">
-            <h3>
-              <span className={styles.featureNum}>1</span>Declarative
-            </h3>
-          </a>
-          <a href="#feature-integrated">
-            <h3>
-              <span className={styles.featureNum}>2</span>Integrated
-            </h3>
-          </a>
-          <a href="#feature-automated">
-            <h3>
-              <span className={styles.featureNum}>3</span>Automated
-            </h3>
-          </a>
+          <div>
+            <a href="#feature-declarative">
+              <h3>
+                <span className={styles.featureNum}>1</span>Declarative
+              </h3>
+            </a>
+            <a href="#feature-integrated">
+              <h3>
+                <span className={styles.featureNum}>2</span>Integrated
+              </h3>
+            </a>
+            <a href="#feature-automated">
+              <h3>
+                <span className={styles.featureNum}>3</span>Automated
+              </h3>
+            </a>
+          </div>
         </section>
 
         <section id="feature-declarative" className={styles.feature}>
