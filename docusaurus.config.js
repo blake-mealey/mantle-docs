@@ -115,11 +115,11 @@ const config = {
               },
               {
                 label: 'Feature requests',
-                href: 'https://github.com/blake-mealey/mantle/issues/new',
+                href: 'https://github.com/blake-mealey/mantle/issues/new?labels=enhancement&template=feature_request.md',
               },
               {
                 label: 'Bug reports',
-                href: 'https://github.com/blake-mealey/mantle/issues/new',
+                href: 'https://github.com/blake-mealey/mantle/issues/new?labels=bug&template=bug_report.md',
               },
             ],
           },

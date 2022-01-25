@@ -54,6 +54,10 @@ export default function Home(): JSX.Element {
           </div>
         </section>
 
+        <div className={styles.demo}>
+          <img src="/img/mantle-demo.svg" />
+        </div>
+
         <section id="feature-declarative" className={styles.feature}>
           <aside>
             <div className={styles.codeBlock}>

@@ -55,6 +55,17 @@
   }
 }
 
+.demo {
+  text-align: center;
+  padding: 1em;
+}
+
+@media screen and (max-width: 966px) {
+  .demo {
+    display: none;
+  }
+}
+
 .feature {
   display: flex;
   max-width: max(966px, 70%);
