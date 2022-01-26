@@ -23,17 +23,16 @@
 }
 
 .divider {
-  background-color: var(--ifm-background-surface-color);
-  padding: 0 1em;
+  background-color: var(--ifm-footer-background-color);
 }
 
 .divider > div {
-  max-width: max(966px, 70%);
+  max-width: max(966px, min(70%, 1300px));
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 3em 0;
+  padding: 3em 1em;
 }
 
 .divider h3 {
@@ -49,7 +48,7 @@
   color: var(--ifm-link-hover-color);
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 966px) {
   .divider {
     display: none;
   }
@@ -57,7 +56,12 @@
 
 .demo {
   text-align: center;
-  padding: 1em;
+  margin: 6em 0;
+}
+
+.demo img {
+  width: max(966px, min(70%, 1300px));
+  padding: 0 1em;
 }
 
 @media screen and (max-width: 966px) {
@@ -68,16 +72,21 @@
 
 .feature {
   display: flex;
-  max-width: max(966px, 70%);
-  margin: 1em auto;
+  max-width: max(966px, min(70%, 1300px));
+  margin: 6em auto;
   padding: 0 1em;
-  gap: 2em;
+  gap: 6em;
+}
+
+.feature:nth-child(even) {
+  flex-direction: row-reverse;
 }
 
 @media screen and (max-width: 966px) {
   .feature {
-    flex-direction: column-reverse;
+    flex-direction: column-reverse !important;
     gap: 1em;
+    margin: 3em 0;
   }
 }
 
@@ -85,8 +94,13 @@
   flex: 1;
 }
 
+.feature > aside {
+  min-width: 0;
+  flex-grow: 2;
+}
+
 .feature .content {
-  font-size: 1.1em;
+  font-size: 1.3em;
   display: flex;
   flex-direction: column;
   justify-content: center;
