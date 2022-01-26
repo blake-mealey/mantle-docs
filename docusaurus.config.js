@@ -12,7 +12,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'favicon.ico',
+  favicon: 'favicon.png',
   clientModules: [require.resolve('./load-github-buttons.js')],
 
   presets: [
@@ -44,10 +44,10 @@ const config = {
       },
       navbar: {
         title: 'Mantle',
-        // logo: {
-        //   alt: 'Mantle Logo',
-        //   src: 'img/mantle-logo.png',
-        // },
+        logo: {
+          alt: 'Mantle Icon',
+          src: 'img/mantle-icon.svg',
+        },
         items: [
           {
             type: 'doc',
@@ -79,9 +79,8 @@ const config = {
         style: 'dark',
         logo: {
           alt: 'Mantle Logo',
-          src: 'img/mantle-logo.png',
+          src: 'img/mantle-logo.svg',
           href: 'https://mantle-docs.vercel.app',
-          width: 60,
           height: 60,
         },
         links: [
