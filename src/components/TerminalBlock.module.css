@@ -1,0 +1,31 @@
+.block {
+  background-color: var(--terminal-block-bg-color);
+  color: var(--terminal-block-fg-color);
+  border-radius: var(--ifm-global-radius);
+  box-shadow: var(--ifm-global-shadow-lw);
+  margin-bottom: var(--ifm-leading);
+  overflow-x: auto;
+}
+
+.title {
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  font-size: var(--ifm-code-font-size);
+  font-weight: 500;
+  padding: 0.75rem var(--ifm-pre-padding);
+}
+
+.block pre {
+  background-color: var(--terminal-block-bg-color);
+  color: var(--terminal-block-fg-color);
+  border-radius: var(--ifm-global-radius);
+  margin: 0;
+}
+
+.block code {
+  display: block;
+}
+
+.prompt {
+  font-style: italic;
+  margin-right: 0.6em;
+}

@@ -5,6 +5,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.css';
 import CodeBlock from '@theme/CodeBlock';
+import TerminalBlock from '../components/TerminalBlock';
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -62,29 +63,30 @@ target:
       'Mantle makes the minimum required changes to keep your deployments fast and stable.',
     learnMoreLink: '/docs/getting-started',
     example: {
-      title: '$ mantle deploy',
+      title: 'mantle deploy',
       language: 'txt',
+      ansi: true,
       content: `Deploying resources:
   ╷
-  │  ~ Updating: placeConfiguration_start
+  │  [33m~[0m Updating: placeConfiguration_start
   │    ╷
   │    │  Dependencies:
-  │    │      - place:
-  │    │          assetId: 8588802093
+  │    │      [2m- place:[0m
+  │    │      [2m    assetId: 8635420754[0m
   │    │  Inputs:
-  │    │      placeConfiguration:
-  │    │    -   name: "[DEV] Getting Started with Mantle"
-  │    │    +   name: "[DEV] I changed the Mantle config!"
-  │    │        description: Made with Mantle
-  │    │        maxPlayerCount: 50
-  │    │        allowCopying: false
-  │    │        socialSlotType: Automatic
-  │    │        customSocialSlotsCount: ~
-  │    │
+  │    │      [2mplaceConfiguration:[0m
+  │    │    [31m-[0m [31m  name: Getting Started with Mantle[0m
+  │    │    [32m+[0m [32m  name: Going to the moon with Mantle[0m
+  │    │      [2m  description: Made with Mantle[0m
+  │    │      [2m  maxPlayerCount: 50[0m
+  │    │      [2m  allowCopying: false[0m
+  │    │      [2m  socialSlotType: Automatic[0m
+  │    │      [2m  customSocialSlotsCount: ~[0m
+  │    │  
   │    ╰─ Succeeded with outputs:
-  │           placeConfiguration
-  │
-  │
+  │           [2mplaceConfiguration[0m
+  │  
+  │  
   ╰─ Succeeded with 0 create(s), 1 update(s), 0 delete(s), 5 noop(s), 0 skip(s)`,
     },
   },
@@ -171,23 +173,18 @@ export default function Home(): JSX.Element {
             className={styles.feature}
           >
             <aside>
-              {/* <div className={styles.codeBlock}>
-                <div className={styles.codeBlockTitle}>
-                  {feature.example.title}
-                </div>
-                <SyntaxHighlighter
-                  language={feature.example.language}
-                  style={codeTheme}
+              {feature.example.ansi ? (
+                <TerminalBlock title={feature.example.title}>
+                  {feature.example.content}
+                </TerminalBlock>
+              ) : (
+                <CodeBlock
+                  className={`language-${feature.example.language}`}
+                  title={feature.example.title}
                 >
                   {feature.example.content}
-                </SyntaxHighlighter>
-              </div> */}
-              <CodeBlock
-                className={`language-${feature.example.language}`}
-                title={feature.example.title}
-              >
-                {feature.example.content}
-              </CodeBlock>
+                </CodeBlock>
+              )}
             </aside>
             <div className={styles.content}>
               <h2>

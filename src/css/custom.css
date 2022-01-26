@@ -15,10 +15,16 @@
   --ifm-color-primary-darkest: #932208;
 
   --ifm-code-font-size: 95%;
+
+  --terminal-block-bg-color: rgb(251, 251, 251);
+  --terminal-block-fg-color: rgb(64, 63, 83);
 }
 
 html[data-theme='dark'] {
   --ifm-color-primary: #fb7244;
+
+  --terminal-block-bg-color: #282c34;
+  --terminal-block-fg-color: #ffffff;
 }
 
 .docusaurus-highlight-code-line {
