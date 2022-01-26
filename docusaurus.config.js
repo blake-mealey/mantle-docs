@@ -1,8 +1,8 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/vsLight');
-const darkCodeTheme = require('prism-react-renderer/themes/vsDark');
+const lightCodeTheme = require('prism-react-renderer/themes/nightOwlLight');
+const darkCodeTheme = require('prism-react-renderer/themes/oceanicNext');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -13,6 +13,7 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'favicon.ico',
+  clientModules: [require.resolve('./load-github-buttons.js')],
 
   presets: [
     [
@@ -59,10 +60,18 @@ const config = {
             label: 'Examples',
             position: 'left',
           },
+          /* <a class="github-button" href="https://github.com/blake-mealey/mantle" data-color-scheme="no-preference: light; light: light; dark: dark;" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star blake-mealey/mantle on GitHub">Star</a> */
           {
             href: 'https://github.com/blake-mealey/mantle',
             label: 'GitHub',
             position: 'right',
+            className: 'github-button',
+            'data-color-scheme':
+              'no-preference: light; light: light; dark: dark;',
+            'data-icon': 'octicon-star',
+            'data-size': 'large',
+            'data-show-count': 'true',
+            'aria-label': 'Star blake-mealey/mantle on GitHub',
           },
         ],
       },
@@ -90,7 +99,7 @@ const config = {
             ],
           },
           {
-            title: 'Repos',
+            title: 'GitHub',
             items: [
               {
                 label: 'Mantle',
@@ -103,6 +112,19 @@ const config = {
               {
                 label: 'Docs',
                 href: 'https://github.com/blake-mealey/mantle-docs',
+              },
+              {
+                html: `<a id="github-stargazers"
+                          class="github-button"
+                          href="https://github.com/blake-mealey/mantle"
+                          data-color-scheme="dark"
+                          data-icon="octicon-star"
+                          data-size="large"
+                          data-show-count="true"
+                          aria-label="Star blake-mealey/mantle on GitHub"
+                        >
+                          Star
+                        </a>`,
               },
             ],
           },
@@ -120,6 +142,22 @@ const config = {
               {
                 label: 'Bug reports',
                 href: 'https://github.com/blake-mealey/mantle/issues/new?labels=bug&template=bug_report.md',
+              },
+            ],
+          },
+          {
+            title: 'Built with',
+            items: [
+              {
+                label: 'Docusaurus',
+                href: 'https://docusaurus.io/',
+              },
+              {
+                html: `
+                <a href="https://vercel.com">
+                <img src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg" style="margin-top: 0.5em" />
+                </a>
+                `,
               },
             ],
           },

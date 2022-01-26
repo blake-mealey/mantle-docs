@@ -4,8 +4,7 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.css';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { anOldHope as codeTheme } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import CodeBlock from '@theme/CodeBlock';
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -36,7 +35,7 @@ const features = [
     learnMoreLink: '/docs/configuration',
     example: {
       title: 'mantle.yml',
-      language: 'yaml',
+      language: 'yml',
       content: `environments:
   - name: dev
     targetNamePrefix: environmentName
@@ -63,12 +62,7 @@ target:
       'Mantle makes the minimum required changes to keep your deployments fast and stable.',
     learnMoreLink: '/docs/getting-started',
     example: {
-      title: (
-        <>
-          <span style={{ color: 'var(--ifm-color-primary)' }}>$</span> mantle
-          deploy
-        </>
-      ),
+      title: '$ mantle deploy',
       language: 'txt',
       content: `Deploying resources:
   ╷
@@ -120,7 +114,7 @@ mantle = { source = "blake-mealey/mantle", version = "0.10" }`,
     learnMoreLink: '/docs/continuous-deployment',
     example: {
       title: '.github/workflows/deploy.yml',
-      language: 'yaml',
+      language: 'yml',
       content: `name: Deploy
 on: push
 jobs:
@@ -177,7 +171,7 @@ export default function Home(): JSX.Element {
             className={styles.feature}
           >
             <aside>
-              <div className={styles.codeBlock}>
+              {/* <div className={styles.codeBlock}>
                 <div className={styles.codeBlockTitle}>
                   {feature.example.title}
                 </div>
@@ -187,7 +181,13 @@ export default function Home(): JSX.Element {
                 >
                   {feature.example.content}
                 </SyntaxHighlighter>
-              </div>
+              </div> */}
+              <CodeBlock
+                className={`language-${feature.example.language}`}
+                title={feature.example.title}
+              >
+                {feature.example.content}
+              </CodeBlock>
             </aside>
             <div className={styles.content}>
               <h2>
