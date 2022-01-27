@@ -13,7 +13,13 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'favicon.png',
-  clientModules: [require.resolve('./load-github-buttons.js')],
+  scripts: [
+    {
+      src: 'https://buttons.github.io/buttons.js',
+      async: true,
+      defer: true,
+    },
+  ],
 
   presets: [
     [
@@ -60,18 +66,10 @@ const config = {
             label: 'Examples',
             position: 'left',
           },
-          /* <a class="github-button" href="https://github.com/blake-mealey/mantle" data-color-scheme="no-preference: light; light: light; dark: dark;" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star blake-mealey/mantle on GitHub">Star</a> */
           {
             href: 'https://github.com/blake-mealey/mantle',
             label: 'GitHub',
             position: 'right',
-            className: 'github-button',
-            'data-color-scheme':
-              'no-preference: light; light: light; dark: dark;',
-            'data-icon': 'octicon-star',
-            'data-size': 'large',
-            'data-show-count': 'true',
-            'aria-label': 'Star blake-mealey/mantle on GitHub',
           },
         ],
       },
@@ -113,17 +111,19 @@ const config = {
                 href: 'https://github.com/blake-mealey/mantle-docs',
               },
               {
-                html: `<a id="github-stargazers"
-                          class="github-button"
-                          href="https://github.com/blake-mealey/mantle"
-                          data-color-scheme="dark"
-                          data-icon="octicon-star"
-                          data-size="large"
-                          data-show-count="true"
-                          aria-label="Star blake-mealey/mantle on GitHub"
+                html: `<div style="padding-top: 0.5em">
+                        <a id="github-stargazers"
+                            class="github-button"
+                            href="https://github.com/blake-mealey/mantle"
+                            data-color-scheme="dark"
+                            data-icon="octicon-star"
+                            data-size="large"
+                            data-show-count="true"
+                            aria-label="Star blake-mealey/mantle on GitHub"
                         >
                           Star
-                        </a>`,
+                        </a>
+                      </div>`,
               },
             ],
           },

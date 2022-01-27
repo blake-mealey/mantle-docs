@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
@@ -146,13 +146,35 @@ jobs:
   },
 ];
 
+function Demo() {
+  const ref = useRef<HTMLDivElement>();
+
+  useEffect(() => {
+    const { current: parent } = ref;
+    if (!parent) {
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://asciinema.org/a/A2RTzQTSLem3npwpcyGn35DPy.js';
+    script.id = 'asciicast-A2RTzQTSLem3npwpcyGn35DPy';
+    script.async = true;
+    script.dataset.autoplay = '1';
+
+    parent.appendChild(script);
+    return () => {
+      parent.removeChild(script);
+    };
+  }, [ref]);
+
+  return <div ref={ref} className={styles.demo}></div>;
+}
+
 export default function Home(): JSX.Element {
   return (
     <Layout title="Features" description="Mantle features">
       <HomepageHeader />
-      <main>
-        {/* TODO: extract this into data-driven components */}
-
+      <main className={styles.main}>
         <section className={styles.divider}>
           <div>
             {features.map((feature, index) => (
@@ -169,9 +191,7 @@ export default function Home(): JSX.Element {
           </div>
         </section>
 
-        <div className={styles.demo}>
-          <img src="/img/mantle-demo.svg" />
-        </div>
+        <Demo />
 
         {features.map((feature, index) => (
           <section

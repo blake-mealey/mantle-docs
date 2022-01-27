@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Ansi from 'ansi-to-react';
 import styles from './TerminalBlock.module.css';
 
@@ -19,12 +19,12 @@ export default function TerminalBlock({ title, children }: Props) {
       ) : null}
       <pre>
         {lines.map((line, i) => (
-          <>
-            <Ansi key={i} linkify useClasses>
+          <Fragment key={i}>
+            <Ansi linkify useClasses>
               {line}
             </Ansi>
             <br />
-          </>
+          </Fragment>
         ))}
       </pre>
     </div>

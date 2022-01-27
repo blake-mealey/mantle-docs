@@ -3,6 +3,10 @@
  * and scoped locally.
  */
 
+.main {
+  --ifm-global-radius: 1em;
+}
+
 .heroBanner {
   padding: 4rem 0;
   text-align: center;
@@ -56,12 +60,13 @@
 
 .demo {
   text-align: center;
-  margin: 6em 0;
+  background-color: rgb(19, 19, 20);
+  padding: 15px 1em 0;
+  aspect-ratio: 1866/683.4;
 }
 
-.demo img {
-  width: max(966px, min(70%, 1300px));
-  padding: 0 1em;
+.demo > div {
+  margin: 0 !important;
 }
 
 @media screen and (max-width: 966px) {
