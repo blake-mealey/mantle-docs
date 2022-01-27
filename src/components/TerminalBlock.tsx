@@ -19,7 +19,12 @@ export default function TerminalBlock({ title, children }: Props) {
       ) : null}
       <pre>
         {lines.map((line, i) => (
-          <Ansi key={i}>{line}</Ansi>
+          <>
+            <Ansi key={i} linkify useClasses>
+              {line}
+            </Ansi>
+            <br />
+          </>
         ))}
       </pre>
     </div>

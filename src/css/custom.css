@@ -18,6 +18,23 @@
 
   --terminal-block-bg-color: rgb(251, 251, 251);
   --terminal-block-fg-color: rgb(64, 63, 83);
+
+  --ansi-black: rgb(0, 0, 0);
+  --ansi-red: rgb(222, 56, 43);
+  --ansi-green: rgb(57, 181, 74);
+  --ansi-yellow: rgb(255, 199, 6);
+  --ansi-blue: rgb(0, 111, 184);
+  --ansi-magenta: rgb(211, 56, 211);
+  --ansi-cyan: rgb(44, 181, 233);
+  --ansi-white: rgb(204, 204, 204);
+  --ansi-bright-black: rgb(128, 128, 128);
+  --ansi-bright-red: rgb(252, 57, 31);
+  --ansi-bright-green: rgb(49, 231, 34);
+  --ansi-bright-yellow: rgb(255, 255, 85);
+  --ansi-bright-blue: rgb(0, 0, 255);
+  --ansi-bright-magenta: rgb(249, 53, 248);
+  --ansi-bright-cyan: rgb(20, 240, 240);
+  --ansi-bright-white: rgb(255, 255, 255);
 }
 
 html[data-theme='dark'] {
@@ -34,4 +51,128 @@ html[data-theme='dark'] {
 
 html[data-theme='dark'] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+pre code .ansi-bold {
+  font-weight: bold;
+}
+
+pre code .ansi-italic {
+  font-weight: italic;
+}
+
+pre code .ansi-dim {
+  opacity: 0.5;
+}
+
+pre code .ansi-hidden {
+  visibility: hidden;
+}
+
+pre code .ansi-strikethrough {
+  text-decoration: line-through;
+}
+
+pre code .ansi-underline {
+  text-decoration: underline;
+}
+
+pre code .ansi-strikethrough.ansi-underline {
+  text-decoration: underline line-through;
+}
+
+pre code .ansi-black-fg {
+  color: var(--ansi-black);
+}
+
+pre code .ansi-black-bg {
+  background-color: var(--ansi-black);
+}
+
+pre code .ansi-red-fg {
+  color: var(--ansi-red);
+}
+
+pre code .ansi-red-bg {
+  background-color: var(--ansi-red);
+}
+
+pre code .ansi-green-fg {
+  color: var(--ansi-green);
+}
+
+pre code .ansi-green-bg {
+  background-color: var(--ansi-green);
+}
+
+pre code .ansi-yellow-fg {
+  color: var(--ansi-yellow);
+}
+
+pre code .ansi-yellow-bg {
+  background-color: var(--ansi-yellow);
+}
+
+pre code .ansi-blue-fg {
+  color: var(--ansi-blue);
+}
+
+pre code .ansi-blue-bg {
+  background-color: var(--ansi-blue);
+}
+
+pre code .ansi-magenta-fg {
+  color: var(--ansi-magenta);
+}
+
+pre code .ansi-magenta-bg {
+  background-color: var(--ansi-magenta);
+}
+
+pre code .ansi-cyan-fg {
+  color: var(--ansi-cyan);
+}
+
+pre code .ansi-cyan-bg {
+  background-color: var(--ansi-cyan);
+}
+
+pre code .ansi-white-fg {
+  color: var(--ansi-white);
+}
+
+pre code .ansi-white-bg {
+  background-color: var(--ansi-white);
+}
+
+pre code .ansi-bright-black-fg {
+  color: var(--ansi-bright-black);
+}
+
+pre code .ansi-bright-red-fg {
+  color: var(--ansi-bright-red);
+}
+
+pre code .ansi-bright-green-fg {
+  color: var(--ansi-bright-green);
+}
+
+pre code .ansi-bright-yellow-fg {
+  color: var(--ansi-bright-yellow);
+}
+
+pre code .ansi-bright-blue-fg {
+  color: var(--ansi-bright-blue);
+}
+
+pre code .ansi-bright-magenta-fg {
+  color: var(--ansi-bright-magenta);
+}
+
+pre code .ansi-bright-cyan-fg {
+  color: var(--ansi-bright-cyan);
+}
+
+pre code .ansi-bright-white-fg {
+  color: var(--ansi-bright-white);
 }

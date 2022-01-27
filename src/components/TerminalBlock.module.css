@@ -21,8 +21,9 @@
   margin: 0;
 }
 
-.block code {
-  display: block;
+.block a {
+  color: inherit;
+  text-decoration: underline;
 }
 
 .prompt {
