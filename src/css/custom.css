@@ -40,6 +40,7 @@
 html[data-theme='dark'] {
   --terminal-block-bg-color: #282c34;
   --terminal-block-fg-color: #ffffff;
+  --ifm-code-background: #282c34;
 }
 
 .docusaurus-highlight-code-line {
@@ -47,6 +48,16 @@ html[data-theme='dark'] {
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
+}
+
+h3 .badge {
+  font-size: 0.5em;
+  transform: translateY(-0.15rem);
+  margin-left: 0.5em;
+}
+
+.table-of-contents .badge {
+  display: none;
 }
 
 html[data-theme='dark'] .docusaurus-highlight-code-line {
