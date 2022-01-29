@@ -1,14 +1,22 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Children, FC } from 'react';
 import Ansi from 'ansi-to-react';
 import styles from './TerminalBlock.module.css';
 
 type Props = {
   title?: string;
-  children: string;
 };
 
-export default function TerminalBlock({ title, children }: Props) {
-  const lines = children.split('\n');
+const TerminalBlock: FC<Props> = ({ title, children }) => {
+  let lines: string[] = [];
+  if (typeof children === 'string') {
+    lines = children.split('\n');
+  } else {
+    const mdx: any = Children.only(children);
+    const pre: any = Children.only(mdx.props.children);
+    const code: string = pre.props.children;
+    lines = code.trimEnd().split('\n');
+  }
+
   return (
     <div className={styles.block}>
       {title ? (
@@ -29,4 +37,6 @@ export default function TerminalBlock({ title, children }: Props) {
       </pre>
     </div>
   );
-}
+};
+
+export default TerminalBlock;

@@ -5,6 +5,7 @@ title: Getting Started
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import TerminalBlock from '/src/components/TerminalBlock';
 
 The quickest way to get started is with the
 [Examples](https://github.com/blake-mealey/mantle-examples) repo. This guide will walk you through
@@ -96,16 +97,18 @@ the output.
 
 First, Mantle tells us about the project we are trying to deploy:
 
-```
-Loading project:
-  ╷
-  │  Loaded config file .\examples\getting-started\mantle.yml
-  │  Selected provided environment configuration dev
-  │  Loading previous state from local file .\examples\getting-started\.mantle-state.yml
-  │  No previous state for environment dev
-  │
-  ╰─ Succeeded
-```
+<TerminalBlock title="mantle deploy">
+
+    Loading project:
+      ╷
+      │  Loaded config file [36mexamples/getting-started/mantle.yml[0m
+      │  Selected provided environment configuration [36mdev[0m
+      │  Loading previous state from local file [36mexamples/getting-started/.mantle-state.yml[0m
+      │  No previous state for environment [36mdev[0m
+      │
+      ╰─ Succeeded
+
+</TerminalBlock>
 
 Here we can see the configuration file that Mantle used was `examples/getting-started/mantle.yml`
 because by default Mantle will look for a file called `mantle.yml` in the provided folder. It also
@@ -117,27 +120,29 @@ realized we didn't have a state file yet so it created a new one.
 
 Next, Mantle tells us about the resources it is deploying:
 
-```
-Deploying resources:
-  ╷
-  │  + Creating: experience_singleton
-  │    ╷
-  │    │  Dependencies:
-  │    │      []
-  │    │  Inputs:
-  │    │    + experience:
-  │    │    +   groupId: ~
-  │    │
-  │    ╰─ Succeeded with outputs:
-  │         + experience:
-  │         +   assetId: 3272076227
-  │         +   startPlaceId: 8588802093
+<TerminalBlock title="mantle deploy">
 
-... cut for brevity ...
+    Deploying resources:
+      ╷
+      │  [32m+[0m Creating: experience_singleton
+      │    ╷
+      │    │  Dependencies:
+      │    │      [2m[][0m
+      │    │  Inputs:
+      │    │    [32m+[0m [32mexperience:[0m
+      │    │    [32m+[0m [32m  groupId: ~[0m
+      │    │
+      │    ╰─ Succeeded with outputs:
+      │         [32m+[0m [32mexperience:[0m
+      │         [32m+[0m [32m  assetId: 3296599132[0m
+      │         [32m+[0m [32m  startPlaceId: 8667346609[0m
 
-  │
-  ╰─ Succeeded with 6 create(s), 0 update(s), 0 delete(s), 0 noop(s), 0 skip(s)
-```
+    [2m... cut for brevity ...[0m
+
+      │
+      ╰─ Succeeded with 6 create(s), 0 update(s), 0 delete(s), 0 noop(s), 0 skip(s)
+
+</TerminalBlock>
 
 Here we can see all of the Roblox resources which Mantle has decided it needs to create for us to
 match the configuration file. In the snippet above, Mantle is creating a new Roblox experience, and
@@ -147,13 +152,15 @@ create 6 resources.
 
 Next, Mantle tells us where it is saving the state of the current deployment:
 
-```
-Saving state:
-  ╷
-  │  Saving to local file .\examples\getting-started\.mantle-state.yml. It is recommended you commit this file to your source control
-  │
-  ╰─ Succeeded
-```
+<TerminalBlock title="mantle deploy">
+
+    Saving state:
+      ╷
+      │  Saving to local file [36mexamples/getting-started/.mantle-state.yml[0m. It is recommended you commit this file to your source control
+      │
+      ╰─ Succeeded
+
+</TerminalBlock>
 
 Here's the mysterious state file again! Let's crack it open and take a look. Run
 `cat examples/getting-started/.mantle-state.yml` to print the file's contents into your terminal. As
@@ -167,17 +174,19 @@ this, but this is just so that everyone can try their own deployments.
 Finally, Mantle tells us the final results of the deployment as it relates to the "target" resource
 which in this case was an experience:
 
-```
-Target results:
-  ╷
-  │  Experience:
-  │    https://www.roblox.com/games/8588802093
-  │
-  │  Places:
-  │    start: https://www.roblox.com/games/8588802093
-  │
-  ╰──○
-```
+<TerminalBlock title="mantle deploy">
+
+    Target results:
+      ╷
+      │  Experience:
+      │    https://www.roblox.com/games/8667346609
+      │
+      │  Places:
+      │    start: https://www.roblox.com/games/8667346609
+      │
+      ╰──○
+
+</TerminalBlock>
 
 Open one of the links to view and play your new experience! It should look like the following image:
 
@@ -203,7 +212,7 @@ target:
       start:
         file: game.rbxlx
         configuration:
-          name: I changed the Mantle config!
+          name: I changed the Mantle config
           description: |-
             Made with Mantle
 ```
@@ -214,30 +223,32 @@ happens.
 You should see a very similar output to the first deployment, except instead of recreating all of
 the resources, Mantle is able to just apply the single change you made to the place configuration:
 
-```
-Deploying resources:
-  ╷
-  │  ~ Updating: placeConfiguration_start
-  │    ╷
-  │    │  Dependencies:
-  │    │      - place:
-  │    │          assetId: 8588802093
-  │    │  Inputs:
-  │    │      placeConfiguration:
-  │    │    -   name: "[DEV] Getting Started with Mantle"
-  │    │    +   name: "[DEV] I changed the Mantle config!"
-  │    │        description: Made with Mantle
-  │    │        maxPlayerCount: 50
-  │    │        allowCopying: false
-  │    │        socialSlotType: Automatic
-  │    │        customSocialSlotsCount: ~
-  │    │
-  │    ╰─ Succeeded with outputs:
-  │           placeConfiguration
-  │
-  │
-  ╰─ Succeeded with 0 create(s), 1 update(s), 0 delete(s), 5 noop(s), 0 skip(s)
-```
+<TerminalBlock title="mantle deploy">
+
+    Deploying resources:
+      ╷
+      │  [33m~[0m Updating: placeConfiguration_start
+      │    ╷
+      │    │  Dependencies:
+      │    │      [2m- place:[0m
+      │    │      [2m    assetId: 8667346609[0m
+      │    │  Inputs:
+      │    │      [2mplaceConfiguration:[0m
+      │    │    [31m-[0m [31m  name: "[DEV] Getting Started with Mantle"[0m
+      │    │    [32m+[0m [32m  name: "[DEV] I changed the Mantle config"[0m
+      │    │      [2m  description: Made with Mantle[0m
+      │    │      [2m  maxPlayerCount: 50[0m
+      │    │      [2m  allowCopying: false[0m
+      │    │      [2m  socialSlotType: Automatic[0m
+      │    │      [2m  customSocialSlotsCount: ~[0m
+      │    │
+      │    ╰─ Succeeded with outputs:
+      │           [2mplaceConfiguration[0m
+      │
+      │
+      ╰─ Succeeded with 0 create(s), 1 update(s), 0 delete(s), 5 noop(s), 0 skip(s)
+
+</TerminalBlock>
 
 As you can see, Mantle highlights for us in the output exactly what changed and which resources
 needed to be updated as a result of it. Mantle is able to do this because of the state file! All it
