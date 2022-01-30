@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Configuration",
+  "title": "Config",
   "type": "object",
   "required": [
     "environments",
@@ -8,674 +8,574 @@
   ],
   "properties": {
     "environments": {
-      "title": "Environments",
-      "description": "The list of environments which Mantle can deploy to.",
+      "description": "The list of environments which Mantle can deploy to.\n\n```yml title=\"Example\"\nenvironments:\n  - name: staging\n    branches: [dev, dev/*]\n    overrides:\n      configuration:\n        genre: building\n  - name: production\n    branches: [main]\n    targetAccess: public\n```",
       "type": "array",
       "items": {
-        "$ref": "#/definitions/EnvironmentConfig"
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "branches": {
+            "description": "An array of file globs to match against Git branches. If the `--environment` flag is not\nspecified, Mantle will pick the first environment which contains a matching file glob for\nthe current Git branch. If no environments match, Mantle will exit with a success code.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "description": "The name of the environment that is used to identify the environment via the `--environment`\nflag. Must be unique across all environments.",
+            "type": "string"
+          },
+          "overrides": {
+            "description": "Environment-specific overrides for the target resource definition. This will override all\nconfiguration, including changes made by the `targetNamePrefix` and `targetAccess` fields.\n\nOverride the target configuration. Should match the type of the target configuration.",
+            "anyOf": [
+              {
+                "title": "Experience",
+                "type": "object",
+                "properties": {
+                  "assets": {
+                    "title": "Assets",
+                    "description": "A list of assets to include in your experience.\n\nIf set to `'file'`, the value should be a file path or glob to an asset or list of assets. The\n`rbxgameasset` name of each matched file will be its file name without the extension. For\nexample, `assets/pirate-flag.png` will be given the `rbxgameasset` name `pirate-flag` and will\nbe accessible in the experience with `rbxgameasset://Images/pirate-flag`.\n\nIf set to an object, `file` should be set to a file path (it will not be interpreted as a glob),\nand `name` will be the name of the `rbxgameasset`.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    assets:\n      - assets/*\n      - file: marketing/icon.png\n        name: game-icon\n```\n\n:::caution\nBy default, Mantle does not have permission to make purchases with Robux. Since\ncreating and updating audio assets costs Robux, you will need to use the `--allow-purchases`\nflag when you want to create or update them.\n:::\n\nEach file will be uploaded as the asset type matching its file extension. Supported asset types\nand their file extensions:\n\n| Asset type | File extensions                                 |\n| :--------- | :---------------------------------------------- |\n| Image      | `.bmp`, `.gif`, `.jpeg`, `.jpg`, `.png`, `.tga` |\n| Audio      | `.ogg`, `.mp3`                                  |",
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "file",
+                            "name"
+                          ],
+                          "properties": {
+                            "file": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "badges": {
+                    "title": "Badges",
+                    "description": "Badges that can be awarded within your experience.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    badges:\n      captureFirstShip:\n        name: Capture First Ship!\n        description: You captured your first enemy ship!\n        icon: badges/capture-first-ship.png\n```\n\n:::caution\nBy default, Mantle does not have permission to make purchases with Robux. Since creating badges\ncosts Robux, you will need to use the `--allow-purchases` flag when you want to create them.\n:::\n\nBecause Roblox does not offer any way to delete badges, when a badge is \"deleted\" by\nMantle, it is updated in the following ways:\n\n1. It is disabled\n2. Its description is updated to: `Name: <name>\\nEnabled: <enabled>\\nDescription:\\n<description>`\n3. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time\n   in `YYYY-MM-DD hh::mm::ss.ns` format.",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "required": [
+                        "icon",
+                        "name"
+                      ],
+                      "properties": {
+                        "description": {
+                          "description": "The description of the badge on the Roblox website and in the experience.",
+                          "default": "''",
+                          "type": "string"
+                        },
+                        "enabled": {
+                          "description": "Whether or not the badge is enabled.",
+                          "default": "true",
+                          "type": "boolean"
+                        },
+                        "icon": {
+                          "description": "A file path to an image to use as the badge's icon on the Roblox website and in the\nexperience.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "description": "The display name of the badge on the Roblox website and in the experience.",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "configuration": {
+                    "title": "Configuration",
+                    "description": "The Experience's Roblox configuration.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    configuration:\n      genre: naval\n      playableDevices: [computer]\n      playability: private\n      privateServerPrice: 0\n      enableStudioAccessToApis: true\n      icon: marketing/game-icon.png\n      thumbnails:\n        - marketing/game-thumbnail-fall-update.png\n        - marketing/game-thumbnail-default.png\n```\n\nIn order to configure the name and description of an experience, use the `name` and\n`description` fields of the `PlaceConfiguration` for the experience's start place.",
+                    "type": "object",
+                    "properties": {
+                      "allowThirdPartySales": {
+                        "description": "Whether or not this experience should allow third-party sales.",
+                        "default": "false",
+                        "type": "boolean"
+                      },
+                      "allowThirdPartyTeleports": {
+                        "description": "Whether or not this experience should allow third-party teleports.",
+                        "default": "false",
+                        "type": "boolean"
+                      },
+                      "avatarAnimationType": {
+                        "description": "The type of avatar animation that players can use in this experience.",
+                        "default": "'playerChoice'",
+                        "type": "string",
+                        "enum": [
+                          "standard",
+                          "playerChoice"
+                        ]
+                      },
+                      "avatarAssetOverrides": {
+                        "description": "The asset overrides to apply to player avatars in the experience. Defaults to Roblox's\ndefaults.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    configuration:\n      avatarAssetOverrides:\n        face: 7699174\n        shirt: 5382048848\n        pants: 5611120855\n```",
+                        "type": "object",
+                        "properties": {
+                          "face": {
+                            "description": "The asset ID to override the avatar's face.",
+                            "type": "integer",
+                            "format": "uint64",
+                            "minimum": 0.0
+                          },
+                          "head": {
+                            "description": "The asset ID to override the avatar's head.",
+                            "type": "integer",
+                            "format": "uint64",
+                            "minimum": 0.0
+                          },
+                          "leftArm": {
+                            "description": "The asset ID to override the avatar's left arm.",
+                            "type": "integer",
+                            "format": "uint64",
+                            "minimum": 0.0
+                          },
+                          "leftLeg": {
+                            "description": "The asset ID to override the avatar's left leg.",
+                            "type": "integer",
+                            "format": "uint64",
+                            "minimum": 0.0
+                          },
+                          "pants": {
+                            "description": "The asset ID to override the avatar's pants.",
+                            "type": "integer",
+                            "format": "uint64",
+                            "minimum": 0.0
+                          },
+                          "rightArm": {
+                            "description": "The asset ID to override the avatar's right arm.",
+                            "type": "integer",
+                            "format": "uint64",
+                            "minimum": 0.0
+                          },
+                          "rightLeg": {
+                            "description": "The asset ID to override the avatar's right leg.",
+                            "type": "integer",
+                            "format": "uint64",
+                            "minimum": 0.0
+                          },
+                          "shirt": {
+                            "description": "The asset ID to override the avatar's shirt.",
+                            "type": "integer",
+                            "format": "uint64",
+                            "minimum": 0.0
+                          },
+                          "torso": {
+                            "description": "The asset ID to override the avatar's torso.",
+                            "type": "integer",
+                            "format": "uint64",
+                            "minimum": 0.0
+                          },
+                          "tshirt": {
+                            "description": "The asset ID to override the avatar's t-shirt.",
+                            "type": "integer",
+                            "format": "uint64",
+                            "minimum": 0.0
+                          }
+                        },
+                        "x-skip-properties": true
+                      },
+                      "avatarCollisionType": {
+                        "description": "The type of avatar collision that players can use in this experience.",
+                        "default": "'outerBox'",
+                        "type": "string",
+                        "enum": [
+                          "outerBox",
+                          "innerBox"
+                        ]
+                      },
+                      "avatarScaleConstraints": {
+                        "description": "The scale constraints to apply to player avatars in the experience. Defaults to Roblox's\ndefaults.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    configuration:\n      avatarScaleConstraints:\n        height:\n          min: 0.95\n        width:\n          max: 0.9\n        proportions:\n          min: 30\n          max: 50\n```",
+                        "type": "object",
+                        "properties": {
+                          "bodyType": {
+                            "title": "Body Type",
+                            "description": "The constraints to apply to the body type of the avatar.",
+                            "type": "object",
+                            "properties": {
+                              "max": {
+                                "description": "The maximum value (float)",
+                                "type": "number",
+                                "format": "float"
+                              },
+                              "min": {
+                                "description": "The minimum value (float)",
+                                "type": "number",
+                                "format": "float"
+                              }
+                            }
+                          },
+                          "head": {
+                            "title": "Head",
+                            "description": "The constraints to apply to the head of the avatar.",
+                            "type": "object",
+                            "properties": {
+                              "max": {
+                                "description": "The maximum value (float)",
+                                "type": "number",
+                                "format": "float"
+                              },
+                              "min": {
+                                "description": "The minimum value (float)",
+                                "type": "number",
+                                "format": "float"
+                              }
+                            }
+                          },
+                          "height": {
+                            "title": "Height",
+                            "description": "The constraints to apply to the height of the avatar.",
+                            "type": "object",
+                            "properties": {
+                              "max": {
+                                "description": "The maximum value (float)",
+                                "type": "number",
+                                "format": "float"
+                              },
+                              "min": {
+                                "description": "The minimum value (float)",
+                                "type": "number",
+                                "format": "float"
+                              }
+                            }
+                          },
+                          "proportions": {
+                            "title": "Proportions",
+                            "description": "The constraints to apply to the proportions of the avatar.",
+                            "type": "object",
+                            "properties": {
+                              "max": {
+                                "description": "The maximum value (float)",
+                                "type": "number",
+                                "format": "float"
+                              },
+                              "min": {
+                                "description": "The minimum value (float)",
+                                "type": "number",
+                                "format": "float"
+                              }
+                            }
+                          },
+                          "width": {
+                            "title": "Width",
+                            "description": "The constraints to apply to the width of the avatar.",
+                            "type": "object",
+                            "properties": {
+                              "max": {
+                                "description": "The maximum value (float)",
+                                "type": "number",
+                                "format": "float"
+                              },
+                              "min": {
+                                "description": "The minimum value (float)",
+                                "type": "number",
+                                "format": "float"
+                              }
+                            }
+                          }
+                        },
+                        "x-skip-properties": true
+                      },
+                      "avatarType": {
+                        "description": "The types of avatars that players can use in this experience.",
+                        "default": "'r15'",
+                        "type": "string",
+                        "enum": [
+                          "r6",
+                          "r15",
+                          "playerChoice"
+                        ]
+                      },
+                      "enableStudioAccessToApis": {
+                        "description": "Whether or not studio should be able to use Roblox APIs for this place.",
+                        "default": "false",
+                        "type": "boolean"
+                      },
+                      "genre": {
+                        "description": "The experience's genre.",
+                        "default": "'all'",
+                        "type": "string",
+                        "enum": [
+                          "all",
+                          "adventure",
+                          "building",
+                          "comedy",
+                          "fighting",
+                          "fps",
+                          "horror",
+                          "medieval",
+                          "military",
+                          "naval",
+                          "rpg",
+                          "sciFi",
+                          "sports",
+                          "townAndCity",
+                          "western"
+                        ]
+                      },
+                      "icon": {
+                        "description": "A file path to an image that will be used as the experience's icon.",
+                        "type": "string"
+                      },
+                      "paidAccessPrice": {
+                        "description": "If set, paid access will be enabled with the specified price. Otherwise, paid access will be\ndisabled. Should not be used with `privateServerPrice`.",
+                        "type": "integer",
+                        "format": "uint32",
+                        "minimum": 0.0
+                      },
+                      "playability": {
+                        "description": "Determines who has access to play the experience.\n\nIf set to `'public'`, the epxerience will be playable by all Roblox users.\n\nIf set to `'private'`, the experience will only be playable by the authorized user.\n\nIf set to `'friends'`, the experience will only be playable by the authorized user and that\nuser's Roblox friends.",
+                        "default": "'private'",
+                        "type": "string",
+                        "enum": [
+                          "public",
+                          "private",
+                          "friends"
+                        ]
+                      },
+                      "playableDevices": {
+                        "description": "The devices that the experience can be played on.",
+                        "default": "['computer', 'phone', 'tablet']",
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "computer",
+                            "phone",
+                            "tablet",
+                            "console"
+                          ]
+                        }
+                      },
+                      "privateServerPrice": {
+                        "description": "If set, private servers will be enabled with the specified price. Otherwise, private servers\nwill be disabled. To enable for free, set to `0`. Should not be used with\n`privateServerPrice`.",
+                        "type": "integer",
+                        "format": "uint32",
+                        "minimum": 0.0
+                      },
+                      "thumbnails": {
+                        "description": "An array of file paths to images that will be used as the experience's thumbnails. The order\nused here will be the order they appear on the Roblox webpage.",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "passes": {
+                    "title": "Passes",
+                    "description": "Passes that can be purchased within your experience for Robux.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    passes:\n      shipOfTheLine:\n        name: Ship of the Line\n        description: Get the best ship in the game!\n        icon: passes/ship-of-the-line.png\n        price: 499\n```\n\nBecause Roblox does not offer any way to delete game passes, when a pass is \"deleted\" by\nMantle, it is updated in the following ways:\n\n1. Its description is updated to: `Name: <name>\\nPrice: <price>\\nDescription:\\n<description>`\n2. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time\n   in `YYYY-MM-DD hh::mm::ss.ns` format.",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "required": [
+                        "icon",
+                        "name"
+                      ],
+                      "properties": {
+                        "description": {
+                          "description": "The description of the game pass on the Roblox website and in the experience.",
+                          "default": "''",
+                          "type": "string"
+                        },
+                        "icon": {
+                          "description": "A file path to an image to use as the pass's icon on the Roblox website and in the\nexperience.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "description": "The display name of the game pass on the Roblox website and in the experience.",
+                          "type": "string"
+                        },
+                        "price": {
+                          "description": "The price of the game pass in Robux. If not specified, the game pass will be off-sale.",
+                          "type": "integer",
+                          "format": "uint32",
+                          "minimum": 0.0
+                        }
+                      }
+                    }
+                  },
+                  "places": {
+                    "title": "Places",
+                    "description": "The places to create in the experience. There must be at least one place supplied with the\nname `'start'`, which will be used as the start place for the experience.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    places:\n      start:\n        file: game.rbxlx\n        configuration:\n          name: Pirate Wars!\n          description: |-\n            Duke it out on the high seas in your pirate ship!\n\n            🍂 Fall update: new cannons, new ship types!\n          maxPlayerCount: 10\n          serverFill: robloxOptimized\n```",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "configuration": {
+                          "description": "A place's Roblox configuration.",
+                          "type": "object",
+                          "properties": {
+                            "allowCopying": {
+                              "description": "Whether or not other Roblox users can clone your place.",
+                              "default": "false",
+                              "type": "boolean"
+                            },
+                            "description": {
+                              "description": "The descirption of the place on the Roblox website and in-game. If the\nplace is an experience's start place, it will be the experience's\ndescription as well.",
+                              "default": "'Created with Mantle'",
+                              "type": "string"
+                            },
+                            "maxPlayerCount": {
+                              "description": "The maximum number of players that can be in a server for the place.",
+                              "default": "50",
+                              "type": "integer",
+                              "format": "uint32",
+                              "minimum": 0.0
+                            },
+                            "name": {
+                              "description": "The display name of the place on the Roblox website and in-game. If the\nplace is an experience's start place, it will be the experience's\ndisplay name as well.",
+                              "default": "'Untitled Game'",
+                              "type": "string"
+                            },
+                            "serverFill": {
+                              "description": "Determines how Roblox will fill your servers.\n\nIf set to `'robloxOptimized'`, Roblox will attempt to automatically leave some space for friends\nto join.\n\nIf set to `'maximum'`, Roblox will never leave room for friends to join.\n\nIf set to reserved slots, Roblox will always leave the provided number of slots available for\nfriends to join.\n\n```yml title=\"Reserved Slots Example\"\ntarget:\n  experience:\n    places:\n      start:\n        file: game.rbxlx\n        configuration:\n          serverFill:\n            reservedSlots: 10\n```",
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "enum": [
+                                    "robloxOptimized",
+                                    "maximum"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "required": [
+                                    "reservedSlots"
+                                  ],
+                                  "properties": {
+                                    "reservedSlots": {
+                                      "type": "integer",
+                                      "format": "uint32",
+                                      "minimum": 0.0
+                                    }
+                                  },
+                                  "additionalProperties": false
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "file": {
+                          "description": "A file path to a Roblox place (either `.rbxl` or `.rbxlx`).",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "products": {
+                    "title": "Products",
+                    "description": "Products that can be purchased within your experience for Robux.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    products:\n      fiftyGold:\n        name: 50 Gold\n        description: Add 50 gold to your wallet!\n        icon: products/50-gold.png\n        price: 25\n      hundredGold:\n        name: 100 Gold\n        description: Add 100 gold to your wallet!\n        icon: products/100-gold.png\n        price: 45\n```\n\nBecause Roblox does not offer any way to delete developer products, when a product is \"deleted\"\nby Mantle, it is updated in the following ways:\n\n1. Its description is updated to: `Name: <name>\\nDescription:\\n<description>`\n2. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current\n   date-time in `YYYY-MM-DD hh::mm::ss.ns` format.",
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "price"
+                      ],
+                      "properties": {
+                        "description": {
+                          "description": "The description of the developer product on the Roblox website and in the experience.",
+                          "default": "''",
+                          "type": "string"
+                        },
+                        "icon": {
+                          "description": "A file path to an image to use as the product's icon on the Roblox website and in the\nexperience.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "description": "The display name of the developer product on the Roblox website and in the experience.",
+                          "type": "string"
+                        },
+                        "price": {
+                          "description": "The price of the developer product in Robux.",
+                          "type": "integer",
+                          "format": "uint32",
+                          "minimum": 0.0
+                        }
+                      }
+                    }
+                  },
+                  "socialLinks": {
+                    "title": "Social Links",
+                    "description": "A list of social links that will appear on the experience's webpage.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    socialLinks:\n      - title: Follow on Twitter\n        url: https://twitter.com/blakemdev\n```",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "title",
+                        "url"
+                      ],
+                      "properties": {
+                        "title": {
+                          "description": "The display name of the social link on the Roblox website.",
+                          "type": "string"
+                        },
+                        "url": {
+                          "description": "The URL of the social link. Must be one of the Roblox supported social link types.",
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "x-skip-properties": true
+          },
+          "tagCommit": {
+            "description": "Whether or not to tag the commit with place file versions after successful deployments. It\nis recommended to only enable this on your production environment. Tags will be of the\nformat `<name>-v<version>` where `<name>` is the name of the place and `<version>` is the\nplace's Roblox version.",
+            "type": "boolean"
+          },
+          "targetAccess": {
+            "description": "Overrides the target's access. The implementation is dependent on the target's type. For\nExperience targets, the `configuration.playability` field will be overridden.\n\nIf set to `'public'`, the target will be accessible to all Roblox users.\n\nIf set to `'private'`, the target will only be accessible to the authorized user.\n\nIf set to `'friends'`, the target will only be accessible to the authorized user and that user's\nRoblox friends.",
+            "type": "string",
+            "enum": [
+              "public",
+              "private",
+              "friends"
+            ]
+          },
+          "targetNamePrefix": {
+            "description": "Adds a prefix to the target's name configuration. The implementation is dependent on the\ntarget's type. For Experience targets, all place names will be updated with the prefix.\n\nIf set to `'environmentName'`, the target name prefix will use the format `[<ENVIRONMENT>] `\nwhere `<ENVIRONMENT>` is the value of the environment's `name` field in all caps.\n\nIf set to a custom string, the target name prefix will use the user-specified string.\n\n```yml title=\"Environment Name Example\"\nenvironments:\n  - name: staging\n    targetNamePrefix: environmentName\n  - name: production\n```\n\n```yml title=\"Custom Example\"\nenvironments:\n  - name: staging\n    targetNamePrefix:\n      custom: 'Prefix: '\n  - name: production\n```",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "environmentName"
+                ]
+              },
+              {
+                "type": "object",
+                "required": [
+                  "custom"
+                ],
+                "properties": {
+                  "custom": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            ],
+            "x-skip-properties": true
+          }
+        }
       }
     },
     "owner": {
-      "title": "Owner",
-      "description": "The owner of the resources that will be created. Defaults to `\"personal\"`.",
-      "allOf": [
-        {
-          "$ref": "#/definitions/OwnerConfig"
-        }
-      ]
-    },
-    "payments": {
-      "title": "Payments",
-      "description": "Where Robux should come from to purchase resources (if `--allow-purchases` is enabled). Defaults to `\"owner\"`.",
-      "allOf": [
-        {
-          "$ref": "#/definitions/PaymentsConfig"
-        }
-      ]
-    },
-    "state": {
-      "title": "State",
-      "description": "Defines how Mantle should manage state files (locally or remotely). Defaults to `\"local\"`.",
-      "allOf": [
-        {
-          "$ref": "#/definitions/StateConfig"
-        }
-      ]
-    },
-    "target": {
-      "title": "Target",
-      "description": "Defines the target resource which Mantle will deploy to. Currently Mantle only supports targeting Experiences, but in the future it will target other types like Plugins and Models.",
-      "allOf": [
-        {
-          "$ref": "#/definitions/TargetConfig"
-        }
-      ]
-    }
-  },
-  "definitions": {
-    "AnimationTypeTargetConfig": {
-      "title": "AnimationType",
-      "type": "string",
-      "enum": [
-        "standard",
-        "playerChoice"
-      ]
-    },
-    "AssetTargetConfig": {
-      "title": "Asset",
-      "description": "If set to `\"file\"`, the value should be a file path or glob to an asset or list of assets. The `rbxgameasset` name of each matched file will be its file name without the extension. For example, `assets/pirate-flag.png` will be given the `rbxgameasset` name `pirate-flag` and will be accessible in the experience with `rbxgameasset://Images/pirate-flag`.\n\nIf set to an object, `file` should be set to a file path (it will not be interpreted as a glob), and `name` will be the name of the `rbxgameasset`.\n\n```yml title=\"Example\" target: experience: assets: - assets/* - file: marketing/icon.png name: game-icon ```\n\n:::caution By default, Mantle does not have permission to make purchases with Robux. Since creating and updating audio assets costs Robux, you will need to use the `--allow-purchases` flag when you want to create or update them. :::\n\nEach file will be uploaded as the asset type matching its file extension. Supported asset types and their file extensions:\n\n| Asset type | File extensions                                 | | :--------- | :---------------------------------------------- | | Image      | `.bmp`, `.gif`, `.jpeg`, `.jpg`, `.png`, `.tga` | | Audio      | `.ogg`, `.mp3`                                  |",
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "object",
-          "required": [
-            "file",
-            "name"
-          ],
-          "properties": {
-            "file": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            }
-          }
-        }
-      ]
-    },
-    "AvatarAssetOverridesTargetConfig": {
-      "title": "AvatarAssetOverrides",
-      "description": "```yml title=\"Example\" target: experience: configuration: avatarAssetOverrides: face: 7699174 shirt: 5382048848 pants: 5611120855 ```",
-      "type": "object",
-      "properties": {
-        "face": {
-          "title": "Face",
-          "description": "The asset ID to override the avatar's face.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint64",
-          "minimum": 0.0
-        },
-        "head": {
-          "title": "Head",
-          "description": "The asset ID to override the avatar's head.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint64",
-          "minimum": 0.0
-        },
-        "leftArm": {
-          "title": "Left Arm",
-          "description": "The asset ID to override the avatar's left arm.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint64",
-          "minimum": 0.0
-        },
-        "leftLeg": {
-          "title": "Left Leg",
-          "description": "The asset ID to override the avatar's left leg.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint64",
-          "minimum": 0.0
-        },
-        "pants": {
-          "title": "Pants",
-          "description": "The asset ID to override the avatar's pants.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint64",
-          "minimum": 0.0
-        },
-        "rightArm": {
-          "title": "Right Arm",
-          "description": "The asset ID to override the avatar's right arm.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint64",
-          "minimum": 0.0
-        },
-        "rightLeg": {
-          "title": "Right Leg",
-          "description": "The asset ID to override the avatar's right leg.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint64",
-          "minimum": 0.0
-        },
-        "shirt": {
-          "title": "Shirt",
-          "description": "The asset ID to override the avatar's shirt.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint64",
-          "minimum": 0.0
-        },
-        "torso": {
-          "title": "Torso",
-          "description": "The asset ID to override the avatar's torso.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint64",
-          "minimum": 0.0
-        },
-        "tshirt": {
-          "title": "T-shirt",
-          "description": "The asset ID to override the avatar's t-shirt.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint64",
-          "minimum": 0.0
-        }
-      }
-    },
-    "AvatarScaleConstraintsTargetConfig": {
-      "title": "AvatarScaleConstraints",
-      "description": "```yml title=\"Example\" target: experience: configuration: avatarScaleConstraints: height: min: 0.95 width: max: 0.9 proportions: min: 30 max: 50 ```",
-      "type": "object",
-      "properties": {
-        "bodyType": {
-          "title": "Body Type",
-          "description": "The constraints to apply to the body type of the avatar.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Constraint"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "head": {
-          "title": "Head",
-          "description": "The constraints to apply to the head of the avatar.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Constraint"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "height": {
-          "title": "Height",
-          "description": "The constraints to apply to the height of the avatar.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Constraint"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "proportions": {
-          "title": "Proportions",
-          "description": "The constraints to apply to the proportions of the avatar.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Constraint"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "width": {
-          "title": "Width",
-          "description": "The constraints to apply to the width of the avatar.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Constraint"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      }
-    },
-    "AvatarTypeTargetConfig": {
-      "title": "AvatarType",
-      "type": "string",
-      "enum": [
-        "r6",
-        "r15",
-        "playerChoice"
-      ]
-    },
-    "BadgeTargetConfig": {
-      "title": "Badge",
-      "description": "```yml title=\"Example\" target: experience: badges: captureFirstShip: name: Capture First Ship! description: You captured your first enemy ship! icon: badges/capture-first-ship.png ```\n\n:::caution By default, Mantle does not have permission to make purchases with Robux. Since creating badges costs Robux, you will need to use the `--allow-purchases` flag when you want to create them. :::\n\nBecause Roblox does not offer any way to delete badges, when a badge is \"deleted\" by Mantle, it is updated in the following ways:\n\n1. It is disabled 2. Its description is updated to: `Name: <name>\\nEnabled: <enabled>\\nDescription:\\n<description>` 3. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time in `YYYY-MM-DD hh::mm::ss.ns` format.",
-      "type": "object",
-      "required": [
-        "icon",
-        "name"
-      ],
-      "properties": {
-        "description": {
-          "title": "Description",
-          "description": "The description of the badge on the Roblox website and in the experience. Defaults to `\"\"`.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "enabled": {
-          "title": "Enabled",
-          "description": "Whether or not the badge is enabled. Defaults to `true`.",
-          "type": [
-            "boolean",
-            "null"
-          ]
-        },
-        "icon": {
-          "title": "Icon",
-          "description": "A file path to an image to use as the badge's icon on the Roblox website and in the experience.",
-          "type": "string"
-        },
-        "name": {
-          "title": "Name",
-          "description": "The display name of the badge on the Roblox website and in the experience.",
-          "type": "string"
-        }
-      }
-    },
-    "CollisionTypeTargetConfig": {
-      "title": "CollisionType",
-      "type": "string",
-      "enum": [
-        "outerBox",
-        "innerBox"
-      ]
-    },
-    "Constraint": {
-      "title": "Constraint",
-      "type": "object",
-      "properties": {
-        "max": {
-          "title": "Maximum",
-          "description": "The maximum value (float)",
-          "type": [
-            "number",
-            "null"
-          ],
-          "format": "float"
-        },
-        "min": {
-          "title": "Minimum",
-          "description": "The minimum value (float)",
-          "type": [
-            "number",
-            "null"
-          ],
-          "format": "float"
-        }
-      }
-    },
-    "EnvironmentConfig": {
-      "title": "Environment",
-      "description": "```yml title=\"Example\" environments: - name: staging branches: [dev, dev/*] overrides: configuration: genre: building - name: production branches: [main] targetAccess: public ```",
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "branches": {
-          "title": "Branches",
-          "description": "An array of file globs to match against Git branches. If the `--environment` flag is not specified, Mantle will pick the first environment which contains a matching file glob for the current Git branch. If no environments match, Mantle will exit with a success code.",
-          "default": [],
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "name": {
-          "title": "Name",
-          "description": "The name of the environment that is used to identify the environment via the `--environment` flag. Must be unique across all environments.",
-          "type": "string"
-        },
-        "overrides": {
-          "title": "Overrides",
-          "description": "Environment-specific overrides for the target resource definition. This will override all configuration, including changes made by the `targetNamePrefix` and `targetAccess` fields.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/TargetOverridesConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "tagCommit": {
-          "title": "Tag Commit",
-          "description": "Whether or not to tag the commit with place file versions after successful deployments. It is recommended to only enable this on your production environment. Tags will be of the format `<name>-v<version>` where `<name>` is the name of the place and `<version>` is the place's Roblox version.",
-          "default": false,
-          "type": "boolean"
-        },
-        "targetAccess": {
-          "title": "Target Access",
-          "description": "Overrides the target's access. The implementation is dependent on the target's type. For Experience targets, the `configuration.playability` field will be overridden.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/TargetAccessConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "targetNamePrefix": {
-          "title": "Target Name Prefix",
-          "description": "Adds a prefix to the target's name configuration. The implementation is dependent on the target's type. For Experience targets, all place names will be updated with the prefix.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/TargetNamePrefixConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      }
-    },
-    "ExperienceTargetConfig": {
-      "title": "Experience",
-      "type": "object",
-      "properties": {
-        "assets": {
-          "title": "Assets",
-          "description": "A list of assets to include in your experience.",
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "$ref": "#/definitions/AssetTargetConfig"
-          }
-        },
-        "badges": {
-          "title": "Badges",
-          "description": "Badges that can be awarded within your experience.",
-          "type": [
-            "object",
-            "null"
-          ],
-          "additionalProperties": {
-            "$ref": "#/definitions/BadgeTargetConfig"
-          }
-        },
-        "configuration": {
-          "title": "Configuration",
-          "description": "The Experience's Roblox configuration.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ExperienceTargetConfigurationConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "passes": {
-          "title": "Passes",
-          "description": "Passes that can be purchased within your experience for Robux.",
-          "type": [
-            "object",
-            "null"
-          ],
-          "additionalProperties": {
-            "$ref": "#/definitions/PassTargetConfig"
-          }
-        },
-        "places": {
-          "title": "Places",
-          "description": "The places to create in the experience. There must be at least one place supplied with the name `\"start\"`, which will be used as the start place for the experience.",
-          "type": [
-            "object",
-            "null"
-          ],
-          "additionalProperties": {
-            "$ref": "#/definitions/PlaceTargetConfig"
-          }
-        },
-        "products": {
-          "title": "Products",
-          "description": "Products that can be purchased within your experience for Robux.",
-          "type": [
-            "object",
-            "null"
-          ],
-          "additionalProperties": {
-            "$ref": "#/definitions/ProductTargetConifg"
-          }
-        },
-        "socialLinks": {
-          "title": "Social Links",
-          "description": "A list of social links that will appear on the experience's webpage.",
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "$ref": "#/definitions/SocialLinkTargetConfig"
-          }
-        }
-      }
-    },
-    "ExperienceTargetConfigurationConfig": {
-      "title": "ExperienceConfiguration",
-      "description": "```yml title=\"Example\" target: experience: configuration: genre: naval playableDevices: [computer] playability: private privateServerPrice: 0 enableStudioAccessToApis: true icon: marketing/game-icon.png thumbnails: - marketing/game-thumbnail-fall-update.png - marketing/game-thumbnail-default.png ```\n\nIn order to configure the name and description of an experience, use the `name` and `description` fields of the `PlaceConfiguration` for the experience's start place.",
-      "type": "object",
-      "properties": {
-        "allowThirdPartySales": {
-          "title": "Allow Third-party Sales",
-          "description": "Whether or not this experience should allow third-party sales. Defaults to `false`.",
-          "type": [
-            "boolean",
-            "null"
-          ]
-        },
-        "allowThirdPartyTeleports": {
-          "title": "Allow Third-party Teleports",
-          "description": "Whether or not this experience should allow third-party teleports. Defaults to `false`.",
-          "type": [
-            "boolean",
-            "null"
-          ]
-        },
-        "avatarAnimationType": {
-          "title": "Avatar Animation Type",
-          "description": "The type of avatar animation that players can use in this experience. Defaults to `\"playerChoice\"`.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/AnimationTypeTargetConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "avatarAssetOverrides": {
-          "title": "Avatar Asset Overrides",
-          "description": "The asset overrides to apply to player avatars in the experience. Defaults to Roblox's defaults.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/AvatarAssetOverridesTargetConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "avatarCollisionType": {
-          "title": "Avatar Collision Type",
-          "description": "The type of avatar collision that players can use in this experience. Defaults to `\"outerBox\"`.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/CollisionTypeTargetConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "avatarScaleConstraints": {
-          "title": "Avatar Scale Constraints",
-          "description": "The scale constraints to apply to player avatars in the experience. Defaults to Roblox's defaults.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/AvatarScaleConstraintsTargetConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "avatarType": {
-          "title": "Avatar Type",
-          "description": "The types of avatars that players can use in this experience. Defaults to `\"r15\"`.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/AvatarTypeTargetConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "enableStudioAccessToApis": {
-          "title": "Enable Studio Access to APIs",
-          "description": "Whether or not studio should be able to use Roblox APIs for this place. Defaults to `false`.",
-          "type": [
-            "boolean",
-            "null"
-          ]
-        },
-        "genre": {
-          "title": "Genre",
-          "description": "The experience's genre. Defaults to `\"all\"`.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/GenreTargetConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "icon": {
-          "title": "Icon",
-          "description": "A file path to an image that will be used as the experience's icon.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "paidAccessPrice": {
-          "title": "Paid Access Price",
-          "description": "If set, paid access will be enabled with the specified price. Otherwise, paid access will be disabled. Should not be used with `privateServerPrice`.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint32",
-          "minimum": 0.0
-        },
-        "playability": {
-          "title": "Playability",
-          "description": "Determines who has access to play the experience. Defaults to `\"private\"`.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/PlayabilityTargetConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "playableDevices": {
-          "title": "Playable Devices",
-          "description": "The devices that the experience can be played on. Defaults to `[\"computer\", \"phone\", \"tablet\"]`",
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "$ref": "#/definitions/PlayableDeviceTargetConfig"
-          }
-        },
-        "privateServerPrice": {
-          "title": "Private Server Price",
-          "description": "If set, private servers will be enabled with the specified price. Otherwise, private servers will be disabled. To enable for free, set to `0`. Should not be used with `privateServerPrice`.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint32",
-          "minimum": 0.0
-        },
-        "thumbnails": {
-          "title": "Thumbnails",
-          "description": "An array of file paths to images that will be used as the experience's thumbnails. The order used here will be the order they appear on the Roblox webpage.",
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "GenreTargetConfig": {
-      "title": "Genre",
-      "type": "string",
-      "enum": [
-        "all",
-        "adventure",
-        "building",
-        "comedy",
-        "fighting",
-        "fps",
-        "horror",
-        "medieval",
-        "military",
-        "naval",
-        "rpg",
-        "sciFi",
-        "sports",
-        "townAndCity",
-        "western"
-      ]
-    },
-    "OwnerConfig": {
-      "title": "Owner",
-      "description": "If set to `\"personal\"`, all resources will be created under the authorizer user.\n\nIf set to a group, all resources will be created under the provided group ID.\n\n```yml title=\"Group Example\" owner: group: 5723117 ```\n\n```yml title=\"Personal Example (Default)\" owner: personal ```",
+      "description": "The owner of the resources that will be created.\n\nIf set to `'personal'`, all resources will be created under the authorizer user.\n\nIf set to a group, all resources will be created under the provided group ID.\n\n```yml title=\"Group Example\"\nowner:\n  group: 5723117\n```\n\n```yml title=\"Personal Example (Default)\"\nowner: personal\n```",
+      "default": "'personal'",
       "oneOf": [
         {
           "type": "string",
@@ -697,50 +597,12 @@
           },
           "additionalProperties": false
         }
-      ]
-    },
-    "PassTargetConfig": {
-      "title": "Pass",
-      "description": "```yml title=\"Example\" target: experience: passes: shipOfTheLine: name: Ship of the Line description: Get the best ship in the game! icon: passes/ship-of-the-line.png price: 499 ```\n\nBecause Roblox does not offer any way to delete game passes, when a pass is \"deleted\" by Mantle, it is updated in the following ways:\n\n1. Its description is updated to: `Name: <name>\\nPrice: <price>\\nDescription:\\n<description>` 2. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time in `YYYY-MM-DD hh::mm::ss.ns` format.",
-      "type": "object",
-      "required": [
-        "icon",
-        "name"
       ],
-      "properties": {
-        "description": {
-          "title": "Description",
-          "description": "The description of the game pass on the Roblox website and in the experience. Defaults to `\"\"`.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "icon": {
-          "title": "Icon",
-          "description": "A file path to an image to use as the pass's icon on the Roblox website and in the experience.",
-          "type": "string"
-        },
-        "name": {
-          "title": "Name",
-          "description": "The display name of the game pass on the Roblox website and in the experience.",
-          "type": "string"
-        },
-        "price": {
-          "title": "Price",
-          "description": "The price of the game pass in Robux. If not specified, the game pass will be off-sale.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint32",
-          "minimum": 0.0
-        }
-      }
+      "x-skip-properties": true
     },
-    "PaymentsConfig": {
-      "title": "Payments",
-      "description": "If set to `\"owner\"`, all payments will come from the balance of the owner specified by the top-level `owner` field.\n\nIf set to `\"personal\"`, all payments will come from the balance of the authorized user.\n\nIf set to `\"group\"`, all payments will come from the balance of the group specified by the top-level `owner` field. Payments can only be set to `\"group\"` when `owner` is also set to a group because Roblox does not allow groups to pay for purchases of resources outside of themselves.\n\n```yml title=\"Personal Example\" payments: personal ```\n\n```yml title=\"Group Example\" payments: group ```\n\n```yml title=\"Owner Example (Default)\" payments: owner ```",
+    "payments": {
+      "description": "Where Robux should come from to purchase resources (if `--allow-purchases` is enabled).\n\nIf set to `'owner'`, all payments will come from the balance of the owner specified by the\ntop-level `owner` field.\n\nIf set to `'personal'`, all payments will come from the balance of the authorized user.\n\nIf set to `'group'`, all payments will come from the balance of the group specified by the\ntop-level `owner` field. Payments can only be set to `'group'` when `owner` is also set to a\ngroup because Roblox does not allow groups to pay for purchases of resources outside of\nthemselves.\n\n```yml title=\"Personal Example\"\npayments: personal\n```\n\n```yml title=\"Group Example\"\npayments: group\n```\n\n```yml title=\"Owner Example (Default)\"\npayments: owner\n```",
+      "default": "'owner'",
       "type": "string",
       "enum": [
         "owner",
@@ -748,285 +610,9 @@
         "group"
       ]
     },
-    "PlaceTargetConfig": {
-      "title": "Place",
-      "description": "```yml title=\"Example\" target: experience: places: start: file: game.rbxlx configuration: name: Pirate Wars! description: |- Duke it out on the high seas in your pirate ship!\n\n🍂 Fall update: new cannons, new ship types! maxPlayerCount: 10 serverFill: robloxOptimized ```",
-      "type": "object",
-      "properties": {
-        "configuration": {
-          "title": "Configuration",
-          "description": "A place's Roblox configuration.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/PlaceTargetConfigurationConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "file": {
-          "title": "File",
-          "description": "A file path to a Roblox place (either `.rbxl` or `.rbxlx`).",
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      }
-    },
-    "PlaceTargetConfigurationConfig": {
-      "title": "PlaceConfiguration",
-      "type": "object",
-      "properties": {
-        "allowCopying": {
-          "title": "Allow Copying",
-          "description": "Whether or not other Roblox users can clone your place. Defaults to `false`.",
-          "type": [
-            "boolean",
-            "null"
-          ]
-        },
-        "description": {
-          "title": "Description",
-          "description": "The descirption of the place on the Roblox website and in-game. Defaults to `\"Created with Mantle\"`. If the place is an experience's start place, it will be the experience's description as well.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "maxPlayerCount": {
-          "title": "Max Player Count",
-          "description": "The maximum number of players that can be in a server for the place. Defaults to `50`.",
-          "type": [
-            "integer",
-            "null"
-          ],
-          "format": "uint32",
-          "minimum": 0.0
-        },
-        "name": {
-          "title": "Name",
-          "description": "The display name of the place on the Roblox website and in-game. Defaults to `\"Untitled Game\"`. If the place is an experience's start place, it will be the experience's display name as well.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "serverFill": {
-          "title": "Server Fill",
-          "description": "Determines how Roblox will fill your servers.",
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ServerFillTargetConfig"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      }
-    },
-    "PlayabilityTargetConfig": {
-      "title": "Playability",
-      "description": "If set to `\"public\"`, the epxerience will be playable by all Roblox users.\n\nIf set to `\"private\"`, the experience will only be playable by the authorized user.\n\nIf set to `\"friends\"`, the experience will only be playable by the authorized user and that user's Roblox friends.",
-      "type": "string",
-      "enum": [
-        "public",
-        "private",
-        "friends"
-      ]
-    },
-    "PlayableDeviceTargetConfig": {
-      "title": "PlayableDevice",
-      "type": "string",
-      "enum": [
-        "computer",
-        "phone",
-        "tablet",
-        "console"
-      ]
-    },
-    "ProductTargetConifg": {
-      "title": "Product",
-      "description": "```yml title=\"Example\" target: experience: products: fiftyGold: name: 50 Gold description: Add 50 gold to your wallet! icon: products/50-gold.png price: 25 hundredGold: name: 100 Gold description: Add 100 gold to your wallet! icon: products/100-gold.png price: 45 ```\n\nBecause Roblox does not offer any way to delete developer products, when a product is \"deleted\" by Mantle, it is updated in the following ways:\n\n1. Its description is updated to: `Name: <name>\\nDescription:\\n<description>` 2. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time in `YYYY-MM-DD hh::mm::ss.ns` format.",
-      "type": "object",
-      "required": [
-        "name",
-        "price"
-      ],
-      "properties": {
-        "description": {
-          "title": "Description",
-          "description": "The description of the developer product on the Roblox website and in the experience. Defaults to `\"\"`.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "icon": {
-          "title": "Icon",
-          "description": "A file path to an image to use as the product's icon on the Roblox website and in the experience. Defaults to no icon.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "name": {
-          "title": "Name",
-          "description": "The display name of the developer product on the Roblox website and in the experience.",
-          "type": "string"
-        },
-        "price": {
-          "title": "Price",
-          "description": "The price of the developer product in Robux.",
-          "type": "integer",
-          "format": "uint32",
-          "minimum": 0.0
-        }
-      }
-    },
-    "Region": {
-      "title": "Region",
-      "oneOf": [
-        {
-          "type": "string",
-          "enum": [
-            "ap-east-1",
-            "ap-northeast-1",
-            "ap-northeast-2",
-            "ap-northeast-3",
-            "ap-south-1",
-            "ap-southeast-1",
-            "ap-southeast-2",
-            "ca-central-1",
-            "eu-central-1",
-            "eu-west-1",
-            "eu-west-2",
-            "eu-west-3",
-            "eu-north-1",
-            "eu-south-1",
-            "me-south-1",
-            "sa-east-1",
-            "us-east-1",
-            "us-east-2",
-            "us-west-1",
-            "us-west-2",
-            "us-gov-east-1",
-            "us-gov-west-1",
-            "cn-north-1",
-            "cn-northwest-1",
-            "af-south-1"
-          ]
-        },
-        {
-          "type": "object",
-          "required": [
-            "custom"
-          ],
-          "properties": {
-            "custom": {
-              "type": "object",
-              "required": [
-                "endpoint",
-                "name"
-              ],
-              "properties": {
-                "endpoint": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
-    },
-    "RemoteStateConfig": {
-      "title": "RemoteState",
-      "type": "object",
-      "required": [
-        "bucket",
-        "key",
-        "region"
-      ],
-      "properties": {
-        "bucket": {
-          "title": "Bucket",
-          "description": "The name of your AWS S3 bucket.",
-          "type": "string"
-        },
-        "key": {
-          "title": "Key",
-          "description": "The key to use to store your state file. The file will be named with the format `<key>.mantle-state.yml`.",
-          "type": "string"
-        },
-        "region": {
-          "title": "Region",
-          "description": "The AWS region your S3 bucket is located in.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/Region"
-            }
-          ]
-        }
-      }
-    },
-    "ServerFillTargetConfig": {
-      "title": "ServerFill",
-      "description": "If set to `\"robloxOptimized\"`, Roblox will attempt to automatically leave some space for friends to join.\n\nIf set to `\"maximum\"`, Roblox will never leave room for friends to join.\n\nIf set to reserved slots, Roblox will always leave the provided number of slots available for friends to join.\n\n```yml title=\"Reserved Slots Example\" target: experience: places: start: file: game.rbxlx configuration: serverFill: reservedSlots: 10 ```",
-      "oneOf": [
-        {
-          "type": "string",
-          "enum": [
-            "robloxOptimized",
-            "maximum"
-          ]
-        },
-        {
-          "type": "object",
-          "required": [
-            "reservedSlots"
-          ],
-          "properties": {
-            "reservedSlots": {
-              "type": "integer",
-              "format": "uint32",
-              "minimum": 0.0
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
-    },
-    "SocialLinkTargetConfig": {
-      "title": "SocialLink",
-      "description": "```yml title=\"Example\" target: experience: socialLinks: - title: Follow on Twitter url: https://twitter.com/blakemdev ```",
-      "type": "object",
-      "required": [
-        "title",
-        "url"
-      ],
-      "properties": {
-        "title": {
-          "title": "Title",
-          "description": "The display name of the social link on the Roblox website.",
-          "type": "string"
-        },
-        "url": {
-          "title": "URL",
-          "description": "The URL of the social link. Must be one of the Roblox supported social link types.",
-          "type": "string",
-          "format": "uri"
-        }
-      }
-    },
-    "StateConfig": {
-      "title": "State",
-      "description": "If set to `\"local\"`, Mantle will save and load its state to and from a local `.mantle-state.yml` file.\n\nIf set to a remote, Mantle will save and load its state to and from a remote file.\n\n```yml title=\"Remote State Example\" state: remote: region: [us-west-2] bucket: mantle-states key: pirate-wars ```\n\n```yml title=\"Local State Example (Default)\" state: local ```",
+    "state": {
+      "description": "Defines how Mantle should manage state files (locally or remotely).\n\nIf set to `'local'`, Mantle will save and load its state to and from a local `.mantle-state.yml`\nfile.\n\n```yml title=\"Local State Example (Default)\"\nstate: local\n```",
+      "default": "'local'",
       "oneOf": [
         {
           "type": "string",
@@ -1035,32 +621,97 @@
           ]
         },
         {
+          "description": "```yml title=\"Remote State Example\"\nstate:\n  remote:\n    region: us-west-2\n    bucket: mantle-states\n    key: pirate-wars\n```",
           "type": "object",
           "required": [
             "remote"
           ],
           "properties": {
             "remote": {
-              "$ref": "#/definitions/RemoteStateConfig"
+              "type": "object",
+              "required": [
+                "bucket",
+                "key",
+                "region"
+              ],
+              "properties": {
+                "bucket": {
+                  "description": "The name of your AWS S3 bucket.",
+                  "type": "string"
+                },
+                "key": {
+                  "description": "The key to use to store your state file. The file will be named with the format\n`<key>.mantle-state.yml`.",
+                  "type": "string"
+                },
+                "region": {
+                  "description": "The AWS region your S3 bucket is located in. If for some reason you need\nto use a region that is not defined, you can supply a custom one:\n\n```yml title=\"Custom Region Example\"\nstate:\n  remote:\n    region:\n      custom:\n        name: region-name\n        endpoint: region-endpoint\n    bucket: mantle-states\n    key: pirate-wars\n```",
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "ap-east-1",
+                        "ap-northeast-1",
+                        "ap-northeast-2",
+                        "ap-northeast-3",
+                        "ap-south-1",
+                        "ap-southeast-1",
+                        "ap-southeast-2",
+                        "ca-central-1",
+                        "eu-central-1",
+                        "eu-west-1",
+                        "eu-west-2",
+                        "eu-west-3",
+                        "eu-north-1",
+                        "eu-south-1",
+                        "me-south-1",
+                        "sa-east-1",
+                        "us-east-1",
+                        "us-east-2",
+                        "us-west-1",
+                        "us-west-2",
+                        "us-gov-east-1",
+                        "us-gov-west-1",
+                        "cn-north-1",
+                        "cn-northwest-1",
+                        "af-south-1"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "custom"
+                      ],
+                      "properties": {
+                        "custom": {
+                          "type": "object",
+                          "required": [
+                            "endpoint",
+                            "name"
+                          ],
+                          "properties": {
+                            "endpoint": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ],
+                  "x-skip-properties": true
+                }
+              }
             }
           },
           "additionalProperties": false
         }
       ]
     },
-    "TargetAccessConfig": {
-      "title": "TargetAccess",
-      "description": "If set to `\"public\"`, the target will be accessible to all Roblox users.\n\nIf set to `\"private\"`, the target will only be accessible to the authorized user.\n\nIf set to `\"friends\"`, the target will only be accessible to the authorized user and that user's Roblox friends.",
-      "type": "string",
-      "enum": [
-        "public",
-        "private",
-        "friends"
-      ]
-    },
-    "TargetConfig": {
-      "title": "Target",
-      "description": "Currently the only supported target resource type is an Experience.\n\n```yml title=\"Example\" target: experience: {} ```",
+    "target": {
+      "description": "Defines the target resource which Mantle will deploy to. Currently Mantle only supports\ntargeting Experiences, but in the future it will target other types like Plugins and Models.\n\nCurrently the only supported target resource type is an Experience.\n\n```yml title=\"Example\"\ntarget:\n  experience: {}\n```",
       "oneOf": [
         {
           "type": "object",
@@ -1069,43 +720,507 @@
           ],
           "properties": {
             "experience": {
-              "$ref": "#/definitions/ExperienceTargetConfig"
+              "title": "Experience",
+              "type": "object",
+              "properties": {
+                "assets": {
+                  "title": "Assets",
+                  "description": "A list of assets to include in your experience.\n\nIf set to `'file'`, the value should be a file path or glob to an asset or list of assets. The\n`rbxgameasset` name of each matched file will be its file name without the extension. For\nexample, `assets/pirate-flag.png` will be given the `rbxgameasset` name `pirate-flag` and will\nbe accessible in the experience with `rbxgameasset://Images/pirate-flag`.\n\nIf set to an object, `file` should be set to a file path (it will not be interpreted as a glob),\nand `name` will be the name of the `rbxgameasset`.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    assets:\n      - assets/*\n      - file: marketing/icon.png\n        name: game-icon\n```\n\n:::caution\nBy default, Mantle does not have permission to make purchases with Robux. Since\ncreating and updating audio assets costs Robux, you will need to use the `--allow-purchases`\nflag when you want to create or update them.\n:::\n\nEach file will be uploaded as the asset type matching its file extension. Supported asset types\nand their file extensions:\n\n| Asset type | File extensions                                 |\n| :--------- | :---------------------------------------------- |\n| Image      | `.bmp`, `.gif`, `.jpeg`, `.jpg`, `.png`, `.tga` |\n| Audio      | `.ogg`, `.mp3`                                  |",
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "object",
+                        "required": [
+                          "file",
+                          "name"
+                        ],
+                        "properties": {
+                          "file": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "badges": {
+                  "title": "Badges",
+                  "description": "Badges that can be awarded within your experience.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    badges:\n      captureFirstShip:\n        name: Capture First Ship!\n        description: You captured your first enemy ship!\n        icon: badges/capture-first-ship.png\n```\n\n:::caution\nBy default, Mantle does not have permission to make purchases with Robux. Since creating badges\ncosts Robux, you will need to use the `--allow-purchases` flag when you want to create them.\n:::\n\nBecause Roblox does not offer any way to delete badges, when a badge is \"deleted\" by\nMantle, it is updated in the following ways:\n\n1. It is disabled\n2. Its description is updated to: `Name: <name>\\nEnabled: <enabled>\\nDescription:\\n<description>`\n3. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time\n   in `YYYY-MM-DD hh::mm::ss.ns` format.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "required": [
+                      "icon",
+                      "name"
+                    ],
+                    "properties": {
+                      "description": {
+                        "description": "The description of the badge on the Roblox website and in the experience.",
+                        "default": "''",
+                        "type": "string"
+                      },
+                      "enabled": {
+                        "description": "Whether or not the badge is enabled.",
+                        "default": "true",
+                        "type": "boolean"
+                      },
+                      "icon": {
+                        "description": "A file path to an image to use as the badge's icon on the Roblox website and in the\nexperience.",
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "The display name of the badge on the Roblox website and in the experience.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "configuration": {
+                  "title": "Configuration",
+                  "description": "The Experience's Roblox configuration.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    configuration:\n      genre: naval\n      playableDevices: [computer]\n      playability: private\n      privateServerPrice: 0\n      enableStudioAccessToApis: true\n      icon: marketing/game-icon.png\n      thumbnails:\n        - marketing/game-thumbnail-fall-update.png\n        - marketing/game-thumbnail-default.png\n```\n\nIn order to configure the name and description of an experience, use the `name` and\n`description` fields of the `PlaceConfiguration` for the experience's start place.",
+                  "type": "object",
+                  "properties": {
+                    "allowThirdPartySales": {
+                      "description": "Whether or not this experience should allow third-party sales.",
+                      "default": "false",
+                      "type": "boolean"
+                    },
+                    "allowThirdPartyTeleports": {
+                      "description": "Whether or not this experience should allow third-party teleports.",
+                      "default": "false",
+                      "type": "boolean"
+                    },
+                    "avatarAnimationType": {
+                      "description": "The type of avatar animation that players can use in this experience.",
+                      "default": "'playerChoice'",
+                      "type": "string",
+                      "enum": [
+                        "standard",
+                        "playerChoice"
+                      ]
+                    },
+                    "avatarAssetOverrides": {
+                      "description": "The asset overrides to apply to player avatars in the experience. Defaults to Roblox's\ndefaults.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    configuration:\n      avatarAssetOverrides:\n        face: 7699174\n        shirt: 5382048848\n        pants: 5611120855\n```",
+                      "type": "object",
+                      "properties": {
+                        "face": {
+                          "description": "The asset ID to override the avatar's face.",
+                          "type": "integer",
+                          "format": "uint64",
+                          "minimum": 0.0
+                        },
+                        "head": {
+                          "description": "The asset ID to override the avatar's head.",
+                          "type": "integer",
+                          "format": "uint64",
+                          "minimum": 0.0
+                        },
+                        "leftArm": {
+                          "description": "The asset ID to override the avatar's left arm.",
+                          "type": "integer",
+                          "format": "uint64",
+                          "minimum": 0.0
+                        },
+                        "leftLeg": {
+                          "description": "The asset ID to override the avatar's left leg.",
+                          "type": "integer",
+                          "format": "uint64",
+                          "minimum": 0.0
+                        },
+                        "pants": {
+                          "description": "The asset ID to override the avatar's pants.",
+                          "type": "integer",
+                          "format": "uint64",
+                          "minimum": 0.0
+                        },
+                        "rightArm": {
+                          "description": "The asset ID to override the avatar's right arm.",
+                          "type": "integer",
+                          "format": "uint64",
+                          "minimum": 0.0
+                        },
+                        "rightLeg": {
+                          "description": "The asset ID to override the avatar's right leg.",
+                          "type": "integer",
+                          "format": "uint64",
+                          "minimum": 0.0
+                        },
+                        "shirt": {
+                          "description": "The asset ID to override the avatar's shirt.",
+                          "type": "integer",
+                          "format": "uint64",
+                          "minimum": 0.0
+                        },
+                        "torso": {
+                          "description": "The asset ID to override the avatar's torso.",
+                          "type": "integer",
+                          "format": "uint64",
+                          "minimum": 0.0
+                        },
+                        "tshirt": {
+                          "description": "The asset ID to override the avatar's t-shirt.",
+                          "type": "integer",
+                          "format": "uint64",
+                          "minimum": 0.0
+                        }
+                      },
+                      "x-skip-properties": true
+                    },
+                    "avatarCollisionType": {
+                      "description": "The type of avatar collision that players can use in this experience.",
+                      "default": "'outerBox'",
+                      "type": "string",
+                      "enum": [
+                        "outerBox",
+                        "innerBox"
+                      ]
+                    },
+                    "avatarScaleConstraints": {
+                      "description": "The scale constraints to apply to player avatars in the experience. Defaults to Roblox's\ndefaults.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    configuration:\n      avatarScaleConstraints:\n        height:\n          min: 0.95\n        width:\n          max: 0.9\n        proportions:\n          min: 30\n          max: 50\n```",
+                      "type": "object",
+                      "properties": {
+                        "bodyType": {
+                          "title": "Body Type",
+                          "description": "The constraints to apply to the body type of the avatar.",
+                          "type": "object",
+                          "properties": {
+                            "max": {
+                              "description": "The maximum value (float)",
+                              "type": "number",
+                              "format": "float"
+                            },
+                            "min": {
+                              "description": "The minimum value (float)",
+                              "type": "number",
+                              "format": "float"
+                            }
+                          }
+                        },
+                        "head": {
+                          "title": "Head",
+                          "description": "The constraints to apply to the head of the avatar.",
+                          "type": "object",
+                          "properties": {
+                            "max": {
+                              "description": "The maximum value (float)",
+                              "type": "number",
+                              "format": "float"
+                            },
+                            "min": {
+                              "description": "The minimum value (float)",
+                              "type": "number",
+                              "format": "float"
+                            }
+                          }
+                        },
+                        "height": {
+                          "title": "Height",
+                          "description": "The constraints to apply to the height of the avatar.",
+                          "type": "object",
+                          "properties": {
+                            "max": {
+                              "description": "The maximum value (float)",
+                              "type": "number",
+                              "format": "float"
+                            },
+                            "min": {
+                              "description": "The minimum value (float)",
+                              "type": "number",
+                              "format": "float"
+                            }
+                          }
+                        },
+                        "proportions": {
+                          "title": "Proportions",
+                          "description": "The constraints to apply to the proportions of the avatar.",
+                          "type": "object",
+                          "properties": {
+                            "max": {
+                              "description": "The maximum value (float)",
+                              "type": "number",
+                              "format": "float"
+                            },
+                            "min": {
+                              "description": "The minimum value (float)",
+                              "type": "number",
+                              "format": "float"
+                            }
+                          }
+                        },
+                        "width": {
+                          "title": "Width",
+                          "description": "The constraints to apply to the width of the avatar.",
+                          "type": "object",
+                          "properties": {
+                            "max": {
+                              "description": "The maximum value (float)",
+                              "type": "number",
+                              "format": "float"
+                            },
+                            "min": {
+                              "description": "The minimum value (float)",
+                              "type": "number",
+                              "format": "float"
+                            }
+                          }
+                        }
+                      },
+                      "x-skip-properties": true
+                    },
+                    "avatarType": {
+                      "description": "The types of avatars that players can use in this experience.",
+                      "default": "'r15'",
+                      "type": "string",
+                      "enum": [
+                        "r6",
+                        "r15",
+                        "playerChoice"
+                      ]
+                    },
+                    "enableStudioAccessToApis": {
+                      "description": "Whether or not studio should be able to use Roblox APIs for this place.",
+                      "default": "false",
+                      "type": "boolean"
+                    },
+                    "genre": {
+                      "description": "The experience's genre.",
+                      "default": "'all'",
+                      "type": "string",
+                      "enum": [
+                        "all",
+                        "adventure",
+                        "building",
+                        "comedy",
+                        "fighting",
+                        "fps",
+                        "horror",
+                        "medieval",
+                        "military",
+                        "naval",
+                        "rpg",
+                        "sciFi",
+                        "sports",
+                        "townAndCity",
+                        "western"
+                      ]
+                    },
+                    "icon": {
+                      "description": "A file path to an image that will be used as the experience's icon.",
+                      "type": "string"
+                    },
+                    "paidAccessPrice": {
+                      "description": "If set, paid access will be enabled with the specified price. Otherwise, paid access will be\ndisabled. Should not be used with `privateServerPrice`.",
+                      "type": "integer",
+                      "format": "uint32",
+                      "minimum": 0.0
+                    },
+                    "playability": {
+                      "description": "Determines who has access to play the experience.\n\nIf set to `'public'`, the epxerience will be playable by all Roblox users.\n\nIf set to `'private'`, the experience will only be playable by the authorized user.\n\nIf set to `'friends'`, the experience will only be playable by the authorized user and that\nuser's Roblox friends.",
+                      "default": "'private'",
+                      "type": "string",
+                      "enum": [
+                        "public",
+                        "private",
+                        "friends"
+                      ]
+                    },
+                    "playableDevices": {
+                      "description": "The devices that the experience can be played on.",
+                      "default": "['computer', 'phone', 'tablet']",
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "computer",
+                          "phone",
+                          "tablet",
+                          "console"
+                        ]
+                      }
+                    },
+                    "privateServerPrice": {
+                      "description": "If set, private servers will be enabled with the specified price. Otherwise, private servers\nwill be disabled. To enable for free, set to `0`. Should not be used with\n`privateServerPrice`.",
+                      "type": "integer",
+                      "format": "uint32",
+                      "minimum": 0.0
+                    },
+                    "thumbnails": {
+                      "description": "An array of file paths to images that will be used as the experience's thumbnails. The order\nused here will be the order they appear on the Roblox webpage.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "passes": {
+                  "title": "Passes",
+                  "description": "Passes that can be purchased within your experience for Robux.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    passes:\n      shipOfTheLine:\n        name: Ship of the Line\n        description: Get the best ship in the game!\n        icon: passes/ship-of-the-line.png\n        price: 499\n```\n\nBecause Roblox does not offer any way to delete game passes, when a pass is \"deleted\" by\nMantle, it is updated in the following ways:\n\n1. Its description is updated to: `Name: <name>\\nPrice: <price>\\nDescription:\\n<description>`\n2. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current date-time\n   in `YYYY-MM-DD hh::mm::ss.ns` format.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "required": [
+                      "icon",
+                      "name"
+                    ],
+                    "properties": {
+                      "description": {
+                        "description": "The description of the game pass on the Roblox website and in the experience.",
+                        "default": "''",
+                        "type": "string"
+                      },
+                      "icon": {
+                        "description": "A file path to an image to use as the pass's icon on the Roblox website and in the\nexperience.",
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "The display name of the game pass on the Roblox website and in the experience.",
+                        "type": "string"
+                      },
+                      "price": {
+                        "description": "The price of the game pass in Robux. If not specified, the game pass will be off-sale.",
+                        "type": "integer",
+                        "format": "uint32",
+                        "minimum": 0.0
+                      }
+                    }
+                  }
+                },
+                "places": {
+                  "title": "Places",
+                  "description": "The places to create in the experience. There must be at least one place supplied with the\nname `'start'`, which will be used as the start place for the experience.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    places:\n      start:\n        file: game.rbxlx\n        configuration:\n          name: Pirate Wars!\n          description: |-\n            Duke it out on the high seas in your pirate ship!\n\n            🍂 Fall update: new cannons, new ship types!\n          maxPlayerCount: 10\n          serverFill: robloxOptimized\n```",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "configuration": {
+                        "description": "A place's Roblox configuration.",
+                        "type": "object",
+                        "properties": {
+                          "allowCopying": {
+                            "description": "Whether or not other Roblox users can clone your place.",
+                            "default": "false",
+                            "type": "boolean"
+                          },
+                          "description": {
+                            "description": "The descirption of the place on the Roblox website and in-game. If the\nplace is an experience's start place, it will be the experience's\ndescription as well.",
+                            "default": "'Created with Mantle'",
+                            "type": "string"
+                          },
+                          "maxPlayerCount": {
+                            "description": "The maximum number of players that can be in a server for the place.",
+                            "default": "50",
+                            "type": "integer",
+                            "format": "uint32",
+                            "minimum": 0.0
+                          },
+                          "name": {
+                            "description": "The display name of the place on the Roblox website and in-game. If the\nplace is an experience's start place, it will be the experience's\ndisplay name as well.",
+                            "default": "'Untitled Game'",
+                            "type": "string"
+                          },
+                          "serverFill": {
+                            "description": "Determines how Roblox will fill your servers.\n\nIf set to `'robloxOptimized'`, Roblox will attempt to automatically leave some space for friends\nto join.\n\nIf set to `'maximum'`, Roblox will never leave room for friends to join.\n\nIf set to reserved slots, Roblox will always leave the provided number of slots available for\nfriends to join.\n\n```yml title=\"Reserved Slots Example\"\ntarget:\n  experience:\n    places:\n      start:\n        file: game.rbxlx\n        configuration:\n          serverFill:\n            reservedSlots: 10\n```",
+                            "oneOf": [
+                              {
+                                "type": "string",
+                                "enum": [
+                                  "robloxOptimized",
+                                  "maximum"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "required": [
+                                  "reservedSlots"
+                                ],
+                                "properties": {
+                                  "reservedSlots": {
+                                    "type": "integer",
+                                    "format": "uint32",
+                                    "minimum": 0.0
+                                  }
+                                },
+                                "additionalProperties": false
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "file": {
+                        "description": "A file path to a Roblox place (either `.rbxl` or `.rbxlx`).",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "products": {
+                  "title": "Products",
+                  "description": "Products that can be purchased within your experience for Robux.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    products:\n      fiftyGold:\n        name: 50 Gold\n        description: Add 50 gold to your wallet!\n        icon: products/50-gold.png\n        price: 25\n      hundredGold:\n        name: 100 Gold\n        description: Add 100 gold to your wallet!\n        icon: products/100-gold.png\n        price: 45\n```\n\nBecause Roblox does not offer any way to delete developer products, when a product is \"deleted\"\nby Mantle, it is updated in the following ways:\n\n1. Its description is updated to: `Name: <name>\\nDescription:\\n<description>`\n2. Its name is updated to `zzz_Deprecated(<date-time>)` where `<date-time>` is the current\n   date-time in `YYYY-MM-DD hh::mm::ss.ns` format.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "price"
+                    ],
+                    "properties": {
+                      "description": {
+                        "description": "The description of the developer product on the Roblox website and in the experience.",
+                        "default": "''",
+                        "type": "string"
+                      },
+                      "icon": {
+                        "description": "A file path to an image to use as the product's icon on the Roblox website and in the\nexperience.",
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "The display name of the developer product on the Roblox website and in the experience.",
+                        "type": "string"
+                      },
+                      "price": {
+                        "description": "The price of the developer product in Robux.",
+                        "type": "integer",
+                        "format": "uint32",
+                        "minimum": 0.0
+                      }
+                    }
+                  }
+                },
+                "socialLinks": {
+                  "title": "Social Links",
+                  "description": "A list of social links that will appear on the experience's webpage.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    socialLinks:\n      - title: Follow on Twitter\n        url: https://twitter.com/blakemdev\n```",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "title",
+                      "url"
+                    ],
+                    "properties": {
+                      "title": {
+                        "description": "The display name of the social link on the Roblox website.",
+                        "type": "string"
+                      },
+                      "url": {
+                        "description": "The URL of the social link. Must be one of the Roblox supported social link types.",
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    }
+                  }
+                }
+              }
             }
           },
           "additionalProperties": false
-        }
-      ]
-    },
-    "TargetNamePrefixConfig": {
-      "title": "TargetNamePrefix",
-      "description": "If set to `\"environmentName\"`, the target name prefix will use the format `[<ENVIRONMENT>] ` where `<ENVIRONMENT>` is the value of the environment's `name` field in all caps.\n\nIf set to a custom string, the target name prefix will use the user-specified string.\n\n```yml title=\"Environment Name Example\" environments: - name: staging targetNamePrefix: environmentName - name: production ```\n\n```yml title=\"Custom Example\" environments: - name: staging targetNamePrefix: custom: 'Prefix: ' - name: production ```",
-      "oneOf": [
-        {
-          "type": "string",
-          "enum": [
-            "environmentName"
-          ]
-        },
-        {
-          "type": "object",
-          "required": [
-            "custom"
-          ],
-          "properties": {
-            "custom": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
-    },
-    "TargetOverridesConfig": {
-      "title": "TargetOverrides",
-      "description": "Override the target configuration. Should match the type of the target configuration.",
-      "anyOf": [
-        {
-          "$ref": "#/definitions/ExperienceTargetConfig"
         }
       ]
     }

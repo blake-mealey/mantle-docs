@@ -25,8 +25,27 @@ repo.
 
 ## Schema
 
+You can view the JSON schema for the config file in the [Releases](https://github.com/blake-mealey/mantle/releases)
+artifacts (only for versions above `0.11.0`). You can also use the schema to add autocomplete to your editor. For
+VSCode, you can install the [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) extension
+and add the following to your VSCode settings:
+
+```json
+"yaml.schemas": {
+   "https://github.com/blake-mealey/mantle/releases/download/v0.11.0/schema.json": "mantle.yml"
+}
+```
+
+Now you should see autocomplete suggestions and documentation while editing your `mantle.yml` config files.
+
+## Reference
+
 {{#each properties}}
-{{#repeat this.level}}#{{/repeat}} `{{this.id}}`{{#if this.required}} <span class="badge badge--danger">required</span>{{/if}}
+
+{{#repeat this.level}}#{{/repeat}} `{{this.id}}`{{> heading-info }}{{anchor this.id}}
+
+{{> schema }}
 
 {{this.schema.description}}
+
 {{/each}}

@@ -51,9 +51,25 @@ html[data-theme='dark'] {
 }
 
 h3 .badge {
-  font-size: 0.5em;
-  transform: translateY(-0.15rem);
-  margin-left: 0.5em;
+  font-size: 12px;
+}
+h4 .badge {
+  font-size: 12px;
+}
+h5 .badge {
+  font-size: 12px;
+}
+h6 .badge {
+  font-size: 12px;
+}
+
+.heading-info {
+  display: flex;
+  gap: 6px;
+  float: right;
+  max-width: 50%;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .table-of-contents .badge {
