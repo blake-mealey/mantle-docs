@@ -41,10 +41,7 @@ Now you should see autocomplete suggestions and documentation while editing your
 ## Reference
 
 {{#each properties}}
-
 {{#repeat this.level}}#{{/repeat}} `{{this.id}}`{{> heading-info }}{{anchor this.id}}
-
-{{> schema }}
 
 {{this.schema.description}}
 
