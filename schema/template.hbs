@@ -16,6 +16,41 @@ Mantle uses the following rules to find your config file:
 
 If no config file is found, Mantle will exit with an error code.
 
+## File path resolving
+
+Many Mantle config properties require file paths or globs. All file paths should be written relative to the
+config file's directory.
+
+For example, with the directory structure:
+
+```txt
+.
+╰── project/
+    ├── mantle.yml
+    ├── game.rbxlx
+    ╰── marketing/
+        ├── game-icon.png
+        ├── thumbnail-1.png
+        ╰── thumbnail-2.png
+```
+
+You would use the config:
+
+```yml title="project/mantle.yml"
+target:
+  experience:
+    configuration:
+      icon: marketing/game-icon.png
+      thumbnails:
+        - marketing/thumbnail-1.png
+        - marketing/thumbnail-2.png
+    places:
+      start:
+        file: game.rbxlx
+```
+
+Mantle will correctly find the referenced files no matter where you execute Mantle from.
+
 ## YAML syntax
 
 Mantle config files use YAML syntax, and should have either a `.yml` or `.yaml` file extension. To
