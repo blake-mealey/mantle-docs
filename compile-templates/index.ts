@@ -143,7 +143,7 @@ function saveSchemas(schemas: Record<string, JSONSchema7>) {
     mkdirSync(versionDir, { recursive: true });
 
     const file = path.join(versionDir, 'schema.json');
-    console.log('Writing:', file);
+    console.log('Writing:\t', file);
     writeFileSync(file, JSON.stringify(schema), 'utf-8');
   }
 }
