@@ -34,6 +34,10 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+        gtag: {
+          trackingID: 'G-Q4VEG3S3WF',
+          anonymizeIP: true,
+        },
       }),
     ],
   ],
@@ -44,10 +48,7 @@ const config = {
       colorMode: {
         respectPrefersColorScheme: true,
       },
-      gtag: {
-        trackingID: 'G-Q4VEG3S3WF',
-        anonymizeIP: true,
-      },
+
       navbar: {
         title: 'Mantle',
         logo: {
