@@ -45,36 +45,36 @@
       ]
     },
     "environments": {
-      "description": "The list of environments which Mantle can deploy to.\n\n```yml title=\"Example\"\nenvironments:\n  - name: staging\n    branches: [dev, dev/*]\n    overrides:\n      configuration:\n        genre: building\n  - name: production\n    branches: [main]\n    targetAccess: public\n```",
+      "description": "The list of environments which Mantle can deploy to.\n\n```yml title=\"Example\"\nenvironments:\n  - label: staging\n    branches: [dev, dev/*]\n    targetOverrides:\n      configuration:\n        icon: marketing/beta-game-icon.png\n  - label: production\n    branches: [main]\n    targetAccess: public\n```",
       "type": "array",
       "items": {
         "type": "object",
         "required": [
-          "name"
+          "label"
         ],
         "properties": {
-          "name": {
-            "description": "The name of the environment that is used to identify the environment via the `--environment`\nflag. Must be unique across all environments.",
+          "label": {
+            "description": "The label of the environment that is used to identify the environment\nvia the `--environment` flag. Must be unique across all environments.",
             "type": "string"
           },
           "branches": {
-            "description": "An array of file globs to match against Git branches. If the `--environment` flag is not\nspecified, Mantle will pick the first environment which contains a matching file glob for\nthe current Git branch. If no environments match, Mantle will exit with a success code.",
+            "description": "An array of file globs to match against Git branches. If the\n`--environment` flag is not specified, Mantle will pick the first\nenvironment which contains a matching file glob for the current Git\nbranch. If no environments match, Mantle will exit with a success code.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "tagCommit": {
-            "description": "Whether or not to tag the commit with place file versions after successful deployments. It\nis recommended to only enable this on your production environment. Tags will be of the\nformat `<name>-v<version>` where `<name>` is the name of the place and `<version>` is the\nplace's Roblox version.\n\nFor example, a start place with Roblox version 23 would have the tag `start-v23`.",
+            "description": "Whether or not to tag the commit with place file versions after\nsuccessful deployments. It is recommended to only enable this on your\nproduction environment. Tags will be of the format `<label>-v<version>`\nwhere `<label>` is the label of the place and `<version>` is the place's\nRoblox version.\n\nFor example, a start place with Roblox version 23 would have the tag\n`start-v23`.",
             "type": "boolean"
           },
           "targetNamePrefix": {
-            "description": "\nAdds a prefix to the target's name configuration. The implementation is dependent on the\ntarget's type. For Experience targets, all place names will be updated with the prefix.\n\n| Value               | Description                                                                                                                                                                                                                                                                                                                            |\n|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n| `'environmentName'` | The target name prefix will use the format `[<ENVIRONMENT>] ` where `<ENVIRONMENT>` is the value of the environment's [`name`](#environments--name) property in all caps. For example, if the environment's name was `'dev'` and the target's name was \"Made with Mantle\", the resulting target name will be \"[DEV] Made with Mantle\". |\n| `custom: <prefix>`  | The target name prefix will be the supplied value.                                                                                                                                                                                                                                                                                     |\n\n```yml title=\"Environment Name Example\"\nenvironments:\n  - name: dev\n    targetNamePrefix: environmentName\n  - name: prod\n```\n\n```yml title=\"Custom Example\"\nenvironments:\n  - name: dev\n    targetNamePrefix:\n      custom: 'Prefix: '\n  - name: prod\n```",
+            "description": "\nAdds a prefix to the target's name configuration. The implementation is dependent on the\ntarget's type. For Experience targets, all place names will be updated with the prefix.\n\n| Value                | Description                                                                                                                                                                                                                                                                                                                               |\n|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n| `'environmentLabel'` | The target name prefix will use the format `[<ENVIRONMENT>] ` where `<ENVIRONMENT>` is the value of the environment's [`label`](#environments--label) property in all caps. For example, if the environment's label was `'dev'` and the target's name was \"Made with Mantle\", the resulting target name will be \"[DEV] Made with Mantle\". |\n| `custom: <prefix>`   | The target name prefix will be the supplied value.                                                                                                                                                                                                                                                                                        |\n\n```yml title=\"Environment Label Example\"\nenvironments:\n  - label: dev\n    targetNamePrefix: environmentLabel\n  - label: prod\n```\n\n```yml title=\"Custom Example\"\nenvironments:\n  - label: dev\n    targetNamePrefix:\n      custom: 'Prefix: '\n  - label: prod\n```",
             "oneOf": [
               {
                 "type": "string",
                 "enum": [
-                  "environmentName"
+                  "environmentLabel"
                 ]
               },
               {
@@ -101,7 +101,7 @@
               "friends"
             ]
           },
-          "overrides": {
+          "targetOverrides": {
             "description": "\nEnvironment-specific overrides for the target resource definition. This\nwill override all configuration, including changes made by the\n[`targetNamePrefix`](#environments--targetnameprefix) and\n[`targetAccess`](#environments--targetaccess) properties.\n\nOverride the target configuration. Should match the type of the target\nconfiguration.",
             "anyOf": [
               {
@@ -147,17 +147,6 @@
                           ]
                         }
                       },
-                      "icon": {
-                        "description": "A file path to an image that will be used as the experience's icon.",
-                        "type": "string"
-                      },
-                      "thumbnails": {
-                        "description": "An array of file paths to images that will be used as the experience's thumbnails. The order\nused here will be the order they appear on the Roblox webpage.",
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      },
                       "playability": {
                         "description": "\nDetermines who has access to play the experience.\n\n| Value       | Description                                                                                 |\n|-------------|---------------------------------------------------------------------------------------------|\n| `'public'`  | The experience will be playable by all Roblox users.                                        |\n| `'private'` | The experience will only be playable by the authorized user.                                |\n| `'friends'` | The experience will only be playable to the authorized user and that user's Roblox friends. |",
                         "default": "'private'",
@@ -168,17 +157,60 @@
                           "friends"
                         ]
                       },
-                      "paidAccessPrice": {
-                        "description": "If set, paid access will be enabled with the specified price. Otherwise, paid access will be\ndisabled. Should not be used with `privateServerPrice`.",
-                        "type": "integer",
-                        "format": "uint32",
-                        "minimum": 0.0
+                      "paidAccess": {
+                        "description": "\nDetermines whether or not paid access is be enabled, and if it is, how\nmuch it costs. This should not be enabled when\n[`privateServers`](#target-experience-configuration-privateservers) are\nalso enabled as they are incompatible.\n\n| Value            | Description                                                             |\n|------------------|-------------------------------------------------------------------------|\n| `'disabled'`     | Paid access will be disabled.                                           |\n| `price: <price>` | Paid access will be enabled and will cost the provided number of Robux. |\n\n```yml title=\"Enabled Example\"\ntarget:\n  experience:\n    configuration:\n      paidAccess:\n        price: 100\n```",
+                        "default": "'disabled'",
+                        "oneOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "disabled"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "required": [
+                              "price"
+                            ],
+                            "properties": {
+                              "price": {
+                                "type": "integer",
+                                "format": "uint32",
+                                "minimum": 0.0
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        ],
+                        "x-skip-properties": true
                       },
-                      "privateServerPrice": {
-                        "description": "If set, private servers will be enabled with the specified price. Otherwise, private servers\nwill be disabled. To enable for free, set to `0`. Should not be used with\n`privateServerPrice`.",
-                        "type": "integer",
-                        "format": "uint32",
-                        "minimum": 0.0
+                      "privateServers": {
+                        "description": "\nDetermines whether or not private servers are enabled, and if they are,\nhow much they cost. This should not be enabled when\n[`paidAccess`](#target-experience-configuration-paidaccess) is also\nenabled as they are incompatible.\n\n| Value            | Description                                                                 |\n|------------------|-----------------------------------------------------------------------------|\n| `'disabled'`     | Private servers will be disabled.                                           |\n| `'free'`         | Private servers will be enabled and will be free to purchase.               |\n| `price: <price>` | Private servers will be enabled and will cost the provided number of Robux. |\n\n```yml title=\"Enabled for Free Example\"\ntarget:\n  experience:\n    configuration:\n      privateServers: free\n```\n\n```yml title=\"Enabled for Price Example\"\ntarget:\n  experience:\n    configuration:\n      privateServers:\n        price: 100\n```",
+                        "default": "'disabled'",
+                        "oneOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "disabled",
+                              "free"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "required": [
+                              "price"
+                            ],
+                            "properties": {
+                              "price": {
+                                "type": "integer",
+                                "format": "uint32",
+                                "minimum": 0.0
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        ],
+                        "x-skip-properties": true
                       },
                       "enableStudioAccessToApis": {
                         "description": "\nWhether or not studio should be able to use Roblox APIs for this place.",
@@ -241,7 +273,8 @@
                                 "type": "number",
                                 "format": "float"
                               }
-                            }
+                            },
+                            "additionalProperties": false
                           },
                           "width": {
                             "description": "The constraints to apply to the width of the avatar.",
@@ -257,7 +290,8 @@
                                 "type": "number",
                                 "format": "float"
                               }
-                            }
+                            },
+                            "additionalProperties": false
                           },
                           "head": {
                             "description": "The constraints to apply to the head of the avatar.",
@@ -273,7 +307,8 @@
                                 "type": "number",
                                 "format": "float"
                               }
-                            }
+                            },
+                            "additionalProperties": false
                           },
                           "bodyType": {
                             "description": "The constraints to apply to the body type of the avatar.",
@@ -289,7 +324,8 @@
                                 "type": "number",
                                 "format": "float"
                               }
-                            }
+                            },
+                            "additionalProperties": false
                           },
                           "proportions": {
                             "description": "The constraints to apply to the proportions of the avatar.",
@@ -305,9 +341,11 @@
                                 "type": "number",
                                 "format": "float"
                               }
-                            }
+                            },
+                            "additionalProperties": false
                           }
                         },
+                        "additionalProperties": false,
                         "x-skip-properties": true
                       },
                       "avatarAssetOverrides": {
@@ -375,12 +413,14 @@
                             "minimum": 0.0
                           }
                         },
+                        "additionalProperties": false,
                         "x-skip-properties": true
                       }
-                    }
+                    },
+                    "additionalProperties": false
                   },
                   "places": {
-                    "description": "The experience's places. There must be at least one place supplied with\nthe name `'start'`, which will be used as the start place for the\nexperience.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    places:\n      start:\n        file: game.rbxlx\n        configuration:\n          name: Pirate Wars!\n          description: |-\n            Duke it out on the high seas in your pirate ship!\n\n            🍂 Fall update: new cannons, new ship types!\n          maxPlayerCount: 10\n          serverFill: robloxOptimized\n```",
+                    "description": "The experience's places. There must be at least one place supplied with\nthe label `'start'`, which will be used as the start place for the\nexperience.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    places:\n      start:\n        file: game.rbxlx\n        configuration:\n          name: Pirate Wars!\n          description: |-\n            Duke it out on the high seas in your pirate ship!\n\n            🍂 Fall update: new cannons, new ship types!\n          maxPlayerCount: 10\n          serverFill: robloxOptimized\n```",
                     "type": "object",
                     "additionalProperties": {
                       "type": "object",
@@ -443,9 +483,22 @@
                               ],
                               "x-skip-properties": true
                             }
-                          }
+                          },
+                          "additionalProperties": false
                         }
-                      }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "icon": {
+                    "description": "A file path to an image that will be used as the experience's icon.",
+                    "type": "string"
+                  },
+                  "thumbnails": {
+                    "description": "An array of file paths to images that will be used as the experience's thumbnails. The order\nused here will be the order they appear on the Roblox webpage.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
                     }
                   },
                   "socialLinks": {
@@ -467,7 +520,8 @@
                           "type": "string",
                           "format": "uri"
                         }
-                      }
+                      },
+                      "additionalProperties": false
                     }
                   },
                   "products": {
@@ -499,7 +553,8 @@
                           "format": "uint32",
                           "minimum": 0.0
                         }
-                      }
+                      },
+                      "additionalProperties": false
                     }
                   },
                   "passes": {
@@ -531,7 +586,8 @@
                           "format": "uint32",
                           "minimum": 0.0
                         }
-                      }
+                      },
+                      "additionalProperties": false
                     }
                   },
                   "badges": {
@@ -562,7 +618,8 @@
                           "default": "true",
                           "type": "boolean"
                         }
-                      }
+                      },
+                      "additionalProperties": false
                     }
                   },
                   "assets": {
@@ -592,12 +649,14 @@
                     },
                     "x-skip-properties": true
                   }
-                }
+                },
+                "additionalProperties": false
               }
             ],
             "x-skip-properties": true
           }
-        }
+        },
+        "additionalProperties": false
       }
     },
     "target": {
@@ -653,17 +712,6 @@
                         ]
                       }
                     },
-                    "icon": {
-                      "description": "A file path to an image that will be used as the experience's icon.",
-                      "type": "string"
-                    },
-                    "thumbnails": {
-                      "description": "An array of file paths to images that will be used as the experience's thumbnails. The order\nused here will be the order they appear on the Roblox webpage.",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
                     "playability": {
                       "description": "\nDetermines who has access to play the experience.\n\n| Value       | Description                                                                                 |\n|-------------|---------------------------------------------------------------------------------------------|\n| `'public'`  | The experience will be playable by all Roblox users.                                        |\n| `'private'` | The experience will only be playable by the authorized user.                                |\n| `'friends'` | The experience will only be playable to the authorized user and that user's Roblox friends. |",
                       "default": "'private'",
@@ -674,17 +722,60 @@
                         "friends"
                       ]
                     },
-                    "paidAccessPrice": {
-                      "description": "If set, paid access will be enabled with the specified price. Otherwise, paid access will be\ndisabled. Should not be used with `privateServerPrice`.",
-                      "type": "integer",
-                      "format": "uint32",
-                      "minimum": 0.0
+                    "paidAccess": {
+                      "description": "\nDetermines whether or not paid access is be enabled, and if it is, how\nmuch it costs. This should not be enabled when\n[`privateServers`](#target-experience-configuration-privateservers) are\nalso enabled as they are incompatible.\n\n| Value            | Description                                                             |\n|------------------|-------------------------------------------------------------------------|\n| `'disabled'`     | Paid access will be disabled.                                           |\n| `price: <price>` | Paid access will be enabled and will cost the provided number of Robux. |\n\n```yml title=\"Enabled Example\"\ntarget:\n  experience:\n    configuration:\n      paidAccess:\n        price: 100\n```",
+                      "default": "'disabled'",
+                      "oneOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "disabled"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "price"
+                          ],
+                          "properties": {
+                            "price": {
+                              "type": "integer",
+                              "format": "uint32",
+                              "minimum": 0.0
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      ],
+                      "x-skip-properties": true
                     },
-                    "privateServerPrice": {
-                      "description": "If set, private servers will be enabled with the specified price. Otherwise, private servers\nwill be disabled. To enable for free, set to `0`. Should not be used with\n`privateServerPrice`.",
-                      "type": "integer",
-                      "format": "uint32",
-                      "minimum": 0.0
+                    "privateServers": {
+                      "description": "\nDetermines whether or not private servers are enabled, and if they are,\nhow much they cost. This should not be enabled when\n[`paidAccess`](#target-experience-configuration-paidaccess) is also\nenabled as they are incompatible.\n\n| Value            | Description                                                                 |\n|------------------|-----------------------------------------------------------------------------|\n| `'disabled'`     | Private servers will be disabled.                                           |\n| `'free'`         | Private servers will be enabled and will be free to purchase.               |\n| `price: <price>` | Private servers will be enabled and will cost the provided number of Robux. |\n\n```yml title=\"Enabled for Free Example\"\ntarget:\n  experience:\n    configuration:\n      privateServers: free\n```\n\n```yml title=\"Enabled for Price Example\"\ntarget:\n  experience:\n    configuration:\n      privateServers:\n        price: 100\n```",
+                      "default": "'disabled'",
+                      "oneOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "disabled",
+                            "free"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "price"
+                          ],
+                          "properties": {
+                            "price": {
+                              "type": "integer",
+                              "format": "uint32",
+                              "minimum": 0.0
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      ],
+                      "x-skip-properties": true
                     },
                     "enableStudioAccessToApis": {
                       "description": "\nWhether or not studio should be able to use Roblox APIs for this place.",
@@ -747,7 +838,8 @@
                               "type": "number",
                               "format": "float"
                             }
-                          }
+                          },
+                          "additionalProperties": false
                         },
                         "width": {
                           "description": "The constraints to apply to the width of the avatar.",
@@ -763,7 +855,8 @@
                               "type": "number",
                               "format": "float"
                             }
-                          }
+                          },
+                          "additionalProperties": false
                         },
                         "head": {
                           "description": "The constraints to apply to the head of the avatar.",
@@ -779,7 +872,8 @@
                               "type": "number",
                               "format": "float"
                             }
-                          }
+                          },
+                          "additionalProperties": false
                         },
                         "bodyType": {
                           "description": "The constraints to apply to the body type of the avatar.",
@@ -795,7 +889,8 @@
                               "type": "number",
                               "format": "float"
                             }
-                          }
+                          },
+                          "additionalProperties": false
                         },
                         "proportions": {
                           "description": "The constraints to apply to the proportions of the avatar.",
@@ -811,9 +906,11 @@
                               "type": "number",
                               "format": "float"
                             }
-                          }
+                          },
+                          "additionalProperties": false
                         }
                       },
+                      "additionalProperties": false,
                       "x-skip-properties": true
                     },
                     "avatarAssetOverrides": {
@@ -881,12 +978,14 @@
                           "minimum": 0.0
                         }
                       },
+                      "additionalProperties": false,
                       "x-skip-properties": true
                     }
-                  }
+                  },
+                  "additionalProperties": false
                 },
                 "places": {
-                  "description": "The experience's places. There must be at least one place supplied with\nthe name `'start'`, which will be used as the start place for the\nexperience.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    places:\n      start:\n        file: game.rbxlx\n        configuration:\n          name: Pirate Wars!\n          description: |-\n            Duke it out on the high seas in your pirate ship!\n\n            🍂 Fall update: new cannons, new ship types!\n          maxPlayerCount: 10\n          serverFill: robloxOptimized\n```",
+                  "description": "The experience's places. There must be at least one place supplied with\nthe label `'start'`, which will be used as the start place for the\nexperience.\n\n```yml title=\"Example\"\ntarget:\n  experience:\n    places:\n      start:\n        file: game.rbxlx\n        configuration:\n          name: Pirate Wars!\n          description: |-\n            Duke it out on the high seas in your pirate ship!\n\n            🍂 Fall update: new cannons, new ship types!\n          maxPlayerCount: 10\n          serverFill: robloxOptimized\n```",
                   "type": "object",
                   "additionalProperties": {
                     "type": "object",
@@ -949,9 +1048,22 @@
                             ],
                             "x-skip-properties": true
                           }
-                        }
+                        },
+                        "additionalProperties": false
                       }
-                    }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "icon": {
+                  "description": "A file path to an image that will be used as the experience's icon.",
+                  "type": "string"
+                },
+                "thumbnails": {
+                  "description": "An array of file paths to images that will be used as the experience's thumbnails. The order\nused here will be the order they appear on the Roblox webpage.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
                   }
                 },
                 "socialLinks": {
@@ -973,7 +1085,8 @@
                         "type": "string",
                         "format": "uri"
                       }
-                    }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "products": {
@@ -1005,7 +1118,8 @@
                         "format": "uint32",
                         "minimum": 0.0
                       }
-                    }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "passes": {
@@ -1037,7 +1151,8 @@
                         "format": "uint32",
                         "minimum": 0.0
                       }
-                    }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "badges": {
@@ -1068,7 +1183,8 @@
                         "default": "true",
                         "type": "boolean"
                       }
-                    }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "assets": {
@@ -1098,7 +1214,8 @@
                   },
                   "x-skip-properties": true
                 }
-              }
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false
@@ -1198,12 +1315,14 @@
                   "description": "The key to use to store your state file. The file will be named with the format\n`<key>.mantle-state.yml`.",
                   "type": "string"
                 }
-              }
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false
         }
       ]
     }
-  }
+  },
+  "additionalProperties": false
 }
