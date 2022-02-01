@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "docusaurus start",
-    "build": "yarn generate-schema-docs && docusaurus build",
+    "build": "yarn compile-template-docs && docusaurus build",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
