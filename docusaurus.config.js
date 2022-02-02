@@ -171,6 +171,7 @@ const config = {
         appId: 'IEEIK6DK23',
         apiKey: '9700ffd8cc2fc0a3c1e209e243c80e26',
         indexName: 'mantle-docs',
+        contextualSearch: false,
       },
     }),
 };
