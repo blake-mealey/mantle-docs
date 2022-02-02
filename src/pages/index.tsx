@@ -45,9 +45,9 @@ const features = [
       title: 'mantle.yml',
       language: 'yml',
       content: `environments:
-  - name: dev
-    targetNamePrefix: environmentName
-  - name: prod
+  - label: dev
+    targetNamePrefix: environmentLabel
+  - label: prod
     targetAccess: public
 
 target:
@@ -112,7 +112,7 @@ target:
       title: 'foreman.toml',
       language: 'toml',
       content: `[tools]
-mantle = { source = "blake-mealey/mantle", version = "0.10" }`,
+mantle = { source = "blake-mealey/mantle", version = "0.11" }`,
     },
   },
   {

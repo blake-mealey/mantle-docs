@@ -199,9 +199,9 @@ something new:
 
 ```yml title="examples/getting-started/mantle.yml" {15}
 environments:
-  - name: dev
-    targetNamePrefix: environmentName
-  - name: prod
+  - label: dev
+    targetNamePrefix: environmentLabel
+  - label: prod
     targetAccess: public
 
 target:
@@ -261,9 +261,9 @@ place's configuration and add some social links to your experience:
 
 ```yml title="examples/getting-started/mantle.yml" {16,19-23}
 environments:
-  - name: dev
-    targetNamePrefix: environmentName
-  - name: prod
+  - label: dev
+    targetNamePrefix: environmentLabel
+  - label: prod
     targetAccess: public
 
 target:
@@ -274,7 +274,7 @@ target:
       start:
         file: game.rbxlx
         configuration:
-          name: I changed the Mantle config!
+          name: I changed the Mantle config
           maxPlayerCount: 25
           description: |-
             Made with Mantle
