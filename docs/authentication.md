@@ -16,9 +16,9 @@ access to them could use them to steal your accounts.
 To manage resources, Mantle requires a valid `.ROBLOSECURITY` cookie value to authenticate all its
 requests.
 
-If there is a logged-in Roblox Studio installation on a Windows computer, Mantle can automatically
-extract its `.ROBLOSECURITY` cookie and will authenticate requests as the user logged in to Roblox
-Studio.
+If there is a logged-in Roblox Studio installation, Mantle can automatically
+extract its `.ROBLOSECURITY` cookie and will authenticate requests as the user
+logged in to Roblox Studio.
 
 Otherwise, you will have to provide the cookie via an environment variable called `ROBLOSECURITY`.
 
@@ -35,10 +35,10 @@ $env:ROBLOSECURITY = "<your cookie>"
 Note that these will be temporary and you will have to reset them whenever you start a new terminal
 instance.
 
-To get your `.ROBLOSECURITY` cookie, you have a couple options:
+To get your `.ROBLOSECURITY` cookie manually, you have a couple options:
 
 <Tabs>
-<TabItem value="studio" label="From Roblox Studio (Windows only)" default>
+<TabItem value="windows-studio" label="From Roblox Studio (Windows)" default>
 
 Open the Start Menu and search for `regedit` and hit enter. In the window that opens, navigate to
 `Computer\HKEY_CURRENT_USER\SOFTWARE\Roblox\RobloxStudioBrowser\roblox.com\`. Double-click on
@@ -47,6 +47,23 @@ Open the Start Menu and search for `regedit` and hit enter. In the window that o
 your environment variable using one of the above methods.
 
 The advantage of this method is that the cookie is less likely to expire or be revoked.
+
+</TabItem>
+<TabItem value="macos-studio" label="From Roblox Studio (MacOS)" default>
+
+Open a terminal and run:
+
+```sh
+defaults read com.roblox.RobloxStudioBrowser
+```
+
+Look in the output for a key called `roblox\\U00b7com.\\U00b7ROBLOSECURITY`,
+then look for the text in the format `COOK::<value>`. Copy the `value` part (not
+including the `<`/`>`). This is your `.ROBLOSECURITY` cookie. You can then set
+your environment variable using one of the above methods.
+
+The advantage of this method is that the cookie is less likely to expire or be
+revoked.
 
 </TabItem>
 <TabItem value="browser" label="From Browser Dev Tools">

@@ -87,9 +87,9 @@ Now it's time to deploy your first project! Run `mantle deploy examples/getting-
 to deploy the getting started project.
 
 :::caution
-If you are a MacOS user, or you are a Windows user but you are not currently logged in to Roblox
-Studio, you will need to provide a `ROBLOSECURITY` environment variable. You can read more about
-this in the [Authentication](/docs/authentication) guide.
+If you are not currently logged in to Roblox Studio, you will need to provide a
+`ROBLOSECURITY` environment variable. You can read more about this in the
+[Authentication](/docs/authentication) guide.
 :::
 
 If everything goes well, you should see that the deployment completed successfully. Let's break down
@@ -199,9 +199,9 @@ something new:
 
 ```yml title="examples/getting-started/mantle.yml" {15}
 environments:
-  - label: dev
-    targetNamePrefix: environmentLabel
-  - label: prod
+  - name: dev
+    targetNamePrefix: environmentName
+  - name: prod
     targetAccess: public
 
 target:
@@ -261,9 +261,9 @@ place's configuration and add some social links to your experience:
 
 ```yml title="examples/getting-started/mantle.yml" {16,19-23}
 environments:
-  - label: dev
-    targetNamePrefix: environmentLabel
-  - label: prod
+  - name: dev
+    targetNamePrefix: environmentName
+  - name: prod
     targetAccess: public
 
 target:
@@ -274,7 +274,7 @@ target:
       start:
         file: game.rbxlx
         configuration:
-          name: I changed the Mantle config
+          name: I changed the Mantle config!
           maxPlayerCount: 25
           description: |-
             Made with Mantle
