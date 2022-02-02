@@ -8,6 +8,7 @@ node_modules
 .docusaurus
 .cache-loader
 docs/configuration.md
+static/schemas
 
 # Misc
 .DS_Store

@@ -6,6 +6,7 @@ import flattenProperties from './flattenProperties';
 import { createSlugger } from '@docusaurus/utils';
 import { Octokit } from '@octokit/rest';
 import semver from 'semver';
+import { simplifySchemaMarkdown } from './simplifySchemaMarkdown';
 
 const docsDir = path.join(__dirname, '../docs');
 
@@ -135,12 +136,14 @@ function createContext(
   };
 }
 
-function saveSchemas(schemas: Record<string, JSONSchema7>) {
+async function saveSchemas(schemas: Record<string, JSONSchema7>) {
   const schemasDir = path.join(__dirname, '../static/schemas');
 
   for (const [version, schema] of Object.entries(schemas)) {
     const versionDir = path.join(schemasDir, version);
     mkdirSync(versionDir, { recursive: true });
+
+    await simplifySchemaMarkdown(schema);
 
     const file = path.join(versionDir, 'schema.json');
     console.log('Writing:\t', file);
