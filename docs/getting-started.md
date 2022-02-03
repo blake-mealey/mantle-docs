@@ -87,9 +87,9 @@ Now it's time to deploy your first project! Run `mantle deploy examples/getting-
 to deploy the getting started project.
 
 :::caution
-If you are a MacOS user, or you are a Windows user but you are not currently logged in to Roblox
-Studio, you will need to provide a `ROBLOSECURITY` environment variable. You can read more about
-this in the [Authentication](/docs/authentication) guide.
+If you are not currently logged in to Roblox Studio, you will need to provide a
+`ROBLOSECURITY` environment variable. You can read more about this in the
+[Authentication](/docs/authentication) guide.
 :::
 
 If everything goes well, you should see that the deployment completed successfully. Let's break down
