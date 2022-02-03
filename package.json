@@ -10,7 +10,7 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
-    "compile-template-docs": "ts-node compile-templates",
+    "compile-template-docs": "NODE_ENV=production ts-node compile-templates",
     "compile-template-docs:dev": "nodemon compile-templates/index.ts"
   },
   "dependencies": {

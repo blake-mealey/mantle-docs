@@ -10,6 +10,16 @@ import { simplifySchemaMarkdown } from './simplifySchemaMarkdown';
 
 const docsDir = path.join(__dirname, '../docs');
 
+function stringifyJson(data: any) {
+  const env = process.env.NODE_ENV?.toLowerCase();
+
+  if (env === 'production') {
+    return JSON.stringify(data);
+  } else {
+    return JSON.stringify(data, null, 2);
+  }
+}
+
 function registerIncludes() {
   const includesDir = path.join(docsDir, 'includes');
   const includes = readdirSync(includesDir);
@@ -72,7 +82,7 @@ function writeCache(key: string, data: any) {
   mkdirSync(cacheDir, { recursive: true });
   writeFileSync(
     path.join(cacheDir, `${key}.json`),
-    JSON.stringify(data),
+    stringifyJson(data),
     'utf-8'
   );
 }
@@ -147,7 +157,7 @@ async function saveSchemas(schemas: Record<string, JSONSchema7>) {
 
     const file = path.join(versionDir, 'schema.json');
     console.log('Writing:\t', file);
-    writeFileSync(file, JSON.stringify(schema), 'utf-8');
+    writeFileSync(file, stringifyJson(schema), 'utf-8');
   }
 }
 
