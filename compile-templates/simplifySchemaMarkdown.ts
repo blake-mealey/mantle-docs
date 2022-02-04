@@ -2,49 +2,81 @@ import { JSONSchema7 } from 'json-schema';
 import remark, { RemarkOptions } from 'remark';
 import visit from 'unist-util-visit';
 import remarkGfm from 'remark-gfm';
-import admonitions from 'remark-admonitions';
-import { list, listItem, paragraph, text } from 'mdast-builder';
+import { paragraph, text, strong, blockquote } from 'mdast-builder';
+
+const admonitionTypeToEmoji = {
+  note: '📝',
+  tip: '💡',
+  info: 'ℹ️',
+  caution: '⚠️',
+  danger: '🔥',
+};
 
 const simplify = () => {
   return (tree: any, _file: any) => {
-    visit(tree, 'code', (node: any) => {
-      // console.log(node);
+    visit(tree, 'paragraph', (node: any, index: number, parent: any) => {
+      // VSCode does not support admonitions. Note the "correct" way to do this
+      // would be with the `remark-admonitions` package but I could not get it
+      // to work (always threw an error immediately after being used)
+      if (node.children[0].value.startsWith(':::')) {
+        const match = node.children[0].value.match(/^:::(\w*)\s*\n/);
+        const type = match[1];
 
-      delete node.meta;
-      delete node.lang;
+        let lines = node.children[0].value.split('\n');
+        lines.splice(
+          0,
+          1,
+          admonitionTypeToEmoji[type] + ' ' + type.toUpperCase(),
+          ''
+        );
+        node.children[0].value = lines.join('\n');
 
-      // console.log(node);
+        lines = node.children[node.children.length - 1].value.split('\n');
+        lines.splice(-1, 1);
+        node.children[node.children.length - 1].value = lines.join('\n');
+
+        parent.children[index] = blockquote([node]);
+      }
     });
 
-    visit(tree, 'table', (node: any, index, parent) => {
-      const [_header, ...rows] = node.children;
-
-      const ul: any = list(
-        'unordered',
-        rows.map((row: any) => {
-          const [value, description] = row.children;
-
-          return listItem(
-            paragraph([...value.children, text(': '), ...description.children])
+    visit(tree, 'code', (node: any, index: number, parent: any) => {
+      // VSCode does not support code block titles
+      if (node.meta) {
+        const match = (node.meta as string).match(/title="(.*)"/);
+        if (match && match[1]) {
+          (parent.children as any[]).splice(
+            index,
+            0,
+            paragraph([strong(text(match[1] + ':'))])
           );
-        })
-      );
-      ul.spread = false;
-      parent.children[index] = ul;
+        }
+        delete node.meta;
+      }
+
+      // VSCode does not support fenced code blocks
+      delete node.lang;
+    });
+
+    visit(tree, 'link', (node: any) => {
+      // Make relative URLs point to the docs
+      const url: string = node.url;
+      if (url.startsWith('/')) {
+        node.url = 'https://mantle-docs.vercel.app' + url;
+      } else if (url.startsWith('#')) {
+        node.url = 'https://mantle-docs.vercel.app/docs/configuration' + url;
+      }
     });
   };
 };
 
 const processor = remark()
   .data('settings', {} as RemarkOptions)
-  .use(admonitions, {})
   .use(remarkGfm)
   .use(simplify);
 
 async function simplifyMarkdown(md: string) {
   const { contents } = await processor.process(md);
-  // I couldn't find a way to stop remark from adding these comments
-  return contents.toString().replace(/<!---->\n/g, '');
+  return contents.toString();
 }
 
 export async function simplifySchemaMarkdown(
@@ -54,12 +86,12 @@ export async function simplifySchemaMarkdown(
   schema.title = title;
 
   if (schema.description) {
-    const newDesc = await simplifyMarkdown(schema.description);
-    // console.log('\n\n\nBEFORE:');
-    // console.log(schema.description);
-    // console.log('\nAFTER:');
-    // console.log(newDesc);
-    schema.description = newDesc;
+    // VSCode interprets the `description` property as plaintext. To render as
+    // markdown, you need to use the `markdownDescription` property.
+    (schema as any).markdownDescription = await simplifyMarkdown(
+      schema.description
+    );
+    delete schema.description;
   }
 
   if (schema.properties) {
@@ -89,8 +121,6 @@ export async function simplifySchemaMarkdown(
   if (typeof schema.items === 'object') {
     const items = Array.isArray(schema.items) ? schema.items : [schema.items];
     for (const definition of items) {
-      console.log(definition);
-
       if (typeof definition !== 'boolean') {
         await simplifySchemaMarkdown(definition);
       }
