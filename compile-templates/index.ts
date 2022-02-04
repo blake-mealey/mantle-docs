@@ -6,8 +6,19 @@ import flattenProperties from './flattenProperties';
 import { createSlugger } from '@docusaurus/utils';
 import { Octokit } from '@octokit/rest';
 import semver from 'semver';
+import { simplifySchemaMarkdown } from './simplifySchemaMarkdown';
 
 const docsDir = path.join(__dirname, '../docs');
+
+function stringifyJson(data: any) {
+  const env = process.env.NODE_ENV?.toLowerCase();
+
+  if (env === 'production') {
+    return JSON.stringify(data);
+  } else {
+    return JSON.stringify(data, null, 2);
+  }
+}
 
 function registerIncludes() {
   const includesDir = path.join(docsDir, 'includes');
@@ -71,7 +82,7 @@ function writeCache(key: string, data: any) {
   mkdirSync(cacheDir, { recursive: true });
   writeFileSync(
     path.join(cacheDir, `${key}.json`),
-    JSON.stringify(data),
+    stringifyJson(data),
     'utf-8'
   );
 }
@@ -135,16 +146,18 @@ function createContext(
   };
 }
 
-function saveSchemas(schemas: Record<string, JSONSchema7>) {
+async function saveSchemas(schemas: Record<string, JSONSchema7>) {
   const schemasDir = path.join(__dirname, '../static/schemas');
 
   for (const [version, schema] of Object.entries(schemas)) {
     const versionDir = path.join(schemasDir, version);
     mkdirSync(versionDir, { recursive: true });
 
+    await simplifySchemaMarkdown(schema);
+
     const file = path.join(versionDir, 'schema.json');
     console.log('Writing:\t', file);
-    writeFileSync(file, JSON.stringify(schema), 'utf-8');
+    writeFileSync(file, stringifyJson(schema), 'utf-8');
   }
 }
 
