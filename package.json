@@ -29,6 +29,7 @@
     "url-loader": "^4.1.1"
   },
   "devDependencies": {
+    "@cloudflare/json-schema-walker": "^0.1.1",
     "@docusaurus/module-type-aliases": "2.0.0-beta.15",
     "@octokit/rest": "^18.12.0",
     "@tsconfig/docusaurus": "^1.0.4",

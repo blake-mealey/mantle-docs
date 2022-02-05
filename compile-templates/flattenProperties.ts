@@ -1,4 +1,53 @@
 import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
+import {
+  getVocabulary,
+  SchemaPath,
+  schemaWalk,
+} from '@cloudflare/json-schema-walker';
+
+function joinPaths(parentPath: SchemaPath, path: SchemaPath) {
+  return [...parentPath, ...path];
+}
+
+export default function flattenProperties(schema: JSONSchema7) {
+  const properties: {
+    id: string;
+    required: boolean;
+    level: number;
+    schema: JSONSchema7;
+    type: string;
+  }[] = [];
+
+  const ignoredPaths = new Set<string>();
+
+  schemaWalk(
+    schema,
+    (schema, path, parent, parentPath) => {
+      const fullPath = joinPaths(parentPath, path);
+      if (ignoredPaths[parentPath.join('.')]) {
+        ignoredPaths.add(fullPath.join('.'));
+        console.log('skip', fullPath.join('.'));
+        return;
+      }
+      if (schema['x-skip-properties']) {
+        ignoredPaths.add(fullPath.join('.'));
+        console.log('skip-properties', fullPath.join('.'));
+      }
+
+      properties.push({
+        id: fullPath.join('.'),
+        required: false,
+        level: 3,
+        schema,
+        type: getType(schema),
+      });
+    },
+    undefined,
+    getVocabulary(schema)
+  );
+
+  return properties;
+}
 
 function formatId(id: string, parentId?: string) {
   return (parentId ? `${parentId}.` : '') + id;
@@ -79,10 +128,7 @@ function getType(schema: JSONSchema7) {
   return type;
 }
 
-export default function flattenProperties(
-  schema: JSONSchema7,
-  parentId?: string
-) {
+function _flattenProperties(schema: JSONSchema7, parentId?: string) {
   if (schema['x-skip-properties']) {
     return [];
   }
@@ -111,7 +157,7 @@ export default function flattenProperties(
           schema: definition,
           type: getType(definition),
         });
-        properties.push(...flattenProperties(definition, formattedId));
+        properties.push(..._flattenProperties(definition, formattedId));
       });
     }
     if (
@@ -119,7 +165,7 @@ export default function flattenProperties(
       typeof schema.additionalProperties !== 'boolean'
     ) {
       properties.push(
-        ...flattenProperties(
+        ..._flattenProperties(
           schema.additionalProperties,
           formatId('<label>', parentId)
         )
@@ -132,7 +178,7 @@ export default function flattenProperties(
         return;
       }
       properties.push(
-        ...flattenProperties(definition, formatId('*', parentId))
+        ..._flattenProperties(definition, formatId('*', parentId))
       );
     });
   } else if (schema.oneOf) {
@@ -140,14 +186,14 @@ export default function flattenProperties(
       if (typeof definition === 'boolean') {
         return;
       }
-      properties.push(...flattenProperties(definition, parentId));
+      properties.push(..._flattenProperties(definition, parentId));
     });
   } else if (schema.anyOf) {
     schema.anyOf.forEach((definition) => {
       if (typeof definition === 'boolean') {
         return;
       }
-      properties.push(...flattenProperties(definition, parentId));
+      properties.push(..._flattenProperties(definition, parentId));
     });
   } else {
     if (
