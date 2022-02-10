@@ -50,6 +50,51 @@ html[data-theme='dark'] {
   padding: 0 var(--ifm-pre-padding);
 }
 
+.markdown a:not(.hash-link) {
+  --ifm-link-color: var(--ifm-color-text);
+  --ifm-link-hover-color: var(--ifm-link-color);
+  --ifm-link-decoration: underline;
+  --ifm-link-decoration-color: var(--ifm-color-primary);
+  --ifm-link-hover-background-color: var(--ifm-link-decoration-color);
+
+  position: relative;
+  text-decoration-color: var(--ifm-link-decoration-color);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 1px;
+  text-decoration-skip-ink: none;
+}
+
+.markdown a:not(.hash-link)::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  width: 100%;
+  height: 0;
+  opacity: 0;
+  background-color: var(--ifm-link-hover-background-color);
+  transition: var(--ifm-transition-fast) var(--ifm-transition-timing-default);
+}
+
+.markdown a:not(.hash-link):focus::before,
+.markdown a:not(.hash-link):hover::before {
+  height: 100%;
+  opacity: 0.3;
+}
+
+.markdown a:not(.hash-link):focus {
+  text-decoration-thickness: 3px;
+}
+
+.markdown .admonition a:not(.hash-link) {
+  z-index: 1;
+  --ifm-link-decoration-color: var(--ifm-alert-border-color);
+}
+
+.markdown pre code a {
+  --ifm-link-decoration-color: var(--ifm-color-text) !important;
+}
+
 h3 .badge {
   font-size: 12px;
 }
