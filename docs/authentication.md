@@ -38,7 +38,16 @@ instance.
 To get your `.ROBLOSECURITY` cookie manually, you have a couple options:
 
 <Tabs>
-<TabItem value="windows-studio" label="From Roblox Studio (Windows)" default>
+<TabItem value="browser" label="From Browser Dev Tools" default>
+
+Navigate to [roblox.com](https://www.roblox.com) in your browser and open the dev tools (right-click
+and select "Inspect"). Navigate to the "Application" tab, then look for "Cookies" under "Storage" in
+the left-hand sidebar. Under "Cookies", select "`https://www.roblox.com`" then select
+"`.ROBLOSECURITY`" from the list of cookies. Copy the value from the "Cookie Value" section. You can
+then set your environment variable using one of the above methods.
+
+</TabItem>
+<TabItem value="windows-studio" label="From Roblox Studio (Windows)">
 
 Open the Start Menu and search for `regedit` and hit enter. In the window that opens, navigate to
 `Computer\HKEY_CURRENT_USER\SOFTWARE\Roblox\RobloxStudioBrowser\roblox.com\`. Double-click on
@@ -64,15 +73,6 @@ your environment variable using one of the above methods.
 
 The advantage of this method is that the cookie is less likely to expire or be
 revoked.
-
-</TabItem>
-<TabItem value="browser" label="From Browser Dev Tools">
-
-Navigate to [roblox.com](https://www.roblox.com) in your browser and open the dev tools (right-click
-and select "Inspect"). Navigate to the "Application" tab, then look for "Cookies" under "Storage" in
-the left-hand sidebar. Under "Cookies", select "`https://www.roblox.com`" then select
-"`.ROBLOSECURITY`" from the list of cookies. Copy the value from the "Cookie Value" section. You can
-then set your environment variable using one of the above methods.
 
 </TabItem>
 </Tabs>
