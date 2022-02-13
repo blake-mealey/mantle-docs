@@ -20,3 +20,6 @@ static/schemas
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Dev
+/schema.json

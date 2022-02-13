@@ -1,4 +1,10 @@
-import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'node:fs';
+import {
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  mkdirSync,
+  existsSync,
+} from 'node:fs';
 import path from 'node:path';
 import Handlebars from 'handlebars';
 import { JSONSchema7 } from 'json-schema';
@@ -87,13 +93,30 @@ function writeCache(key: string, data: any) {
   );
 }
 
+interface SchemasCache {
+  schemas: Record<string, JSONSchema7>;
+  latestVersion: string;
+}
+
+function withNextVersion(schemasCache: SchemasCache) {
+  const schemaPath = path.join(__dirname, '../schema.json');
+  if (existsSync(schemaPath)) {
+    console.log('Adding `next` schema version.');
+
+    const nextSchema = JSON.parse(
+      readFileSync(schemaPath, 'utf-8')
+    ) as JSONSchema7;
+
+    schemasCache.schemas['next'] = nextSchema;
+    schemasCache.latestVersion = 'next';
+  }
+  return schemasCache;
+}
+
 async function getSchemas() {
-  const cached =
-    readCache<{ schemas: Record<string, JSONSchema7>; latestVersion: string }>(
-      'schemas'
-    );
+  const cached = readCache<SchemasCache>('schemas');
   if (cached) {
-    return cached;
+    return withNextVersion(cached);
   }
 
   const client = new Octokit();
@@ -128,12 +151,12 @@ async function getSchemas() {
     );
   }
 
-  const result = { schemas, latestVersion: releases[0].name };
+  const result: SchemasCache = { schemas, latestVersion: releases[0].name };
 
   console.log('Loaded schemas from API.');
   writeCache('schemas', result);
 
-  return result;
+  return withNextVersion(result);
 }
 
 function createContext(
