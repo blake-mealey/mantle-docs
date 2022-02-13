@@ -19,6 +19,10 @@ const config = {
       async: true,
       defer: true,
     },
+    {
+      src: 'https://cdn.splitbee.io/sb.js',
+      async: true,
+    },
   ],
 
   presets: [
