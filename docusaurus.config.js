@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/oceanicNext');
 const config = {
   title: 'Mantle',
   tagline: 'Roblox infra-as-code and deployment tool',
-  url: 'https://mantle-docs.vercel.app',
+  url: 'https://mantledeploy.vercel.app',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -83,7 +83,7 @@ const config = {
         logo: {
           alt: 'Mantle Logo',
           src: 'img/mantle-logo.svg',
-          href: 'https://mantle-docs.vercel.app',
+          href: 'https://mantledeploy.vercel.app',
           height: 60,
         },
         links: [

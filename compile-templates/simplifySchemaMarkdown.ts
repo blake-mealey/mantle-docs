@@ -61,9 +61,9 @@ const simplify = () => {
       // Make relative URLs point to the docs
       const url: string = node.url;
       if (url.startsWith('/')) {
-        node.url = 'https://mantle-docs.vercel.app' + url;
+        node.url = 'https://mantledeploy.vercel.app' + url;
       } else if (url.startsWith('#')) {
-        node.url = 'https://mantle-docs.vercel.app/docs/configuration' + url;
+        node.url = 'https://mantledeploy.vercel.app/docs/configuration' + url;
       }
     });
   };
