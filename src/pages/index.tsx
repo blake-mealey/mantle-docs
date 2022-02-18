@@ -6,7 +6,6 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.css';
 import CodeBlock from '@theme/CodeBlock';
 import ThemedImage from '@theme/ThemedImage';
-import TerminalBlock from '../components/TerminalBlock';
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -71,8 +70,7 @@ target:
     learnMoreLink: '/docs/getting-started',
     example: {
       title: 'mantle deploy',
-      language: 'txt',
-      ansi: true,
+      language: 'ansi',
       content: `Deploying resources:
   ╷
   │  [33m~[0m Updating: placeConfiguration_start
@@ -200,18 +198,12 @@ export default function Home(): JSX.Element {
             className={styles.feature}
           >
             <aside>
-              {feature.example.ansi ? (
-                <TerminalBlock title={feature.example.title}>
-                  {feature.example.content}
-                </TerminalBlock>
-              ) : (
-                <CodeBlock
-                  className={`language-${feature.example.language}`}
-                  title={feature.example.title}
-                >
-                  {feature.example.content}
-                </CodeBlock>
-              )}
+              <CodeBlock
+                className={`language-${feature.example.language}`}
+                title={feature.example.title}
+              >
+                {feature.example.content}
+              </CodeBlock>
             </aside>
             <div className={styles.content}>
               <h2>

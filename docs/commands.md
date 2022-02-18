@@ -3,8 +3,6 @@ sidebar_position: 7
 title: Commands
 ---
 
-import TerminalBlock from '/src/components/TerminalBlock';
-
 This guide offers some basic information for the CLI's commands which are not yet documented
 elsewhere. To view the API of each command, run `mantle help [SUBCOMMAND]`.
 
@@ -22,39 +20,37 @@ After deploying the
 [getting-started](https://github.com/blake-mealey/mantle-examples/tree/main/examples/getting-started)
 example project for the first time, running the outputs command will print something like this:
 
-<TerminalBlock title="mantle deploy">
+```ansi title="mantle deploy"
+Load outputs:
+  ╷
+  │  Loaded config file [36mexamples/getting-started/mantle.yml[0m
+  │  Selected provided environment configuration [36mdev[0m
+  │  Loading previous state from local file [36mexamples/getting-started/.mantle-state.yml[0m
+  │
+  ╰─ Succeeded
 
-    Load outputs:
-      ╷
-      │  Loaded config file [36mexamples/getting-started/mantle.yml[0m
-      │  Selected provided environment configuration [36mdev[0m
-      │  Loading previous state from local file [36mexamples/getting-started/.mantle-state.yml[0m
-      │
-      ╰─ Succeeded
-
-    {
-      "experienceActivation_singleton": "experienceActivation",
-      "experienceConfiguration_singleton": "experienceConfiguration",
-      "experience_singleton": {
-        "experience": {
-          "assetId": 3296599132,
-          "startPlaceId": 8667346609
-        }
-      },
-      "placeConfiguration_start": "placeConfiguration",
-      "placeFile_start": {
-        "placeFile": {
-          "version": 2
-        }
-      },
-      "place_start": {
-        "place": {
-          "assetId": 8667346609
-        }
-      }
+{
+  "experienceActivation_singleton": "experienceActivation",
+  "experienceConfiguration_singleton": "experienceConfiguration",
+  "experience_singleton": {
+    "experience": {
+      "assetId": 3296599132,
+      "startPlaceId": 8667346609
     }
-
-</TerminalBlock>
+  },
+  "placeConfiguration_start": "placeConfiguration",
+  "placeFile_start": {
+    "placeFile": {
+      "version": 2
+    }
+  },
+  "place_start": {
+    "place": {
+      "assetId": 8667346609
+    }
+  }
+}
+```
 
 ## Destroying
 
