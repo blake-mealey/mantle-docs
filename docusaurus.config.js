@@ -23,6 +23,10 @@ const config = {
       src: 'https://cdn.splitbee.io/sb.js',
       async: true,
     },
+    {
+      src: '/va/script.js',
+      defer: true,
+    },
   ],
 
   presets: [
